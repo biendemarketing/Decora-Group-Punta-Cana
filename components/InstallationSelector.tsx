@@ -1,6 +1,5 @@
 import React from 'react';
 
-// FIX: Added multiplier property to match the type from INSTALLATION_OPTIONS in constants.ts
 interface Option {
   label: string;
   price: number;

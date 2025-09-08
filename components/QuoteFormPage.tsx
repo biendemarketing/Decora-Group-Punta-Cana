@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import TvWallQuoteForm from './TvWallQuoteForm';
 import ClosetQuoteForm from './ClosetQuoteForm';
+import KitchenQuoteForm from './KitchenQuoteForm';
 
 interface QuoteFormPageProps {
   projectType: string;
@@ -15,6 +16,10 @@ const QuoteFormPage: React.FC<QuoteFormPageProps> = ({ projectType, onBack }) =>
   
   if (projectType === 'Closets') {
     return <ClosetQuoteForm onBack={onBack} />;
+  }
+  
+  if (projectType === 'Cocinas') {
+    return <KitchenQuoteForm onBack={onBack} />;
   }
 
   // Placeholder for other quote forms
