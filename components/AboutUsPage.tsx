@@ -6,6 +6,7 @@ import ClientLogos from './ClientLogos';
 import WhyChooseUs from './WhyChooseUs';
 import TeamSection from './TeamSection';
 import HiringCTA from './HiringCTA';
+import ContactForm from './ContactForm';
 
 const AboutUsPage: React.FC = () => {
   return (
@@ -25,6 +26,9 @@ const AboutUsPage: React.FC = () => {
       <WhyChooseUs />
       <TeamSection />
       <HiringCTA />
+      <section className="py-16 bg-gray-50">
+        <ContactForm />
+      </section>
     </main>
   );
 };

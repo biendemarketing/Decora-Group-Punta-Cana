@@ -19,6 +19,10 @@ import WorkProcessSection from './components/WorkProcessSection';
 import QuoteFormPage from './components/QuoteFormPage';
 import Pagination from './components/Pagination';
 import AboutUsPage from './components/AboutUsPage';
+import ContactPage from './components/ContactPage';
+import ContactInfo from './components/ContactInfo';
+import LocationMap from './components/LocationMap';
+import ContactForm from './components/ContactForm';
 
 const PRODUCTS_PER_PAGE = 30;
 
@@ -74,8 +78,9 @@ const App: React.FC = () => {
   const [isViewingQuotePage, setIsViewingQuotePage] = useState<boolean>(false);
   const [selectedQuoteType, setSelectedQuoteType] = useState<string | null>(null);
 
-  // About Us Page state
+  // Static Pages state
   const [isViewingAboutPage, setIsViewingAboutPage] = useState<boolean>(false);
+  const [isViewingContactPage, setIsViewingContactPage] = useState<boolean>(false);
 
 
   const [filters, setFilters] = useState<Filters>({
@@ -183,11 +188,14 @@ const App: React.FC = () => {
     } else if (isViewingAboutPage) {
         title = "Sobre Nosotros | Decora Group";
         description = "Conoce la historia, misión, visión y valores de Decora Group. Descubre por qué somos líderes en diseño de muebles a medida en Punta Cana.";
+    } else if (isViewingContactPage) {
+        title = "Contáctanos | Decora Group";
+        description = "Ponte en contacto con Decora Group para tus proyectos de diseño de interiores y muebles a medida en Punta Cana. Estamos aquí para ayudarte.";
     }
     
     updateSEO(title, description, structuredData);
 
-  }, [selectedProduct, selectedCategory, selectedProject, isViewingAllProjects, selectedProjectCategory, isViewingQuotePage, selectedQuoteType, isViewingAboutPage]);
+  }, [selectedProduct, selectedCategory, selectedProject, isViewingAllProjects, selectedProjectCategory, isViewingQuotePage, selectedQuoteType, isViewingAboutPage, isViewingContactPage]);
 
   const resetAllViews = () => {
     setSelectedProduct(null);
@@ -198,6 +206,7 @@ const App: React.FC = () => {
     setIsViewingQuotePage(false);
     setSelectedQuoteType(null);
     setIsViewingAboutPage(false);
+    setIsViewingContactPage(false);
     setCurrentPage(1);
   };
   
@@ -274,10 +283,15 @@ const App: React.FC = () => {
     setIsViewingQuotePage(true);
   }, []);
 
-  // About Us Page Navigation
+  // Static Pages Navigation
   const handleViewAboutPage = useCallback(() => {
     resetAllViews();
     setIsViewingAboutPage(true);
+  }, []);
+  
+  const handleViewContactPage = useCallback(() => {
+    resetAllViews();
+    setIsViewingContactPage(true);
   }, []);
 
 
@@ -333,6 +347,10 @@ const App: React.FC = () => {
   const renderContent = () => {
     if (isViewingAboutPage) {
       return <AboutUsPage />;
+    }
+    
+    if (isViewingContactPage) {
+        return <ContactPage />;
     }
 
     if (selectedQuoteType) {
@@ -467,6 +485,27 @@ const App: React.FC = () => {
         <WorkProcessSection />
         <MagazineSection />
         <InstagramEmbed />
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Contáctanos</h2>
+              <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                Estamos aquí para hacer realidad tu proyecto. Conversemos sobre tus ideas.
+              </p>
+            </div>
+            <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="p-8 sm:p-10 lg:p-12 space-y-10">
+                  <ContactInfo />
+                  <LocationMap />
+                </div>
+                <div className="p-8 sm:p-10 lg:p-12 bg-gray-50">
+                  <ContactForm />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     );
   };
@@ -480,6 +519,7 @@ const App: React.FC = () => {
         onViewQuotePage={handleViewQuotePage}
         onSelectQuoteType={handleSelectQuoteType}
         onViewAboutPage={handleViewAboutPage}
+        onViewContactPage={handleViewContactPage}
       />
       {renderContent()}
       <Footer />

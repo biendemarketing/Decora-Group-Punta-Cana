@@ -19,9 +19,10 @@ interface HeaderProps {
   onViewQuotePage: () => void;
   onSelectQuoteType: (type: string) => void;
   onViewAboutPage: () => void;
+  onViewContactPage: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, onSelectQuoteType, onViewAboutPage }) => {
+const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, onSelectQuoteType, onViewAboutPage, onViewContactPage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
   const [isDormitorioMenuOpen, setIsDormitorioMenuOpen] = useState(false);
@@ -73,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
              <span className="text-gray-300">|</span>
              <a href="#" className="hover:text-[#5a1e38]">Aviso Legal y Términos y Condiciones</a>
              <span className="text-gray-300">|</span>
-             <a href="#" className="hover:text-[#5a1e38]">Contacto</a>
+             <button onClick={onViewContactPage} className="hover:text-[#5a1e38]">Contacto</button>
              <span className="text-gray-300">|</span>
             <div className="flex items-center"><Phone className="h-4 w-4 mr-1 text-[#5a1e38]"/> (849) 456-1963</div>
             <button className="flex items-center">
