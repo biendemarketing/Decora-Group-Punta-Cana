@@ -10,15 +10,17 @@ import OficinaMegaMenu from './OficinaMegaMenu';
 import BanoMegaMenu from './BanoMegaMenu';
 import InfantilesMegaMenu from './InfantilesMegaMenu';
 import ProyectosMegaMenu from './ProyectosMegaMenu';
+import CotizarMegaMenu from './CotizarMegaMenu';
 
 interface HeaderProps {
   onSelectCategory: (category: string) => void;
   onSelectProjectCategory: (category: string) => void;
   onGoHome: () => void;
   onViewQuotePage: () => void;
+  onSelectQuoteType: (type: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage }) => {
+const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, onSelectQuoteType }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
   const [isDormitorioMenuOpen, setIsDormitorioMenuOpen] = useState(false);
@@ -28,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
   const [isBanoMenuOpen, setIsBanoMenuOpen] = useState(false);
   const [isInfantilesMenuOpen, setIsInfantilesMenuOpen] = useState(false);
   const [isProyectosMenuOpen, setIsProyectosMenuOpen] = useState(false);
+  const [isCotizarMenuOpen, setIsCotizarMenuOpen] = useState(false);
 
 
   const closeAllMegaMenus = () => {
@@ -39,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
     setIsBanoMenuOpen(false);
     setIsInfantilesMenuOpen(false);
     setIsProyectosMenuOpen(false);
+    setIsCotizarMenuOpen(false);
   };
   
   const handleNavLinkClick = (link: string) => {
@@ -161,6 +165,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
                       ${link === 'Baño' && isBanoMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Muebles infantiles' && isInfantilesMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Proyectos' && isProyectosMenuOpen ? 'text-[#5a1e38]' : ''}
+                       ${link === 'Cotizar a medida' && isCotizarMenuOpen ? 'text-[#5a1e38]' : ''}
                     `}
                     onMouseEnter={() => {
                       closeAllMegaMenus();
@@ -172,6 +177,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
                       else if (link === 'Baño') setIsBanoMenuOpen(true);
                       else if (link === 'Muebles infantiles') setIsInfantilesMenuOpen(true);
                       else if (link === 'Proyectos') setIsProyectosMenuOpen(true);
+                      else if (link === 'Cotizar a medida') setIsCotizarMenuOpen(true);
                     }}
                   >
                     {link}
@@ -242,6 +248,14 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             onMouseEnter={() => setIsProyectosMenuOpen(true)}
           >
             <ProyectosMegaMenu onSelectProjectCategory={onSelectProjectCategory} />
+          </div>
+        )}
+        {isCotizarMenuOpen && (
+          <div 
+            className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
+            onMouseEnter={() => setIsCotizarMenuOpen(true)}
+          >
+            <CotizarMegaMenu onSelectQuoteType={onSelectQuoteType} />
           </div>
         )}
       </nav>

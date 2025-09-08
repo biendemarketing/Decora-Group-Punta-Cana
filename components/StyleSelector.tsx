@@ -35,7 +35,7 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ styles, selectedStyle, on
           <div className="aspect-square w-full overflow-hidden rounded-t-md">
             <img
               src={style.imageUrl}
-              alt={style.name}
+              alt={`Estilo de TV Wall: ${style.name}`}
               className="w-full h-full object-cover"
             />
           </div>

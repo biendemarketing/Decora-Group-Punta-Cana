@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const categories = [
@@ -19,7 +18,7 @@ const CategoryGrid: React.FC = () => {
               <div className="w-full h-80 bg-gray-200 rounded-lg overflow-hidden aspect-w-1 aspect-h-1 group-hover:opacity-75 transition-opacity duration-300">
                 <img
                   src={category.imageUrl}
-                  alt={category.name}
+                  alt={`Muebles para ${category.name} de alta calidad`}
                   className="w-full h-full object-center object-cover"
                 />
               </div>

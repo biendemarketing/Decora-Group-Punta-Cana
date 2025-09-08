@@ -35,7 +35,7 @@ const ClosetTypeSelector: React.FC<ClosetTypeSelectorProps> = ({ types, selected
           <div className="aspect-square w-full overflow-hidden rounded-t-md">
             <img
               src={type.imageUrl}
-              alt={type.name}
+              alt={`Ilustración de un ${type.name}`}
               className="w-full h-full object-cover"
             />
           </div>

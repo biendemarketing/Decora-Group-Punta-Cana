@@ -1,4 +1,5 @@
 
+
 import type { Product, Project } from './types';
 
 export const NAV_LINKS = [
@@ -583,19 +584,18 @@ const parseDeliveryTime = (timeString?: string): number => {
   return match ? parseInt(match[1], 10) : 99;
 };
 
-const mapCategory = (p: any) => {
+const mapCategory = (p: any): string => {
     if (p.category === 'Sala') return 'Salón';
     const lowerName = p.name.toLowerCase();
-    if (lowerName.includes('mesa de centro') || lowerName.includes('mesa auxiliar') || lowerName.includes('mueble tv') || lowerName.includes('aparador') || lowerName.includes('conjunto mesa de centro')) {
+    const lowerHint = p.hint.toLowerCase();
+
+    if (lowerHint.includes('mueble tv') || lowerHint.includes('mesa de centro') || lowerHint.includes('aparador')) {
         return 'Salón';
     }
-    if (lowerName.includes('cómoda')) {
+    if (lowerHint.includes('cómoda')) {
         return 'Dormitorio';
     }
-    if (p.subcategory) {
-        if (p.subcategory.toLowerCase().includes('tv')) return 'Salón';
-    }
-    return 'Salón'; 
+    return 'Salón'; // Default category
 };
 
 export const ALL_PRODUCTS: Product[] = rawProducts.map((p: any) => ({
@@ -608,10 +608,9 @@ export const ALL_PRODUCTS: Product[] = rawProducts.map((p: any) => ({
   materials: p.materials || ["Aglomerado laminado"],
   colors: p.colors || ["Marrón"],
   dimensions: p.dimensions,
-  images: p.images,
+  images: p.images.map((img: string) => img.startsWith('http') ? img : `https://${img}`),
   sku: String(p.id),
   rating: p.rating,
-  // FIX: Add missing 'reviews' property to satisfy the Product interface.
   reviews: p.reviews,
   reviewsCount: p.reviews,
   hint: p.hint,
@@ -674,35 +673,35 @@ export const SERVICES_DATA = [
   {
     title: 'Closets',
     description: 'Somos expertos en sacar el mejor provecho del espacio con diseños de closets a medida.',
-    imageUrl: 'https://picsum.photos/id/159/200/200',
+    imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg',
     buttonText: 'Cotizar tu nuevo closet',
     quoteType: 'Closets',
   },
   {
     title: 'Cocinas',
     description: 'Diseño y construcción de cocinas optimizadas para mejor uso y eficiencia.',
-    imageUrl: 'https://picsum.photos/id/292/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop',
     buttonText: 'Cotizar tu nueva cocina',
     quoteType: 'Cocinas',
   },
   {
     title: 'Muebles Personalizados',
     description: 'Diseño o solicitud de mobiliario con funciones especiales.',
-    imageUrl: 'https://picsum.photos/id/211/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop',
     buttonText: 'Cotizar',
     quoteType: 'Muebles Personalizados',
   },
   {
     title: 'Mobiliario Comercial',
     description: 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...',
-    imageUrl: 'https://picsum.photos/id/180/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop',
     buttonText: 'Cotizar',
     quoteType: 'Mobiliario Comercial',
   },
   {
     title: 'Construcciones Especializadas',
     description: 'Desde el revestimiento de una pared hasta la construcción de una tiny house.',
-    imageUrl: 'https://picsum.photos/id/1013/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop',
     buttonText: 'Cotizar',
     quoteType: 'Construcciones Especializadas',
   },
@@ -712,37 +711,37 @@ export const QUOTE_PROJECT_TYPES = [
   {
     title: 'TV Wall',
     description: 'Espacios de muebles de TV y similares.',
-    imageUrl: 'https://picsum.photos/id/149/200/200',
+    imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg',
     quoteType: 'TV Wall',
   },
   {
     title: 'Closets',
     description: 'Reach in, walk in y personalizados.',
-    imageUrl: 'https://picsum.photos/id/159/200/200',
+    imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg',
     quoteType: 'Closets',
   },
   {
     title: 'Cocinas',
     description: 'Modulares personalizados.',
-    imageUrl: 'https://picsum.photos/id/292/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop',
     quoteType: 'Cocinas',
   },
   {
     title: 'Muebles Personalizados',
     description: 'Diseño o solicitud de mobiliario con funciones especiales.',
-    imageUrl: 'https://picsum.photos/id/211/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop',
     quoteType: 'Muebles Personalizados',
   },
   {
     title: 'Mobiliario Comercial',
     description: 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...',
-    imageUrl: 'https://picsum.photos/id/180/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop',
     quoteType: 'Mobiliario Comercial',
   },
   {
     title: 'Construcciones Especializadas',
     description: 'Desde el revestimiento de una pared hasta la construcción de una tiny house.',
-    imageUrl: 'https://picsum.photos/id/1013/200/200',
+    imageUrl: 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop',
     quoteType: 'Construcciones Especializadas',
   },
 ];

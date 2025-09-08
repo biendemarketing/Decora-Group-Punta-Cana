@@ -89,7 +89,7 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
             <QuoteStep title="2.- ¿Cuál es el tamaño de tu closet?">
                 <p className="text-sm text-gray-600 mb-6">Toma una cinta métrica y, mide las dos paredes de tu closet. La pared más extensa será el largo y la otra el ancho, asegúrate de medir en <strong>centímetros</strong>.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <img src="https://hom.com.do/wp-content/uploads/2025/05/closet-u.jpg" alt="Medición de closet" className="rounded-lg shadow-md w-full" />
+                    <img src="https://hom.com.do/wp-content/uploads/2025/05/closet-u.jpg" alt="Ilustración de cómo medir las paredes de un closet tipo U" className="rounded-lg shadow-md w-full" />
                     <div className="space-y-6">
                         <NumberInputWithControls label="Pared A en cm ↕️" value={formData.wallA} onChange={(val) => setFormData(p => ({...p, wallA: val}))} min={100} max={700} step={10} unit="cm" />
                         <NumberInputWithControls label="Pared B en cm ↔️" value={formData.wallB} onChange={(val) => setFormData(p => ({...p, wallB: val}))} min={100} max={700} step={10} unit="cm" />
@@ -105,7 +105,7 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
 
             <QuoteStep title="3.- Cantidad de módulos:">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <img src="https://hom.com.do/wp-content/uploads/2025/05/medida-de-closet-768x768.jpg" alt="Capacidad de módulos" className="rounded-lg shadow-md w-full" />
+                    <img src="https://hom.com.do/wp-content/uploads/2025/05/medida-de-closet-768x768.jpg" alt="Ilustración que muestra la capacidad de módulos de un closet" className="rounded-lg shadow-md w-full" />
                     <div className="text-left">
                         <h3 className="text-lg font-semibold text-gray-900">Basándonos en tu tipo de closet y las medidas suministradas, <span className="text-[#621330]">tu closet</span> tiene una capacidad para:</h3>
                         <p className="text-5xl font-bold text-gray-900 my-4">{moduleCapacity} <span className="text-3xl font-medium text-gray-700">Módulos</span></p>

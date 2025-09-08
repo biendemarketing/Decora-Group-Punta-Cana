@@ -21,7 +21,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectQuoteType }) 
           {/* Service Cards */}
           {SERVICES_DATA.map((service) => (
             <div key={service.title} className="bg-white text-gray-800 rounded-lg shadow-xl p-8 flex flex-col items-center text-center transition-transform hover:scale-105">
-              <img src={service.imageUrl} alt={service.title} className="h-32 object-contain mb-6" />
+              <img src={service.imageUrl} alt={`Servicio de ${service.title} por Decora Group`} className="h-32 object-contain mb-6" />
               <h3 className="text-2xl font-bold text-[#5a1e38]">{service.title}</h3>
               <p className="mt-2 text-gray-600 flex-grow">{service.description}</p>
               {service.buttonText && (

@@ -67,7 +67,7 @@ const ModuleSelector: React.FC<ModuleSelectorProps> = ({
                         className="sr-only"
                     />
                     <div className="aspect-[4/5] w-full overflow-hidden rounded-t-md">
-                        <img src={option.imageUrl} alt={option.name} className="w-full h-full object-cover" />
+                        <img src={option.imageUrl} alt={`Ilustración del ${option.name}`} className="w-full h-full object-cover" />
                     </div>
                     <div className="p-2 text-center bg-white rounded-b-md">
                         <p className="font-semibold text-xs text-gray-800 leading-tight">{option.name}</p>

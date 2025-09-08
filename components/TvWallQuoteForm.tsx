@@ -82,7 +82,7 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack }) => {
           <form onSubmit={handleSubmit} className="space-y-12">
             <QuoteStep title="1.- Selecciona el tamaño de tu pared:" subtitle="¡El tamaño si importa!">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <img src="https://hom.com.do/wp-content/uploads/2024/08/tamano-de-pared.jpg" alt="Medición de pared" className="rounded-lg shadow-md w-full" />
+                <img src="https://hom.com.do/wp-content/uploads/2024/08/tamano-de-pared.jpg" alt="Ilustración de cómo medir el alto y ancho de una pared" className="rounded-lg shadow-md w-full" />
                 <div className="space-y-6">
                   <NumberInputWithControls
                     label="Ancho en cm ↕️"

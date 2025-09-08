@@ -21,12 +21,11 @@ const InstagramEmbed: React.FC = () => {
           {/* Profile Info Block (now includes follow button) */}
           <div className="flex items-center gap-4 flex-shrink-0">
             <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-200 p-1">
-               <div className="w-full h-full bg-[#5a1e38] rounded-full flex items-center justify-center relative">
-                  <div className="w-10 h-10 relative">
-                      <div className="absolute top-0 left-0 w-full h-full border-2 border-white rounded-md transform -rotate-12"></div>
-                      <div className="absolute top-0 left-0 w-full h-full border-2 border-white rounded-md transform rotate-12"></div>
-                  </div>
-              </div>
+               <img 
+                  src="https://decoragrouppuntacana.com/icon.png" 
+                  alt="Decora Group Instagram Profile"
+                  className="w-full h-full object-cover rounded-full"
+                />
             </div>
             <div>
               <div className="flex items-center space-x-2">
@@ -50,7 +49,7 @@ const InstagramEmbed: React.FC = () => {
              <div className="flex items-center space-x-2 -m-2 p-2 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
                  {images.slice(0, 6).map((src, index) => (
                     <div key={index} className="snap-start flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32">
-                      <img src={src} alt={`Instagram post ${index + 1}`} className="w-full h-full object-cover rounded-md" />
+                      <img src={src} alt={`Publicación de Instagram ${index + 1} de Decora Group`} className="w-full h-full object-cover rounded-md" />
                     </div>
                   ))}
             </div>

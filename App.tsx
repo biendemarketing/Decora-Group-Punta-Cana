@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import type { Filters, Product, Project } from './types';
 import { ALL_PRODUCTS, ALL_PROJECTS, MAX_PRICE, MIN_PRICE, PRODUCT_DETAIL_DATA } from './constants';
 import Header from './components/Header';
@@ -20,6 +20,43 @@ import QuoteFormPage from './components/QuoteFormPage';
 import Pagination from './components/Pagination';
 
 const PRODUCTS_PER_PAGE = 30;
+
+const updateSEO = (title: string, description: string, structuredData?: object) => {
+  document.title = title;
+  
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) {
+    metaDescription.setAttribute('content', description);
+  }
+  
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', title);
+  
+  const ogDescription = document.querySelector('meta[property="og:description"]');
+  if (ogDescription) ogDescription.setAttribute('content', description);
+
+  const twitterTitle = document.querySelector('meta[property="twitter:title"]');
+  if (twitterTitle) twitterTitle.setAttribute('content', title);
+
+  const twitterDescription = document.querySelector('meta[property="twitter:description"]');
+  if (twitterDescription) twitterDescription.setAttribute('content', description);
+
+  // Remove existing structured data
+  const existingSchema = document.getElementById('json-ld-schema');
+  if (existingSchema) {
+    existingSchema.remove();
+  }
+  
+  // Add new structured data
+  if (structuredData) {
+    const script = document.createElement('script');
+    script.id = 'json-ld-schema';
+    script.type = 'application/ld+json';
+    script.innerHTML = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+  }
+};
+
 
 const App: React.FC = () => {
   // Product state
@@ -45,6 +82,105 @@ const App: React.FC = () => {
     materials: [],
     colors: [],
   });
+
+  useEffect(() => {
+    // Default SEO for homepage
+    let title = "Decora Group - Muebles a Medida y Diseño de Interiores en Punta Cana";
+    let description = "Descubre muebles de diseño y proyectos de interiorismo a medida en Punta Cana. Decora Group te ofrece calidad, estilo y funcionalidad para transformar tu hogar o negocio.";
+    let structuredData: any = {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Decora Group",
+      "url": "https://decoragrouppuntacana.com/",
+      "logo": "https://decoragrouppuntacana.com/icon.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-849-456-1963",
+        "contactType": "customer service"
+      }
+    };
+
+    if (selectedProduct) {
+      title = `${selectedProduct.name} | ${selectedProduct.category} | Decora Group`;
+      description = selectedProduct.description;
+      structuredData = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": selectedProduct.name,
+        "image": selectedProduct.images,
+        "description": selectedProduct.description,
+        "sku": selectedProduct.sku,
+        "brand": {
+            "@type": "Brand",
+            "name": "Decora Group"
+        },
+        "offers": {
+            "@type": "Offer",
+            "url": window.location.href,
+            "priceCurrency": "DOP",
+            "price": selectedProduct.price.toFixed(2),
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": selectedProduct.rating,
+          "reviewCount": selectedProduct.reviewsCount
+        }
+      };
+    } else if (selectedCategory) {
+      const categoryTitle = selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory;
+      title = `${categoryTitle} | Decora Group`;
+      description = `Explora nuestra colección de ${selectedCategory.toLowerCase()}. Encuentra diseños de alta calidad para tu hogar en Decora Group.`;
+      structuredData = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://decoragrouppuntacana.com/"
+        },{
+          "@type": "ListItem",
+          "position": 2,
+          "name": categoryTitle
+        }]
+      };
+    } else if (selectedProject) {
+        title = `${selectedProject.title} | Proyectos | Decora Group`;
+        description = selectedProject.description;
+         structuredData = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": selectedProject.title,
+            "image": selectedProject.galleryImages,
+            "author": {
+                "@type": "Organization",
+                "name": "Decora Group"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Decora Group",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://decoragrouppuntacana.com/icon.png"
+                }
+            },
+            "description": selectedProject.description
+         };
+    } else if (isViewingAllProjects || selectedProjectCategory) {
+        const projectTitle = selectedProjectCategory || "Todos Nuestros Proyectos";
+        title = `${projectTitle} | Proyectos | Decora Group`;
+        description = `Explora los proyectos de ${projectTitle.toLowerCase()} realizados por Decora Group. Inspiración y calidad para tu próximo diseño.`;
+    } else if (isViewingQuotePage || selectedQuoteType) {
+        const quoteTitle = selectedQuoteType || "Cotizar a medida";
+        title = `Cotización para ${quoteTitle} | Decora Group`;
+        description = `Obtén una cotización personalizada para tu proyecto de ${quoteTitle.toLowerCase()} con Decora Group. Calidad y diseño a tu medida.`;
+    }
+    
+    updateSEO(title, description, structuredData);
+
+  }, [selectedProduct, selectedCategory, selectedProject, isViewingAllProjects, selectedProjectCategory, isViewingQuotePage, selectedQuoteType]);
 
   const resetAllViews = () => {
     setSelectedProduct(null);
@@ -221,9 +357,9 @@ const App: React.FC = () => {
         <main>
            <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
                   Proyectos: {selectedProjectCategory}
-                </h2>
+                </h1>
                 <ProjectGrid projects={filteredProjects} onProjectSelect={handleProjectSelect} />
               </div>
            </div>
@@ -248,9 +384,9 @@ const App: React.FC = () => {
         <main>
           <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
                 {selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory}
-              </h2>
+              </h1>
               <div className="lg:grid lg:grid-cols-4 lg:gap-8">
                 <aside className="lg:col-span-1">
                   <FilterSidebar 
@@ -324,6 +460,7 @@ const App: React.FC = () => {
         onSelectProjectCategory={handleSelectProjectCategory}
         onGoHome={handleGoHome} 
         onViewQuotePage={handleViewQuotePage}
+        onSelectQuoteType={handleSelectQuoteType}
       />
       {renderContent()}
       <Footer />
