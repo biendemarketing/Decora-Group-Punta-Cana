@@ -65,7 +65,7 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack }) => {
 
   return (
     <main className="bg-gray-50 pb-28"> {/* Padding bottom to avoid overlap with sticky bar */}
-      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-screen-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <button onClick={onBack} className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
             <ArrowLeft className="h-4 w-4 mr-2" />

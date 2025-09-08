@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Minus, Plus } from 'lucide-react';
 
 interface NumberInputWithControlsProps {
@@ -20,6 +20,15 @@ const NumberInputWithControls: React.FC<NumberInputWithControlsProps> = ({
   step,
   unit,
 }) => {
+  const [inputValue, setInputValue] = useState(value.toString());
+
+  useEffect(() => {
+    // This effect syncs the displayed value with the parent component's state.
+    // It's important for when the value is changed by the increment/decrement buttons
+    // or if the parent component sends a new value.
+    setInputValue(value.toString());
+  }, [value]);
+
   const handleIncrement = () => {
     const newValue = Math.min(max, value + step);
     onChange(newValue);
@@ -30,13 +39,28 @@ const NumberInputWithControls: React.FC<NumberInputWithControlsProps> = ({
     onChange(newValue);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = parseInt(e.target.value, 10);
-    if (isNaN(newValue)) {
-      newValue = min;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Allow the user to type freely, including an empty string.
+    // Only allow numeric characters.
+    const numericValue = e.target.value.replace(/[^0-9]/g, '');
+    setInputValue(numericValue);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    let numValue = parseInt(e.target.value, 10);
+    
+    // If input is empty or not a number, revert to the last valid value from parent.
+    if (isNaN(numValue)) {
+        numValue = value; 
     }
-    newValue = Math.max(min, Math.min(max, newValue));
-    onChange(newValue);
+
+    // Clamp the value within min/max bounds
+    const clampedValue = Math.max(min, Math.min(max, numValue));
+    
+    // Update the parent component with the final, validated value.
+    onChange(clampedValue);
+    // The parent state will update, and the useEffect will re-sync the inputValue if it changed,
+    // for example, if the user entered a value outside the min/max range.
   };
 
   return (
@@ -53,13 +77,12 @@ const NumberInputWithControls: React.FC<NumberInputWithControlsProps> = ({
         </button>
         <div className="relative flex-grow">
            <input
-            type="number"
-            value={value}
-            onChange={handleChange}
-            onBlur={handleChange} // Ensure value is validated on blur
-            min={min}
-            max={max}
-            step={step}
+            type="text" // Using text allows for temporary empty state
+            inputMode="numeric" // Shows numeric keyboard on mobile
+            pattern="[0-9]*"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
             className="w-full text-center bg-white border-y border-gray-300 focus:ring-[#621330] focus:border-[#621330] block shadow-sm text-base py-2.5 text-gray-900"
             style={{ MozAppearance: 'textfield' }}
           />

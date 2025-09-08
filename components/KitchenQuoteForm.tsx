@@ -44,7 +44,7 @@ const ImageSelector = ({ options, selectedOption, onSelect, gridCols = 'grid-col
             <img
               src={option.imageUrl}
               alt={option.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
           <div className="p-3 text-center bg-white rounded-b-md">
@@ -89,7 +89,7 @@ const AccessorySelector = ({ options, selectedOptions, onSelectionChange }: any)
             className="sr-only"
           />
           <div className="aspect-square w-full overflow-hidden rounded-t-md">
-            <img src={option.imageUrl} alt={option.name} className="w-full h-full object-cover" />
+            <img src={option.imageUrl} alt={option.name} className="w-full h-full object-contain" />
           </div>
           <div className="p-2 text-center bg-white rounded-b-md">
             <p className="font-semibold text-xs text-gray-800 leading-tight">{option.name}</p>
@@ -156,7 +156,7 @@ const KitchenQuoteForm: React.FC<KitchenQuoteFormProps> = ({ onBack }) => {
 
   return (
     <main className="bg-gray-50 pb-28">
-      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-screen-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <button onClick={onBack} className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
             <ArrowLeft className="h-4 w-4 mr-2" />

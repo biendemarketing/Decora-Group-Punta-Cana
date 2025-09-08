@@ -7,7 +7,7 @@ interface StickyTotalBarProps {
 const StickyTotalBar: React.FC<StickyTotalBarProps> = ({ total }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <h3 className="text-lg font-bold text-gray-800">Total estimado</h3>
         <p className="text-2xl font-extrabold text-gray-900">
           ${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

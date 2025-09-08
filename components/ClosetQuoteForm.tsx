@@ -37,12 +37,15 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
   const totalPrice = useMemo(() => {
     const modulesValue = formData.selectedModules.reduce((sum, module) => sum + module.price, 0);
     const accessoriesValue = formData.selectedAccessories.reduce((sum, acc) => sum + acc.price, 0);
-    const installationMultiplier = formData.installation.multiplier;
+    const installationPrice = formData.installation.price;
 
-    // Formula: (((modules_sum * closet_sqm) / 4) + (closet_capacity * installation_multiplier) + accessories_sum)
-    const total = ((modulesValue * closetM2) / 4) + (moduleCapacity * installationMultiplier) + accessoriesValue;
+    // Formula: The cost of modules is scaled by the closet area, then accessories and a fixed installation price are added.
+    const modulesCost = formData.selectedModules.length > 0 ? (modulesValue * closetM2) / 4 : 0;
+    
+    const total = modulesCost + accessoriesValue + installationPrice;
+    
     return total;
-  }, [formData, closetM2, moduleCapacity]);
+  }, [formData, closetM2]);
 
   const handleUserInfoChange = useCallback((field: keyof typeof formData.userInfo, value: string) => {
     setFormData(prev => ({ ...prev, userInfo: { ...prev.userInfo, [field]: value } }));
@@ -64,7 +67,7 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
 
   return (
     <main className="bg-gray-50 pb-28">
-      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-screen-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <button onClick={onBack} className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
             <ArrowLeft className="h-4 w-4 mr-2" /> Volver
