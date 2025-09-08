@@ -18,6 +18,7 @@ import ServicesSection from './components/ServicesSection';
 import WorkProcessSection from './components/WorkProcessSection';
 import QuoteFormPage from './components/QuoteFormPage';
 import Pagination from './components/Pagination';
+import AboutUsPage from './components/AboutUsPage';
 
 const PRODUCTS_PER_PAGE = 30;
 
@@ -72,6 +73,9 @@ const App: React.FC = () => {
   // Quote Page state
   const [isViewingQuotePage, setIsViewingQuotePage] = useState<boolean>(false);
   const [selectedQuoteType, setSelectedQuoteType] = useState<string | null>(null);
+
+  // About Us Page state
+  const [isViewingAboutPage, setIsViewingAboutPage] = useState<boolean>(false);
 
 
   const [filters, setFilters] = useState<Filters>({
@@ -176,11 +180,14 @@ const App: React.FC = () => {
         const quoteTitle = selectedQuoteType || "Cotizar a medida";
         title = `Cotización para ${quoteTitle} | Decora Group`;
         description = `Obtén una cotización personalizada para tu proyecto de ${quoteTitle.toLowerCase()} con Decora Group. Calidad y diseño a tu medida.`;
+    } else if (isViewingAboutPage) {
+        title = "Sobre Nosotros | Decora Group";
+        description = "Conoce la historia, misión, visión y valores de Decora Group. Descubre por qué somos líderes en diseño de muebles a medida en Punta Cana.";
     }
     
     updateSEO(title, description, structuredData);
 
-  }, [selectedProduct, selectedCategory, selectedProject, isViewingAllProjects, selectedProjectCategory, isViewingQuotePage, selectedQuoteType]);
+  }, [selectedProduct, selectedCategory, selectedProject, isViewingAllProjects, selectedProjectCategory, isViewingQuotePage, selectedQuoteType, isViewingAboutPage]);
 
   const resetAllViews = () => {
     setSelectedProduct(null);
@@ -190,6 +197,7 @@ const App: React.FC = () => {
     setIsViewingAllProjects(false);
     setIsViewingQuotePage(false);
     setSelectedQuoteType(null);
+    setIsViewingAboutPage(false);
     setCurrentPage(1);
   };
   
@@ -266,6 +274,12 @@ const App: React.FC = () => {
     setIsViewingQuotePage(true);
   }, []);
 
+  // About Us Page Navigation
+  const handleViewAboutPage = useCallback(() => {
+    resetAllViews();
+    setIsViewingAboutPage(true);
+  }, []);
+
 
   // Global Navigation
   const handleGoHome = useCallback(() => {
@@ -317,6 +331,10 @@ const App: React.FC = () => {
   }, [selectedProjectCategory]);
 
   const renderContent = () => {
+    if (isViewingAboutPage) {
+      return <AboutUsPage />;
+    }
+
     if (selectedQuoteType) {
       return <QuoteFormPage projectType={selectedQuoteType} onBack={handleBackToQuotePage} />;
     }
@@ -461,6 +479,7 @@ const App: React.FC = () => {
         onGoHome={handleGoHome} 
         onViewQuotePage={handleViewQuotePage}
         onSelectQuoteType={handleSelectQuoteType}
+        onViewAboutPage={handleViewAboutPage}
       />
       {renderContent()}
       <Footer />

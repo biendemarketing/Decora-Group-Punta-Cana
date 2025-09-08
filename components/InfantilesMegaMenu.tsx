@@ -3,15 +3,22 @@ import { INFANTILES_SUB_CATEGORIES } from '../constants';
 
 interface InfantilesMegaMenuProps {
   onSelectCategory: () => void;
+  onClose: () => void;
 }
 
-const InfantilesMegaMenu: React.FC<InfantilesMegaMenuProps> = ({ onSelectCategory }) => {
+const InfantilesMegaMenu: React.FC<InfantilesMegaMenuProps> = ({ onSelectCategory, onClose }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onSelectCategory();
+    onClose();
+  };
+  
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-4 gap-6 py-5">
         <div className="col-span-3 grid grid-cols-6 gap-x-4 gap-y-3">
           {INFANTILES_SUB_CATEGORIES.map((category) => (
-            <a href="#" key={category.name} onClick={(e) => { e.preventDefault(); onSelectCategory(); }} className="group flex flex-col items-center text-center p-1 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+            <a href="#" key={category.name} onClick={handleClick} className="group flex flex-col items-center text-center p-1 rounded-lg hover:bg-gray-50 transition-colors duration-200">
               <div className="w-16 h-16 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center border">
                 <img src={category.imageUrl} alt={`Icono de la categoría ${category.name}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               </div>
@@ -25,7 +32,7 @@ const InfantilesMegaMenu: React.FC<InfantilesMegaMenuProps> = ({ onSelectCategor
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end p-4">
             <h3 className="text-white text-lg font-bold">Muebles infantiles</h3>
           </div>
-          <a href="#" onClick={(e) => { e.preventDefault(); onSelectCategory(); }} className="absolute inset-0" aria-label="Ver todos los muebles infantiles"></a>
+          <a href="#" onClick={handleClick} className="absolute inset-0" aria-label="Ver todos los muebles infantiles"></a>
         </div>
       </div>
     </div>

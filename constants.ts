@@ -829,3 +829,42 @@ export const CLOSET_ACCESSORIES = [
   { name: 'Gaveta de Accesorios', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/gavetas-de-accesorios.jpg' },
   { name: 'Perchero Extraíble', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/perchero-extraible.jpg' },
 ];
+
+export const TIMELINE_DATA = [
+  { year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },
+  { year: 2019, description: "Inauguramos nuestro primer taller de fabricación, combinando tecnología y artesanía." },
+  { year: 2021, description: "Expandimos nuestros servicios para incluir proyectos comerciales y de hotelería." },
+  { year: 2023, description: "Lanzamos nuestra plataforma digital para ofrecer una experiencia de cotización innovadora." },
+];
+
+export const COMPANY_VALUES = [
+  { icon: "Check", title: "Calidad y Excelencia", description: "Nos comprometemos a utilizar los mejores materiales y la artesanía más fina para entregar productos que superan los más altos estándares." },
+  { icon: "Heart", title: "Pasión por el Diseño", description: "El diseño está en el corazón de todo lo que hacemos. Creamos piezas que son funcionales, hermosas y que inspiran la vida cotidiana." },
+  { icon: "Scale", title: "Integridad y Transparencia", description: "Operamos con honestidad y claridad en cada interacción, construyendo relaciones de confianza con nuestros clientes, socios y equipo." },
+  { icon: "Leaf", title: "Sostenibilidad", description: "Estamos dedicados a prácticas responsables, utilizando materiales sostenibles y procesos que minimizan nuestro impacto en el medio ambiente." },
+];
+
+export const CLIENT_LOGOS = [
+  { url: 'https://tailwindui.com/img/logos/158x48/transistor-logo-gray-400.svg', alt: 'Transistor' },
+  { url: 'https://tailwindui.com/img/logos/158x48/reform-logo-gray-400.svg', alt: 'Reform' },
+  { url: 'https://tailwindui.com/img/logos/158x48/tuple-logo-gray-400.svg', alt: 'Tuple' },
+  { url: 'https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-400.svg', alt: 'SavvyCal' },
+  { url: 'https://tailwindui.com/img/logos/158x48/statamic-logo-gray-400.svg', alt: 'Statamic' },
+  { url: 'https://tailwindui.com/img/logos/158x48/workcation-logo-gray-400.svg', alt: 'Workcation' },
+];
+
+export const WHY_CHOOSE_US_POINTS = [
+    { icon: "Gem", title: "Calidad Insuperable", description: "Utilizamos solo los mejores materiales y acabados para garantizar muebles duraderos y de alta gama." },
+    { icon: "Lightbulb", title: "Diseño Personalizado", description: "Cada proyecto es único. Creamos soluciones a medida que se adaptan perfectamente a tu estilo y necesidades." },
+    { icon: "Award", title: "Artesanía Experta", description: "Nuestro equipo de artesanos cuenta con años de experiencia, cuidando cada detalle con pasión y precisión." },
+    { icon: "Handshake", title: "Compromiso con el Cliente", description: "Tu satisfacción es nuestra prioridad. Te acompañamos en cada paso del proceso, desde el diseño hasta la instalación." },
+    { icon: "TrendingUp", title: "Innovación Constante", description: "Estamos siempre a la vanguardia de las últimas tendencias y tecnologías para ofrecerte lo mejor del mercado." },
+    { icon: "Users", title: "Equipo Profesional", description: "Contamos con un equipo multidisciplinar de diseñadores, arquitectos y técnicos para garantizar resultados excepcionales." },
+];
+
+export const TEAM_MEMBERS = [
+    { name: "Juan Pérez", role: "CEO y Fundador", imageUrl: "https://i.pravatar.cc/150?img=1" },
+    { name: "María González", role: "Directora de Diseño", imageUrl: "https://i.pravatar.cc/150?img=2" },
+    { name: "Carlos Rodríguez", role: "Jefe de Producción", imageUrl: "https://i.pravatar.cc/150?img=3" },
+    { name: "Ana Martínez", role: "Gerente de Proyectos", imageUrl: "https://i.pravatar.cc/150?img=4" },
+];

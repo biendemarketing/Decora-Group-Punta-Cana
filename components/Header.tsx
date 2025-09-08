@@ -18,9 +18,10 @@ interface HeaderProps {
   onGoHome: () => void;
   onViewQuotePage: () => void;
   onSelectQuoteType: (type: string) => void;
+  onViewAboutPage: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, onSelectQuoteType }) => {
+const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, onSelectQuoteType, onViewAboutPage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
   const [isDormitorioMenuOpen, setIsDormitorioMenuOpen] = useState(false);
@@ -66,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             <div className="flex items-center"><ShieldCheck className="h-4 w-4 mr-1 text-[#5a1e38]"/> 365 días - garantía</div>
           </div>
           <div className="flex items-center space-x-3">
-             <a href="#" className="hover:text-[#5a1e38]">Nosotros</a>
+             <button onClick={onViewAboutPage} className="hover:text-[#5a1e38]">Nosotros</button>
              <span className="text-gray-300">|</span>
              <a href="#" className="hover:text-[#5a1e38]">FAQ</a>
              <span className="text-gray-300">|</span>
@@ -191,7 +192,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsSalonMenuOpen(true)}
           >
-            <SalonMegaMenu onSelectCategory={() => onSelectCategory('Salón')} />
+            <SalonMegaMenu onSelectCategory={() => onSelectCategory('Salón')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isDormitorioMenuOpen && (
@@ -199,7 +200,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsDormitorioMenuOpen(true)}
           >
-            <DormitorioMegaMenu onSelectCategory={() => onSelectCategory('Dormitorio')} />
+            <DormitorioMegaMenu onSelectCategory={() => onSelectCategory('Dormitorio')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isCocinaMenuOpen && (
@@ -207,7 +208,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsCocinaMenuOpen(true)}
           >
-            <CocinaMegaMenu onSelectCategory={() => onSelectCategory('Cocina')} />
+            <CocinaMegaMenu onSelectCategory={() => onSelectCategory('Cocina')} onClose={closeAllMegaMenus} />
           </div>
         )}
          {isRecibidorMenuOpen && (
@@ -215,7 +216,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsRecibidorMenuOpen(true)}
           >
-            <RecibidorMegaMenu onSelectCategory={() => onSelectCategory('Recibidor')} />
+            <RecibidorMegaMenu onSelectCategory={() => onSelectCategory('Recibidor')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isOficinaMenuOpen && (
@@ -223,7 +224,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsOficinaMenuOpen(true)}
           >
-            <OficinaMegaMenu onSelectCategory={() => onSelectCategory('Oficina')} />
+            <OficinaMegaMenu onSelectCategory={() => onSelectCategory('Oficina')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isBanoMenuOpen && (
@@ -231,7 +232,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsBanoMenuOpen(true)}
           >
-            <BanoMegaMenu onSelectCategory={() => onSelectCategory('Baño')} />
+            <BanoMegaMenu onSelectCategory={() => onSelectCategory('Baño')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isInfantilesMenuOpen && (
@@ -239,7 +240,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsInfantilesMenuOpen(true)}
           >
-            <InfantilesMegaMenu onSelectCategory={() => onSelectCategory('Muebles infantiles')} />
+            <InfantilesMegaMenu onSelectCategory={() => onSelectCategory('Muebles infantiles')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isProyectosMenuOpen && (
@@ -247,7 +248,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsProyectosMenuOpen(true)}
           >
-            <ProyectosMegaMenu onSelectProjectCategory={onSelectProjectCategory} />
+            <ProyectosMegaMenu onSelectProjectCategory={onSelectProjectCategory} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isCotizarMenuOpen && (
@@ -255,7 +256,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
             onMouseEnter={() => setIsCotizarMenuOpen(true)}
           >
-            <CotizarMegaMenu onSelectQuoteType={onSelectQuoteType} />
+            <CotizarMegaMenu onSelectQuoteType={onSelectQuoteType} onClose={closeAllMegaMenus} />
           </div>
         )}
       </nav>
