@@ -450,7 +450,10 @@ const App: React.FC = () => {
     
     return (
        <main>
-        <Hero />
+        <Hero 
+          onQuoteClick={handleViewQuotePage}
+          onProjectsClick={handleViewAllProjects}
+        />
         <DesignsCarousel onSelectProjectCategory={handleSelectProjectCategory} onViewAllProjects={handleViewAllProjects} />
         <CategoryGrid />
         <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">

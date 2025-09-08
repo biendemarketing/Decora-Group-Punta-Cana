@@ -3,7 +3,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { HERO_SLIDES } from '../constants';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onQuoteClick: () => void;
+  onProjectsClick: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onQuoteClick, onProjectsClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = useCallback(() => {
@@ -24,7 +29,7 @@ const Hero: React.FC = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative bg-gray-800 h-[50vh] min-h-[450px] w-full overflow-hidden">
+    <div className="relative bg-gray-800 h-[60vh] min-h-[500px] w-full overflow-hidden">
       {/* Slides container */}
       <div className="absolute inset-0">
         {HERO_SLIDES.map((slide, index) => (
@@ -33,26 +38,34 @@ const Hero: React.FC = () => {
             className={`absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 ease-in-out ${currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
             style={{ backgroundImage: `url('${slide.imageUrl}')` }}
           >
-            <div className="absolute inset-0 bg-black opacity-30"></div>
+            <div className="absolute inset-0 bg-black opacity-40"></div>
           </div>
         ))}
       </div>
 
       {/* Text content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white flex flex-col items-center justify-center h-full">
-        {HERO_SLIDES.map((slide, index) => (
-          <div
-            key={index}
-            className={`transition-opacity duration-1000 ease-in-out absolute ${currentIndex === index ? 'opacity-100' : 'opacity-0'}`}
-          >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-              <span className="block">{slide.title}</span>
-            </h1>
-            <p className="mt-4 text-2xl sm:text-3xl text-gray-200">
-              {slide.subtitle}
-            </p>
-          </div>
-        ))}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight drop-shadow-lg">
+          <span className="block">{HERO_SLIDES[currentIndex].title}</span>
+        </h1>
+        <p className="mt-4 text-xl sm:text-2xl text-gray-200 drop-shadow-md max-w-3xl">
+          {HERO_SLIDES[currentIndex].subtitle}
+        </p>
+        
+         <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={onQuoteClick}
+              className="px-8 py-3 bg-[#5a1e38] text-white font-semibold rounded-md shadow-lg hover:bg-[#4d182e] transform hover:scale-105 transition-all duration-300"
+            >
+              Cotización automática
+            </button>
+            <button
+              onClick={onProjectsClick}
+              className="px-8 py-3 bg-black/30 backdrop-blur-sm text-white font-semibold rounded-md shadow-lg border border-white/20 hover:bg-white/20 transform hover:scale-105 transition-all duration-300"
+            >
+              Ver proyectos
+            </button>
+        </div>
       </div>
       
       {/* Navigation Arrows */}
