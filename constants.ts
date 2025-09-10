@@ -1,6 +1,4 @@
-
-
-import type { Product, Project } from './types';
+import type { Product, Project, NavigationData, TopBarLink } from './types';
 
 export const NAV_LINKS = [
   "Sala", "Dormitorio", "Cocina", 
@@ -1040,3 +1038,27 @@ export const OUR_HISTORY_IMAGES = [
   { url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
   { url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
 ];
+
+const TOP_BAR_LINKS: TopBarLink[] = [
+    { id: 'about', text: 'Nosotros' },
+    { id: 'faq', text: 'FAQ' },
+    { id: 'legal', text: 'Aviso Legal y Términos y Condiciones' },
+    { id: 'contact', text: 'Contacto' },
+];
+
+export const INITIAL_NAVIGATION_DATA: NavigationData = {
+  navLinks: NAV_LINKS,
+  sala: SALA_SUB_CATEGORIES,
+  dormitorio: DORMITORIO_SUB_CATEGORIES,
+  cocina: COCINA_SUB_CATEGORIES,
+  recibidor: RECIBIDOR_SUB_CATEGORIES,
+  oficina: OFICINA_SUB_CATEGORIES,
+  bano: BANO_SUB_CATEGORIES,
+  infantiles: INFANTILES_SUB_CATEGORIES,
+  puertas: PUERTAS_SUB_CATEGORIES,
+  proyectos: PROYECTOS_SUB_CATEGORIES,
+  cotizar: QUOTE_PROJECT_TYPES.map(p => ({ ...p, name: p.title })),
+  logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
+  footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
+  topBarLinks: TOP_BAR_LINKS,
+};

@@ -1,12 +1,13 @@
 import React from 'react';
-import { INFANTILES_SUB_CATEGORIES } from '../constants';
+import { SubCategory } from '../types';
 
 interface InfantilesMegaMenuProps {
+  subCategories: SubCategory[];
   onSelectCategory: () => void;
   onClose: () => void;
 }
 
-const InfantilesMegaMenu: React.FC<InfantilesMegaMenuProps> = ({ onSelectCategory, onClose }) => {
+const InfantilesMegaMenu: React.FC<InfantilesMegaMenuProps> = ({ subCategories, onSelectCategory, onClose }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onSelectCategory();
@@ -17,7 +18,7 @@ const InfantilesMegaMenu: React.FC<InfantilesMegaMenuProps> = ({ onSelectCategor
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-4 gap-6 py-5">
         <div className="col-span-3 grid grid-cols-6 gap-x-4 gap-y-3">
-          {INFANTILES_SUB_CATEGORIES.map((category) => (
+          {subCategories.map((category) => (
             <a href="#" key={category.name} onClick={handleClick} className="group flex flex-col items-center text-center p-1 rounded-lg hover:bg-gray-50 transition-colors duration-200">
               <div className="w-16 h-16 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center border">
                 <img src={category.imageUrl} alt={`Icono de la categoría ${category.name}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />

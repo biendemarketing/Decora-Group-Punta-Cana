@@ -1,12 +1,13 @@
 import React from 'react';
-import { QUOTE_PROJECT_TYPES } from '../constants';
+import { SubCategory } from '../types';
 
 interface CotizarMegaMenuProps {
+  quoteTypes: SubCategory[];
   onSelectQuoteType: (type: string) => void;
   onClose: () => void;
 }
 
-const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ onSelectQuoteType, onClose }) => {
+const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ quoteTypes, onSelectQuoteType, onClose }) => {
   const handleClick = (e: React.MouseEvent, quoteType: string) => {
     e.preventDefault();
     onSelectQuoteType(quoteType);
@@ -17,11 +18,11 @@ const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ onSelectQuoteType, on
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-4 gap-6 py-5">
         <div className="col-span-3 grid grid-cols-4 gap-x-6 gap-y-4">
-          {QUOTE_PROJECT_TYPES.map((project) => (
+          {quoteTypes.map((project) => (
             <a 
               href="#" 
               key={project.title} 
-              onClick={(e) => handleClick(e, project.quoteType)} 
+              onClick={(e) => handleClick(e, project.quoteType!)} 
               className="group flex flex-col items-center text-center p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200"
             >
               <div className="w-24 h-24 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center border">
@@ -39,7 +40,7 @@ const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ onSelectQuoteType, on
             <h3 className="text-xl font-bold">Proyectos a tu Medida</h3>
             <p className="text-sm mt-2">Creamos soluciones únicas que se adaptan perfectamente a tu espacio y estilo de vida.</p>
           </div>
-          <a href="#" onClick={(e) => handleClick(e, QUOTE_PROJECT_TYPES[0].quoteType)} className="absolute inset-0" aria-label="Ver todos los proyectos a medida"></a>
+          <a href="#" onClick={(e) => handleClick(e, quoteTypes[0].quoteType!)} className="absolute inset-0" aria-label="Ver todos los proyectos a medida"></a>
         </div>
       </div>
     </div>

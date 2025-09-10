@@ -1,8 +1,6 @@
-
-
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem } from './types';
-import { ALL_PRODUCTS, ALL_PROJECTS, MAX_PRICE, MIN_PRICE, PRODUCT_DETAIL_DATA } from './constants';
+import type { Filters, Product, Project, CartItem, NavigationData, TopBarLink } from './types';
+import { ALL_PRODUCTS, ALL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import CategoryGrid from './components/CategoryGrid';
@@ -30,6 +28,8 @@ import QuoteCheckoutPage from './components/QuoteCheckoutPage';
 import QuoteTemplate from './components/QuoteTemplate';
 import WishlistPage from './components/WishlistPage';
 import BlogPage from './components/BlogPage';
+import AdminPanel from './components/AdminPanel';
+import LoginPage from './components/LoginPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -172,7 +172,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin';
 
 interface CustomerInfo {
     name: string;
@@ -212,7 +212,6 @@ const updateSEO = (title: string, description: string, structuredData?: object) 
 };
 
 
-// FIX: Refactored component structure to correctly return JSX and handle view rendering.
 const AppContent: React.FC = () => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
@@ -225,6 +224,24 @@ const AppContent: React.FC = () => {
   const [selectedProjectCategory, setSelectedProjectCategory] = useState<string | null>(null);
   const [selectedQuoteType, setSelectedQuoteType] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({ name: '', email: '', phone: '', address: '' });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [navigationData, setNavigationData] = useState<NavigationData>(INITIAL_NAVIGATION_DATA);
+
+  useEffect(() => {
+    const storedNavData = localStorage.getItem('navigationData');
+    if (storedNavData) {
+      try {
+        setNavigationData(JSON.parse(storedNavData));
+      } catch (error) {
+        console.error("Error parsing navigation data from localStorage", error);
+        localStorage.removeItem('navigationData');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('navigationData', JSON.stringify(navigationData));
+  }, [navigationData]);
 
 
   const [filters, setFilters] = useState<Filters>({
@@ -237,22 +254,20 @@ const AppContent: React.FC = () => {
   });
   
   useEffect(() => {
-    // Scroll to top on major view/selection changes
+    if (view === 'admin' || view === 'login') return;
     window.scrollTo(0, 0);
   }, [view, selectedProduct, selectedProject]);
 
   useEffect(() => {
-    // SEO Management logic based on view
     let title = "Decora Group - Muebles a Medida y Diseño de Interiores en Punta Cana";
     let description = "Descubre muebles de diseño y proyectos de interiorismo a medida en Punta Cana. Decora Group te ofrece calidad, estilo y funcionalidad para transformar tu hogar o negocio.";
-    let structuredData: any = { /* ... default schema ... */ };
+    let structuredData: any = {};
 
     switch(view) {
         case 'productDetail':
             if (selectedProduct) {
                 title = `${selectedProduct.name} | ${selectedProduct.category} | Decora Group`;
                 description = selectedProduct.description;
-                // structuredData for product...
             }
             break;
         case 'category':
@@ -262,13 +277,9 @@ const AppContent: React.FC = () => {
                 description = `Explora nuestra colección de ${selectedCategory.toLowerCase()}. Encuentra diseños de alta calidad para tu hogar en Decora Group.`;
             }
             break;
-        // ... other cases for other views
     }
-    
     updateSEO(title, description, structuredData);
-
   }, [view, selectedProduct, selectedCategory, selectedProject, selectedProjectCategory, selectedQuoteType]);
-
 
   const resetToHome = () => {
     setView('home');
@@ -282,8 +293,12 @@ const AppContent: React.FC = () => {
   
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top of page on pagination, which is only used in category view
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const productGridElement = document.getElementById('product-grid-section');
+    if (productGridElement) {
+        productGridElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleFilterChange = useCallback((newFilters: Partial<Filters>) => {
@@ -299,8 +314,7 @@ const AppContent: React.FC = () => {
   }, []);
 
   const handleProductSelect = useCallback((product: Product) => {
-    const productWithFullData = ALL_PRODUCTS.find(p => p.id === product.id) || PRODUCT_DETAIL_DATA;
-    setSelectedProduct({ ...productWithFullData, name: product.name, price: product.price, imageUrl: product.imageUrl, category: product.category });
+    setSelectedProduct(product);
     setView('productDetail');
   }, []);
 
@@ -337,7 +351,7 @@ const AppContent: React.FC = () => {
     setView('printQuote');
     setTimeout(() => {
         window.print();
-        setView('checkout'); // Return to checkout view after printing
+        setView('checkout'); 
     }, 500);
   }, []);
 
@@ -356,8 +370,17 @@ const AppContent: React.FC = () => {
 
     const whatsappUrl = `https://wa.me/18494561963?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
-};
+  };
 
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    setView('admin');
+  };
+  
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setView('home');
+  };
 
   const filteredProducts = useMemo(() => {
     return ALL_PRODUCTS.filter(product => {
@@ -398,17 +421,28 @@ const AppContent: React.FC = () => {
     if (!selectedProjectCategory) return ALL_PROJECTS;
     return ALL_PROJECTS.filter(project => project.category === selectedProjectCategory);
   }, [selectedProjectCategory]);
+  
+  // --- RENDER LOGIC ---
 
-  const MainContent = () => {
+  // Admin View (isolated, no header/footer)
+  if (view === 'login') return <LoginPage onLogin={handleLogin} />;
+  if (view === 'admin') {
+      if (!isAuthenticated) {
+        setView('login');
+        return <LoginPage onLogin={handleLogin} />;
+      }
+      return <AdminPanel navigationData={navigationData} onNavigationChange={setNavigationData} onLogout={handleLogout} />;
+  }
+
+  // Print View
+  if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
+
+  // Public Views (with Header/Footer)
+  const renderPublicContent = () => {
       switch(view) {
-          case 'blog':
-              return <BlogPage />;
-          case 'printQuote':
-              return <QuoteTemplate customerInfo={customerInfo} />;
-          case 'cart':
-              return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;
-          case 'wishlist':
-              return <WishlistPage onProductSelect={handleProductSelect} />;
+          case 'blog': return <BlogPage />;
+          case 'cart': return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;
+          case 'wishlist': return <WishlistPage onProductSelect={handleProductSelect} />;
           case 'checkout':
               return <QuoteCheckoutPage 
                   customerInfo={customerInfo}
@@ -418,16 +452,11 @@ const AppContent: React.FC = () => {
                   onGoBackToCart={() => setView('cart')}
                   onContinueShopping={() => handleSelectCategory("Todos los productos")}
               />;
-          case 'about':
-              return <AboutUsPage />;
-          case 'contact':
-              return <ContactPage />;
-          case 'quoteForm':
-              return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} />;
-          case 'quote':
-              return <CustomQuotePage onSelectQuoteType={handleSelectQuoteType} />;
-          case 'projectDetail':
-              return <ProjectDetailPage project={selectedProject!} onBack={() => setView('projects')} onGoHome={resetToHome} />;
+          case 'about': return <AboutUsPage />;
+          case 'contact': return <ContactPage />;
+          case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} />;
+          case 'quote': return <CustomQuotePage onSelectQuoteType={handleSelectQuoteType} />;
+          case 'projectDetail': return <ProjectDetailPage project={selectedProject!} onBack={() => setView('projects')} onGoHome={resetToHome} />;
           case 'projects':
               return (
                   <main>
@@ -446,7 +475,7 @@ const AppContent: React.FC = () => {
           case 'category':
                return (
                   <main>
-                  <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+                  <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
                       <div className="max-w-7xl mx-auto">
                       <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
                           {selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory}
@@ -469,7 +498,7 @@ const AppContent: React.FC = () => {
                       <Hero onQuoteClick={() => setView('quote')} onProjectsClick={() => { setSelectedProjectCategory(null); setView('projects'); }} />
                       <DesignsCarousel onSelectProjectCategory={handleSelectProjectCategory} onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} />
                       <CategoryGrid />
-                      <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+                      <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
                           <div className="max-w-7xl mx-auto">
                               <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-4">Descubre Nuestra Selección</h2>
                               <p className="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-12">Explora nuestra selección de muebles de alta calidad. Usa los filtros para encontrar la pieza ideal para ti.</p>
@@ -501,26 +530,27 @@ const AppContent: React.FC = () => {
   }
   
   return (
-      <div className="bg-gray-50">
-          <div className={view === 'printQuote' ? 'no-print' : ''}>
-              <Header 
-                  onSelectCategory={handleSelectCategory} 
-                  onSelectProjectCategory={handleSelectProjectCategory}
-                  onGoHome={resetToHome} 
-                  onViewQuotePage={() => setView('quote')}
-                  onSelectQuoteType={handleSelectQuoteType}
-                  onViewAboutPage={() => setView('about')}
-                  onViewContactPage={() => setView('contact')}
-                  onViewCart={() => setView('cart')}
-                  onViewWishlist={() => setView('wishlist')}
-                  onViewBlogPage={() => setView('blog')}
-              />
-          </div>
-          <MainContent />
-          <div className={view === 'printQuote' ? 'no-print' : ''}>
-              <Footer />
-          </div>
-      </div>
+    <div className="bg-gray-50">
+      <Header 
+          navigationData={navigationData}
+          onSelectCategory={handleSelectCategory} 
+          onSelectProjectCategory={handleSelectProjectCategory}
+          onGoHome={resetToHome} 
+          onViewQuotePage={() => setView('quote')}
+          onSelectQuoteType={handleSelectQuoteType}
+          onViewAboutPage={() => setView('about')}
+          onViewContactPage={() => setView('contact')}
+          onViewCart={() => setView('cart')}
+          onViewWishlist={() => setView('wishlist')}
+          onViewBlogPage={() => setView('blog')}
+          onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')}
+      />
+      {renderPublicContent()}
+      <Footer 
+        footerLogoUrl={navigationData.footerLogoUrl}
+        onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')} 
+      />
+    </div>
   );
 };
 

@@ -56,3 +56,34 @@ export interface Filters {
   materials: string[];
   colors: string[];
 }
+
+export interface SubCategory {
+  name: string;
+  imageUrl: string;
+  // For Cotizar a medida, which has a different structure
+  title?: string;
+  description?: string;
+  quoteType?: string;
+}
+
+export interface TopBarLink {
+  id: 'about' | 'faq' | 'legal' | 'contact';
+  text: string;
+}
+
+export interface NavigationData {
+  navLinks: string[];
+  sala: SubCategory[];
+  dormitorio: SubCategory[];
+  cocina: SubCategory[];
+  recibidor: SubCategory[];
+  oficina: SubCategory[];
+  bano: SubCategory[];
+  infantiles: SubCategory[];
+  puertas: SubCategory[];
+  proyectos: SubCategory[];
+  cotizar: SubCategory[];
+  logoUrl: string;
+  footerLogoUrl: string;
+  topBarLinks: TopBarLink[];
+}

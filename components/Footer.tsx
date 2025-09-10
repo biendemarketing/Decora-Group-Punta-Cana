@@ -14,8 +14,12 @@ const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
     </svg>
 );
 
+interface FooterProps {
+  onViewAdminPage: () => void;
+  footerLogoUrl: string;
+}
 
-const Footer: React.FC = () => {
+const Footer: React.FC<FooterProps> = ({ onViewAdminPage, footerLogoUrl }) => {
   const servicesLinks = [
     "Cocinas Personalizadas", "Closets y Walk-in", "Baños Modernos", 
     "Muebles a Medida", "Mobiliario de Oficina", "Proyectos Comerciales"
@@ -38,7 +42,7 @@ const Footer: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Logo and Socials Column */}
             <div className="space-y-6">
-              <FooterLogo />
+              <FooterLogo src={footerLogoUrl} />
               <p className="text-sm text-gray-400">
                 Transformamos espacios con diseños únicos y funcionales, creando ambientes que reflejan tu estilo de vida.
               </p>
@@ -78,7 +82,10 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="mt-12 border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between">
-            <p className="text-sm text-gray-500 text-center sm:text-left">&copy; {new Date().getFullYear()} Decora Group. Todos los derechos reservados.</p>
+            <p className="text-sm text-gray-500 text-center sm:text-left">
+              &copy; {new Date().getFullYear()} Decora Group. Todos los derechos reservados.
+              <button onClick={onViewAdminPage} className="ml-4 text-xs text-gray-600 hover:text-gray-400">Panel de Administración</button>
+            </p>
             <div className="flex space-x-4 mt-4 sm:mt-0">
               {legalLinks.map(item => (
                 <a href="#" key={item} className="text-xs text-gray-500 hover:text-gray-300">{item}</a>
