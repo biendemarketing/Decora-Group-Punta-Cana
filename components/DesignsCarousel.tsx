@@ -1,13 +1,14 @@
 import React, { useRef } from 'react';
-import { DESIGN_CATEGORIES } from '../constants';
+import { SubCategory } from '../types';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface DesignsCarouselProps {
+  projectCategories: SubCategory[];
   onSelectProjectCategory: (category: string) => void;
   onViewAllProjects: () => void;
 }
 
-const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ onSelectProjectCategory, onViewAllProjects }) => {
+const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, onSelectProjectCategory, onViewAllProjects }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -44,10 +45,10 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ onSelectProjectCatego
             ref={scrollContainerRef}
             className="flex items-start space-x-8 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
           >
-            {DESIGN_CATEGORIES.map((category) => (
+            {projectCategories.map((category) => (
               <a 
                 href="#" 
-                key={category.name} 
+                key={category.id} 
                 onClick={(e) => { e.preventDefault(); onSelectProjectCategory(category.name); }}
                 className="flex-shrink-0 w-40 text-center group snap-center"
               >

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { NavigationData, SubCategory, MenuItem } from '../types';
-import { Trash2, GripVertical, Plus, Eye, EyeOff } from 'lucide-react';
+import { Trash2, GripVertical, Plus, Eye, EyeOff, Info } from 'lucide-react';
 import ImageUploader from './ImageUploader';
 
 interface HeaderEditorProps {
@@ -128,6 +128,21 @@ const HeaderEditor: React.FC<HeaderEditorProps> = ({ navigationData, onNavigatio
 
       {selectedMenuItem && (
         <div className="border-t pt-6">
+           {selectedMenuItem.key === 'proyectos' && (
+            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-lg" role="alert">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <Info className="h-5 w-5 text-blue-400" />
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-blue-800">
+                    Las subcategorías que gestiones aquí (imágenes, nombres, orden) se mostrarán automáticamente en la sección <strong>"Explora Nuestros Diseños"</strong> de la página de inicio.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <h3 className="text-lg font-bold mb-2 text-gray-800">Editar: <span className="text-blue-600">{selectedMenuItem.title}</span></h3>
           
           {selectedMenuItem.subCategories.length > 0 && (

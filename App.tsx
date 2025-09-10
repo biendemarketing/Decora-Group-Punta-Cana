@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData } from './types';
-import { ALL_PRODUCTS, ALL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA } from './constants';
+import { ALL_PRODUCTS, INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import CategoryGrid from './components/CategoryGrid';
@@ -213,10 +213,11 @@ const updateSEO = (title: string, description: string, structuredData?: object) 
 
 interface AppContentProps {
   navigationData: NavigationData;
-  onSaveChanges: (newNavData: NavigationData) => void;
+  projectsData: Project[];
+  onSaveChanges: (data: { navigation: NavigationData, projects: Project[] }) => void;
 }
 
-const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }) => {
+const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, onSaveChanges }) => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
   
@@ -454,9 +455,9 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
 
   const filteredProjects = useMemo(() => {
-    if (!selectedProjectCategory) return ALL_PROJECTS;
-    return ALL_PROJECTS.filter(project => project.category === selectedProjectCategory);
-  }, [selectedProjectCategory]);
+    if (!selectedProjectCategory) return projectsData;
+    return projectsData.filter(project => project.category === selectedProjectCategory);
+  }, [selectedProjectCategory, projectsData]);
   
   // --- RENDER LOGIC ---
   if (view === 'login') return <LoginPage onLogin={handleLogin} />;
@@ -466,10 +467,12 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }
       setView('login');
       return <LoginPage onLogin={handleLogin} />;
     }
-    return <AdminPanel initialNavigationData={navigationData} onSaveChanges={onSaveChanges} onLogout={handleLogout} />;
+    return <AdminPanel initialNavigationData={navigationData} initialProjectsData={projectsData} onSaveChanges={onSaveChanges} onLogout={handleLogout} />;
   }
 
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
+
+  const projectsMenuItem = navigationData.menuItems.find(item => item.key === 'proyectos');
 
   return (
     <div className="bg-gray-50">
@@ -547,7 +550,11 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }
                   return (
                       <main>
                           <Hero heroSlides={navigationData.heroSlides} onNavigate={handleNavigate} />
-                          <DesignsCarousel onSelectProjectCategory={handleSelectProjectCategory} onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} />
+                          <DesignsCarousel 
+                            projectCategories={projectsMenuItem?.subCategories || []}
+                            onSelectProjectCategory={handleSelectProjectCategory} 
+                            onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} 
+                          />
                           <CategoryGrid />
                           <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
                               <div className="max-w-7xl mx-auto">
@@ -590,6 +597,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }
 
 const App: React.FC = () => {
   const [navigationData, setNavigationData] = useState<NavigationData>(INITIAL_NAVIGATION_DATA);
+  const [projectsData, setProjectsData] = useState<Project[]>(INITIAL_PROJECTS);
   const [currency, setCurrency] = useState<Currency>('USD');
 
   useEffect(() => {
@@ -607,11 +615,28 @@ const App: React.FC = () => {
         localStorage.removeItem('navigationData');
       }
     }
+    
+    const storedProjectsData = localStorage.getItem('projectsData');
+    if (storedProjectsData) {
+        try {
+            const parsedData = JSON.parse(storedProjectsData);
+            if (Array.isArray(parsedData)) {
+                setProjectsData(parsedData);
+            } else {
+                 localStorage.removeItem('projectsData');
+            }
+        } catch (error) {
+            console.error("Error parsing projects data from localStorage", error);
+            localStorage.removeItem('projectsData');
+        }
+    }
   }, []);
 
-  const handleSaveChanges = (newNavData: NavigationData) => {
-    setNavigationData(newNavData);
-    localStorage.setItem('navigationData', JSON.stringify(newNavData));
+  const handleSaveChanges = (data: { navigation: NavigationData, projects: Project[] }) => {
+    setNavigationData(data.navigation);
+    setProjectsData(data.projects);
+    localStorage.setItem('navigationData', JSON.stringify(data.navigation));
+    localStorage.setItem('projectsData', JSON.stringify(data.projects));
     alert("Cambios guardados exitosamente!");
   };
   
@@ -635,7 +660,11 @@ const App: React.FC = () => {
     <CurrencyContext.Provider value={currencyContextValue}>
       <CartProvider>
         <WishlistProvider>
-          <AppContent navigationData={navigationData} onSaveChanges={handleSaveChanges} />
+          <AppContent 
+            navigationData={navigationData} 
+            projectsData={projectsData}
+            onSaveChanges={handleSaveChanges} 
+          />
         </WishlistProvider>
       </CartProvider>
     </CurrencyContext.Provider>

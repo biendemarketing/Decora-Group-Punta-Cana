@@ -1,52 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
+import Hero from './Hero';
 import HeaderEditor from './HeaderEditor';
 import SiteSettingsEditor from './SiteSettingsEditor';
-import HeroSliderEditor from './HeroSliderEditor'; // Import the new editor
-import { NavigationData } from '../types';
-import { LogOut, LayoutDashboard, Settings, Save, XCircle, Image as ImageIcon } from 'lucide-react';
+import HeroSliderEditor from './HeroSliderEditor';
+import AdminSidebar from './AdminSidebar';
+import ProjectsEditor from './ProjectsEditor';
+import { NavigationData, Project } from '../types';
+import { LogOut, Save, XCircle } from 'lucide-react';
 
 interface AdminPanelProps {
   initialNavigationData: NavigationData;
-  onSaveChanges: (newData: NavigationData) => void;
+  initialProjectsData: Project[];
+  onSaveChanges: (data: { navigation: NavigationData, projects: Project[] }) => void;
   onLogout: () => void;
 }
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveChanges, onLogout }) => {
+const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, initialProjectsData, onSaveChanges, onLogout }) => {
   const dummyFunc = () => console.log("Action disabled in preview mode.");
-  const [activeTab, setActiveTab] = useState<'menu' | 'settings' | 'slider'>('menu');
-  const [draftData, setDraftData] = useState<NavigationData>(() => JSON.parse(JSON.stringify(initialNavigationData)));
+  const [activeEditor, setActiveEditor] = useState<'menu' | 'slider' | 'settings' | 'projects'>('settings');
+  
+  const [draftNavData, setDraftNavData] = useState<NavigationData>(() => JSON.parse(JSON.stringify(initialNavigationData)));
+  const [draftProjectsData, setDraftProjectsData] = useState<Project[]>(() => JSON.parse(JSON.stringify(initialProjectsData)));
 
   useEffect(() => {
-    // If the live data changes from outside, reset the draft
-    setDraftData(JSON.parse(JSON.stringify(initialNavigationData)));
-  }, [initialNavigationData]);
+    setDraftNavData(JSON.parse(JSON.stringify(initialNavigationData)));
+    setDraftProjectsData(JSON.parse(JSON.stringify(initialProjectsData)));
+  }, [initialNavigationData, initialProjectsData]);
 
   const handleDiscardChanges = () => {
     if (window.confirm("¿Estás seguro de que quieres descartar todos los cambios no guardados?")) {
-      setDraftData(JSON.parse(JSON.stringify(initialNavigationData)));
+      setDraftNavData(JSON.parse(JSON.stringify(initialNavigationData)));
+      setDraftProjectsData(JSON.parse(JSON.stringify(initialProjectsData)));
     }
   };
 
   const handleSaveChanges = () => {
-    onSaveChanges(draftData);
+    onSaveChanges({ navigation: draftNavData, projects: draftProjectsData });
   };
   
-  const hasChanges = JSON.stringify(draftData) !== JSON.stringify(initialNavigationData);
+  const hasChanges = JSON.stringify(draftNavData) !== JSON.stringify(initialNavigationData) || JSON.stringify(draftProjectsData) !== JSON.stringify(initialProjectsData);
 
-  const TabButton: React.FC<{ tabId: 'menu' | 'settings' | 'slider'; children: React.ReactNode, icon: React.ElementType }> = ({ tabId, children, icon: Icon }) => (
-    <button
-      onClick={() => setActiveTab(tabId)}
-      className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-        activeTab === tabId
-          ? 'bg-gray-800 text-white'
-          : 'text-gray-600 hover:bg-gray-200'
-      }`}
-    >
-      <Icon className="h-4 w-4" />
-      {children}
-    </button>
-  );
+  const projectCategories = draftNavData.menuItems.find(item => item.key === 'proyectos')?.subCategories || [];
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -73,43 +68,51 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
         </div>
       </header>
       
-      <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 p-8">
+      <div className="flex-grow grid grid-cols-1 xl:grid-cols-12 gap-8 p-8">
+        {/* Sidebar Column */}
+        <div className="xl:col-span-2">
+           <div className="bg-white p-4 rounded-lg shadow-lg sticky top-24">
+             <AdminSidebar activeEditor={activeEditor} onSelectEditor={setActiveEditor} />
+           </div>
+        </div>
+        
         {/* Editor Column */}
-        <div className="lg:col-span-1 bg-white p-6 rounded-lg shadow-lg flex flex-col max-h-[calc(100vh-120px)]">
-          <nav className="flex-shrink-0 flex space-x-2 border-b pb-4 mb-6">
-            <TabButton tabId="menu" icon={LayoutDashboard}>Menú Principal</TabButton>
-            <TabButton tabId="slider" icon={ImageIcon}>Slider Principal</TabButton>
-            <TabButton tabId="settings" icon={Settings}>Logos y Barra Superior</TabButton>
-          </nav>
-          <div className="flex-grow overflow-y-auto pr-2">
-            {activeTab === 'menu' && (
-              <HeaderEditor
-                navigationData={draftData}
-                onNavigationChange={setDraftData}
-              />
-            )}
-             {activeTab === 'slider' && (
-              <HeroSliderEditor
-                slides={draftData.heroSlides}
-                onSlidesChange={(newSlides) => setDraftData(prev => ({ ...prev, heroSlides: newSlides }))}
-              />
-            )}
-            {activeTab === 'settings' && (
-              <SiteSettingsEditor
-                navigationData={draftData}
-                onNavigationChange={setDraftData}
-              />
-            )}
-          </div>
+        <div className="xl:col-span-5 bg-white p-6 rounded-lg shadow-lg flex flex-col max-h-[calc(100vh-120px)]">
+            <div className="flex-grow overflow-y-auto pr-2">
+                {activeEditor === 'settings' && (
+                  <SiteSettingsEditor
+                    navigationData={draftNavData}
+                    onNavigationChange={setDraftNavData}
+                  />
+                )}
+                {activeEditor === 'menu' && (
+                  <HeaderEditor
+                    navigationData={draftNavData}
+                    onNavigationChange={setDraftNavData}
+                  />
+                )}
+                 {activeEditor === 'slider' && (
+                  <HeroSliderEditor
+                    slides={draftNavData.heroSlides}
+                    onSlidesChange={(newSlides) => setDraftNavData(prev => ({ ...prev, heroSlides: newSlides }))}
+                  />
+                )}
+                 {activeEditor === 'projects' && (
+                  <ProjectsEditor
+                    projects={draftProjectsData}
+                    onProjectsChange={setDraftProjectsData}
+                    projectCategories={projectCategories}
+                  />
+                )}
+            </div>
         </div>
         
         {/* Preview Column */}
-        <div className="lg:col-span-2">
+        <div className="xl:col-span-5">
           <h2 className="text-xl font-semibold mb-4 text-gray-700">Vista Previa en Vivo</h2>
           <div className="border-4 border-gray-300 rounded-lg overflow-hidden shadow-2xl bg-white transform scale-[0.85] origin-top">
-            {/* FIX: Added missing searchQuery and onSearch props to satisfy HeaderProps interface. */}
             <Header
-              navigationData={draftData}
+              navigationData={draftNavData}
               onSelectCategory={dummyFunc}
               onSelectProjectCategory={dummyFunc}
               onGoHome={dummyFunc}
@@ -123,9 +126,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
               searchQuery=""
               onSearch={dummyFunc}
             />
+            <Hero heroSlides={draftNavData.heroSlides} onNavigate={dummyFunc} />
             <div className="p-8 bg-gray-50 h-auto flex items-center justify-center">
               <p className="text-center text-gray-500">
-                {activeTab === 'slider' ? 'La vista previa del slider se muestra en el encabezado de arriba.' : 'El resto de la página se mostraría aquí...'}
+                El resto de la página se mostraría aquí...
               </p>
             </div>
           </div>

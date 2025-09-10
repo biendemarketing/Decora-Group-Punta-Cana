@@ -252,11 +252,7 @@ export const PREDEFINED_LINKS = [
     { key: 'blog', label: 'Ir al Blog' },
 ];
 
-// This now mirrors the mega menu for consistency
-export const DESIGN_CATEGORIES = PROYECTOS_SUB_CATEGORIES_DATA;
-
-
-export const ALL_PROJECTS: Project[] = [
+export const INITIAL_PROJECTS: Project[] = [
   {
     id: 1,
     title: 'Cocina Moderna en Apartamento Urbano',
