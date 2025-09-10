@@ -18,13 +18,15 @@ const ContactForm: React.FC = () => {
   const inputClasses = "mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#5a1e38] focus:border-[#5a1e38] sm:text-sm";
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-900 text-center lg:text-left">Envíanos un Mensaje</h2>
-      <p className="mt-1 text-sm text-gray-600 text-center lg:text-left">Completa el formulario y nos pondremos en contacto contigo.</p>
+    <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-gray-900">Envíanos un Mensaje</h2>
+        <p className="mt-1 text-sm text-gray-600">Completa el formulario y nos pondremos en contacto contigo.</p>
+      </div>
       
-      <form className="mt-8 space-y-6">
+      <form className="space-y-6">
         <div>
-          <label className="text-sm font-medium text-gray-700">Soy:</label>
+          <label className="text-sm font-medium text-gray-700">Soy:*</label>
           <div className="mt-2 flex items-center space-x-6">
             <label className="flex items-center cursor-pointer">
               <input type="radio" name="personType" value="individual" checked={personType === 'individual'} onChange={() => setPersonType('individual')} className="h-4 w-4 text-[#5a1e38] focus:ring-[#5a1e38] border-gray-300"/>
@@ -40,18 +42,18 @@ const ContactForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre completo</label>
-          <input type="text" name="name" id="name" placeholder="Tu nombre" className={inputClasses} />
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre completo*</label>
+          <input type="text" name="name" id="name" placeholder="Tu nombre" required className={inputClasses} />
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" name="email" id="email" placeholder="tu@email.com" className={inputClasses} />
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email*</label>
+            <input type="email" name="email" id="email" placeholder="tu@email.com" required className={inputClasses} />
           </div>
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Teléfono</label>
-            <input type="tel" name="phone" id="phone" placeholder="Tu teléfono" className={inputClasses} />
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Teléfono*</label>
+            <input type="tel" name="phone" id="phone" placeholder="Tu teléfono" required className={inputClasses} />
           </div>
         </div>
         
@@ -70,7 +72,7 @@ const ContactForm: React.FC = () => {
             </div>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
                 <label htmlFor="province" className="block text-sm font-medium text-gray-700">Provincia</label>
                 <select id="province" name="province" value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)} className={inputClasses}>

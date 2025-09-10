@@ -9,7 +9,7 @@ const ClientLogos: React.FC = () => {
         <p className="mt-4 text-lg text-gray-600">
           Construimos relaciones duraderas basadas en la calidad y la confianza.
         </p>
-        <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
           {CLIENT_LOGOS.map((logo, index) => (
             <div key={index} className="flex justify-center">
               <img src={logo.url} alt={logo.alt} className="h-12 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all" />

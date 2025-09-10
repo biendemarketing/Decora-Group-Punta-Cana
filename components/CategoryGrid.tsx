@@ -1,7 +1,7 @@
 import React from 'react';
 
 const categories = [
-  { name: 'Salones', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg' },
+  { name: 'Salas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg' },
   { name: 'Dormitorios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-bedroom-side-image.jpg' },
   { name: 'Terrazas y Jardines', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-outdoors-side-image.jpg' },
   { name: 'Oficinas en Casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg' },

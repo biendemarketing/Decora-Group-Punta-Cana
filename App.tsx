@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem } from './types';
 import { ALL_PRODUCTS, ALL_PROJECTS, MAX_PRICE, MIN_PRICE, PRODUCT_DETAIL_DATA } from './constants';
@@ -28,6 +29,7 @@ import CartPage from './components/CartPage';
 import QuoteCheckoutPage from './components/QuoteCheckoutPage';
 import QuoteTemplate from './components/QuoteTemplate';
 import WishlistPage from './components/WishlistPage';
+import BlogPage from './components/BlogPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -170,7 +172,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog';
 
 interface CustomerInfo {
     name: string;
@@ -235,8 +237,9 @@ const AppContent: React.FC = () => {
   });
   
   useEffect(() => {
+    // Scroll to top on major view/selection changes
     window.scrollTo(0, 0);
-  }, [view, currentPage, selectedProduct, selectedProject]);
+  }, [view, selectedProduct, selectedProject]);
 
   useEffect(() => {
     // SEO Management logic based on view
@@ -279,6 +282,8 @@ const AppContent: React.FC = () => {
   
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    // Scroll to top of page on pagination, which is only used in category view
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleFilterChange = useCallback((newFilters: Partial<Filters>) => {
@@ -317,8 +322,15 @@ const AppContent: React.FC = () => {
   }, []);
 
   const handleSelectQuoteType = useCallback((type: string) => {
-    setSelectedQuoteType(type);
-    setView('quoteForm');
+    const whatsappServices = ['Muebles Personalizados', 'Mobiliario Comercial', 'Construcciones Especializadas'];
+    if (whatsappServices.includes(type)) {
+      const message = `Hola Decora Group, me gustaría solicitar una cotización para: ${type}.`;
+      const whatsappUrl = `https://wa.me/18494561963?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    } else {
+      setSelectedQuoteType(type);
+      setView('quoteForm');
+    }
   }, []);
 
   const handlePrintQuote = useCallback(() => {
@@ -389,6 +401,8 @@ const AppContent: React.FC = () => {
 
   const MainContent = () => {
       switch(view) {
+          case 'blog':
+              return <BlogPage />;
           case 'printQuote':
               return <QuoteTemplate customerInfo={customerInfo} />;
           case 'cart':
@@ -499,6 +513,7 @@ const AppContent: React.FC = () => {
                   onViewContactPage={() => setView('contact')}
                   onViewCart={() => setView('cart')}
                   onViewWishlist={() => setView('wishlist')}
+                  onViewBlogPage={() => setView('blog')}
               />
           </div>
           <MainContent />

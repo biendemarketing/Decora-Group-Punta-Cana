@@ -1,9 +1,22 @@
 
+
 import React, { useState } from 'react';
 import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown } from 'lucide-react';
-import { NAV_LINKS } from '../constants';
+import { 
+    NAV_LINKS, 
+    SALA_SUB_CATEGORIES,
+    DORMITORIO_SUB_CATEGORIES,
+    COCINA_SUB_CATEGORIES,
+    RECIBIDOR_SUB_CATEGORIES,
+    OFICINA_SUB_CATEGORIES,
+    BANO_SUB_CATEGORIES,
+    INFANTILES_SUB_CATEGORIES,
+    PUERTAS_SUB_CATEGORIES,
+    PROYECTOS_SUB_CATEGORIES,
+    QUOTE_PROJECT_TYPES
+} from '../constants';
 import Logo from './Logo';
-import SalonMegaMenu from './SalonMegaMenu';
+import SalaMegaMenu from './SalonMegaMenu';
 import DormitorioMegaMenu from './DormitorioMegaMenu';
 import CocinaMegaMenu from './CocinaMegaMenu';
 import RecibidorMegaMenu from './RecibidorMegaMenu';
@@ -25,14 +38,17 @@ interface HeaderProps {
   onViewContactPage: () => void;
   onViewCart: () => void;
   onViewWishlist: () => void;
+  onViewBlogPage: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
     onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, 
-    onSelectQuoteType, onViewAboutPage, onViewContactPage, onViewCart, onViewWishlist
+    onSelectQuoteType, onViewAboutPage, onViewContactPage, onViewCart, onViewWishlist,
+    onViewBlogPage
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
+  const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
+  const [isSalaMenuOpen, setIsSalaMenuOpen] = useState(false);
   const [isDormitorioMenuOpen, setIsDormitorioMenuOpen] = useState(false);
   const [isCocinaMenuOpen, setIsCocinaMenuOpen] = useState(false);
   const [isRecibidorMenuOpen, setIsRecibidorMenuOpen] = useState(false);
@@ -46,9 +62,21 @@ const Header: React.FC<HeaderProps> = ({
   const { itemCount } = useCart();
   const { wishlistCount } = useWishlist();
 
+  const categorySubmenus: Record<string, { name: string; [key: string]: any }[]> = {
+    'Sala': SALA_SUB_CATEGORIES,
+    'Dormitorio': DORMITORIO_SUB_CATEGORIES,
+    'Cocina': COCINA_SUB_CATEGORIES,
+    'Recibidor': RECIBIDOR_SUB_CATEGORIES,
+    'Oficina': OFICINA_SUB_CATEGORIES,
+    'Baño': BANO_SUB_CATEGORIES,
+    'Muebles infantiles': INFANTILES_SUB_CATEGORIES,
+    'Puertas': PUERTAS_SUB_CATEGORIES,
+    'Proyectos': PROYECTOS_SUB_CATEGORIES,
+    'Cotizar a medida': QUOTE_PROJECT_TYPES.map(p => ({ name: p.title, ...p })),
+  };
 
   const closeAllMegaMenus = () => {
-    setIsSalonMenuOpen(false);
+    setIsSalaMenuOpen(false);
     setIsDormitorioMenuOpen(false);
     setIsCocinaMenuOpen(false);
     setIsRecibidorMenuOpen(false);
@@ -65,10 +93,24 @@ const Header: React.FC<HeaderProps> = ({
       onSelectProjectCategory(''); // Show all projects
     } else if (link === 'Cotizar a medida') {
       onViewQuotePage();
+    } else if (link === 'Blog') {
+      onViewBlogPage();
     } else {
       onSelectCategory(link);
     }
   };
+
+  const handleMobileSubItemClick = (mainCategory: string, subItem: any) => {
+    if (mainCategory === 'Proyectos') {
+      onSelectProjectCategory(subItem.name);
+    } else if (mainCategory === 'Cotizar a medida') {
+      onSelectQuoteType(subItem.quoteType);
+    } else {
+      onSelectCategory(mainCategory);
+    }
+    setIsMenuOpen(false);
+  };
+
 
   return (
     <header className="bg-white sticky top-0 z-50 shadow-sm">
@@ -186,7 +228,7 @@ const Header: React.FC<HeaderProps> = ({
                       handleNavLinkClick(link);
                     }}
                     className={`flex-shrink-0 text-gray-700 hover:text-[#5a1e38] font-medium transition-colors duration-200 text-sm tracking-wide 
-                      ${link === 'Salón' && isSalonMenuOpen ? 'text-[#5a1e38]' : ''}
+                      ${link === 'Sala' && isSalaMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Dormitorio' && isDormitorioMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Cocina' && isCocinaMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Recibidor' && isRecibidorMenuOpen ? 'text-[#5a1e38]' : ''}
@@ -199,7 +241,7 @@ const Header: React.FC<HeaderProps> = ({
                     `}
                     onMouseEnter={() => {
                       closeAllMegaMenus();
-                      if (link === 'Salón') setIsSalonMenuOpen(true);
+                      if (link === 'Sala') setIsSalaMenuOpen(true);
                       else if (link === 'Dormitorio') setIsDormitorioMenuOpen(true);
                       else if (link === 'Cocina') setIsCocinaMenuOpen(true);
                       else if (link === 'Recibidor') setIsRecibidorMenuOpen(true);
@@ -217,12 +259,12 @@ const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
         </div>
-        {isSalonMenuOpen && (
+        {isSalaMenuOpen && (
           <div 
             className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
-            onMouseEnter={() => setIsSalonMenuOpen(true)}
+            onMouseEnter={() => setIsSalaMenuOpen(true)}
           >
-            <SalonMegaMenu onSelectCategory={() => onSelectCategory('Salón')} onClose={closeAllMegaMenus} />
+            <SalaMegaMenu onSelectCategory={() => onSelectCategory('Sala')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isDormitorioMenuOpen && (
@@ -302,21 +344,59 @@ const Header: React.FC<HeaderProps> = ({
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="lg:hidden border-t border-gray-200">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {NAV_LINKS.map((link) => (
-              <a 
-                key={link} 
-                href="#" 
-                onClick={(e) => { 
-                  e.preventDefault(); 
-                  handleNavLinkClick(link);
-                  setIsMenuOpen(false); 
-                }}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50">
-                {link}
-              </a>
-            ))}
-          </div>
+          <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {NAV_LINKS.map((link) => {
+              const subItems = categorySubmenus[link];
+              const isSubMenuOpen = openMobileSubMenu === link;
+              
+              if (!subItems) { // Render as a direct link if no sub-items
+                return (
+                  <a
+                    key={link}
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavLinkClick(link);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left"
+                  >
+                    {link}
+                  </a>
+                );
+              }
+
+              return (
+                <div key={link}>
+                  <button
+                    onClick={() => setOpenMobileSubMenu(isSubMenuOpen ? null : link)}
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left"
+                    aria-expanded={isSubMenuOpen}
+                  >
+                    <span>{link}</span>
+                    <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform ${isSubMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {isSubMenuOpen && (
+                     <div className="pl-6 pt-1 pb-2 space-y-1 border-l-2 ml-4">
+                        {subItems?.map((subItem) => (
+                           <a
+                             key={subItem.name}
+                             href="#"
+                             onClick={(e) => {
+                                 e.preventDefault();
+                                 handleMobileSubItemClick(link, subItem);
+                             }}
+                             className="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-[#5a1e38] hover:bg-gray-100"
+                           >
+                             {subItem.name}
+                           </a>
+                        ))}
+                     </div>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
         </div>
       )}
     </header>

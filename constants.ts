@@ -3,8 +3,8 @@
 import type { Product, Project } from './types';
 
 export const NAV_LINKS = [
-  "Salón", "Dormitorio", "Cocina", 
-  "Recibidor", "Oficina", "Baño", "Muebles infantiles", "Puertas", "Proyectos", "Cotizar a medida"
+  "Sala", "Dormitorio", "Cocina", 
+  "Recibidor", "Oficina", "Baño", "Muebles infantiles", "Puertas", "Blog", "Proyectos", "Cotizar a medida"
 ];
 
 export const HERO_SLIDES = [
@@ -38,25 +38,25 @@ export const PROYECTOS_SUB_CATEGORIES = [
 // This now mirrors the mega menu for consistency
 export const DESIGN_CATEGORIES = PROYECTOS_SUB_CATEGORIES;
 
-export const SALON_SUB_CATEGORIES = [
-  { name: 'Conjuntos de muebles de salón', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wall_units.png' },
-  { name: 'Cómodas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+export const SALA_SUB_CATEGORIES = [
+  { name: 'Juegos de muebles de sala', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wall_units.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
   { name: 'Mesas de centro', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/coffee_tables.png' },
   { name: 'Muebles TV', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/tv_tables.png' },
   { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
   { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
   { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
-  { name: 'Conjuntos de mesas y sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
+  { name: 'Juegos de mesas y sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
   { name: 'Mesas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/oval_table.png' },
   { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chairs_new_1.png' },
-  { name: 'Todos los muebles de salón', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+  { name: 'Todos los muebles de sala', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
 ];
 
 export const DORMITORIO_SUB_CATEGORIES = [
   { name: 'Camas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bed-menu.png' },
-  { name: 'Conjuntos de dormitorio', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bedroom_sets.png' },
+  { name: 'Juegos de dormitorio', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bedroom_sets.png' },
   { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
-  { name: 'Cómodas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
   { name: 'Colchones', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/mattresses.png' },
   { name: 'Mesitas de noche', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bedside_tables.png' },
   { name: 'Tocadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/makeup_tables.png' },
@@ -68,9 +68,9 @@ export const DORMITORIO_SUB_CATEGORIES = [
 ];
 
 export const COCINA_SUB_CATEGORIES = [
-  { name: 'Conjuntos de cocina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_sets.png' },
+  { name: 'Juegos de cocina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_sets.png' },
   { name: 'Armarios de cocinas modulares', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/modular_kitchen.png' },
-  { name: 'Conjuntos de comedor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
+  { name: 'Juegos de comedor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
   { name: 'Mesas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_tables.png' },
   { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chairs_new_1.png' },
   { name: 'Mesas de bar', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bar_tables.png' },
@@ -80,11 +80,11 @@ export const COCINA_SUB_CATEGORIES = [
 ];
 
 export const RECIBIDOR_SUB_CATEGORIES = [
-  { name: 'Conjuntos de pasillo', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
+  { name: 'Juegos de pasillo', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
   { name: 'Zapateros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shoe_cabinets.png' },
   { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
   { name: 'Percheros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/racks1.png' },
-  { name: 'Cómodas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
   { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
   { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
   { name: 'Paneles de pared suaves', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
@@ -93,13 +93,13 @@ export const RECIBIDOR_SUB_CATEGORIES = [
 ];
 
 export const OFICINA_SUB_CATEGORIES = [
-  { name: 'Conjuntos de oficina en casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_furniture_sets.png' },
+  { name: 'Juegos de oficina en casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_furniture_sets.png' },
   { name: 'Mesas de oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_tables.png' },
   { name: 'Sillas de oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_chairs.png' },
   { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
   { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
   { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
-  { name: 'Cómodas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
   { name: 'Archivadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/drawer_blocks.png' },
   { name: 'Mesas de ordenador esquinera', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/corner_tables.png' },
   { name: 'Escritorios de altura regulable', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/adjusting_tables.png' },
@@ -107,19 +107,19 @@ export const OFICINA_SUB_CATEGORIES = [
 ];
 
 export const BANO_SUB_CATEGORIES = [
-  { name: 'Conjuntos de muebles de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_sets.png' },
+  { name: 'Juegos de muebles de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_sets.png' },
   { name: 'Armarios de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_standing_cabinets.png' },
   { name: 'Estanterías de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_shelves.png' },
   { name: 'Todos los muebles de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
 ];
 
 export const INFANTILES_SUB_CATEGORIES = [
-  { name: 'Conjuntos', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_room_sets.png' },
+  { name: 'Juegos', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_room_sets.png' },
   { name: 'Camas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_beds.png' },
   { name: 'Literas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bunk_beds.png' },
   { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_wardrobes.png' },
   { name: 'Escritorios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_tables.png' },
-  { name: 'Cómodas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
   { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
   { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_chairs.png' },
   { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_cabinets.png' },
@@ -259,13 +259,13 @@ const rawProducts = [
   {
     id: 1752700000061,
     category: "Muebles",
-    name: "Cómoda Orlviro 105",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Orlviro 105",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 269,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3800/comoda-orlviro-105_3800236.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 82, height: 85.4, depth: 40 },
     materials: ["Aglomerado laminado"],
@@ -275,13 +275,13 @@ const rawProducts = [
   {
     id: 1752700000062,
     category: "Muebles",
-    name: "Cómoda Livluo 102",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Livluo 102",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 439,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3795/comoda-livluo-102_3795889.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 160, height: 89.9, depth: 40 },
     materials: ["MDF"],
@@ -291,13 +291,13 @@ const rawProducts = [
   {
     id: 1752700000063,
     category: "Muebles",
-    name: "Cómoda Livluo 103",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Livluo 103",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 375,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3795/comoda-livluo-103_3795993.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 115, height: 89.8, depth: 40 },
     materials: ["MDF"],
@@ -308,13 +308,13 @@ const rawProducts = [
   {
     id: 1752700000064,
     category: "Muebles",
-    name: "Cómoda Kailua 2393",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Kailua 2393",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 389,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3792/comoda-kailua-2393-antracita_3792768.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 23 días laborales",
     dimensions: { width: 72, height: 77, depth: 45 },
     materials: ["Aglomerado laminado"],
@@ -324,13 +324,13 @@ const rawProducts = [
   {
     id: 1752700000065,
     category: "Muebles",
-    name: "Cómoda Kailua 2394",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Kailua 2394",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 579,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3793/comoda-kailua-2394-antracita_3793054.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 23 días laborales",
     dimensions: { width: 100, height: 85, depth: 45 },
     materials: ["Aglomerado laminado", "Metal"],
@@ -340,13 +340,13 @@ const rawProducts = [
   {
     id: 1752700000066,
     category: "Muebles",
-    name: "Cómoda Marelbe 102",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Marelbe 102",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 259,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3793/comoda-marelbe-102_3793222.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 23 días laborales",
     dimensions: { width: 72, height: 74, depth: 43 },
     materials: ["Madera"],
@@ -356,13 +356,13 @@ const rawProducts = [
   {
     id: 1752700000067,
     category: "Muebles",
-    name: "Cómoda Comfivo Larmire 102",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Comfivo Larmire 102",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 210,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3410/comoda-comfivo-larmire-102-blanco_3410627.jpg?w=300&h=225&p=fw", "https://img.muebles.es/detailed/3410/comoda-comfivo-larmire-102-negro_3410697.jpg?w=60&h=60&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 8 días laborales",
     dimensions: { width: 80, height: 75, depth: 40 },
     materials: ["MDF"],
@@ -372,13 +372,13 @@ const rawProducts = [
   {
     id: 1752700000068,
     category: "Muebles",
-    name: "Cómoda Comfivo Fersoe 100",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Comfivo Fersoe 100",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 226,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3790/comoda-comfivo-fersoe-100-cachemira_3790137.jpg?w=300&h=225&p=fw", "https://img.muebles.es/detailed/3790/comoda-comfivo-fersoe-100-blanco_3790134.jpg?w=60&h=60&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 8 días laborales",
     dimensions: { width: 141, height: 93, depth: 41 },
     materials: ["Aglomerado laminado"],
@@ -389,13 +389,13 @@ const rawProducts = [
   {
     id: 1752700000069,
     category: "Muebles",
-    name: "Cómoda Comfivo Fersoe 104",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Comfivo Fersoe 104",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 289,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3790/comoda-comfivo-fersoe-104-cachemira_3790464.jpg?w=300&h=225&p=fw", "https://img.muebles.es/detailed/2643/comoda-comfivo-fersoe-104-blanco_2643088.jpg?w=60&h=60&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 8 días laborales",
     dimensions: { width: 120, height: 93, depth: 41 },
     materials: ["Aglomerado laminado"],
@@ -406,13 +406,13 @@ const rawProducts = [
   {
     id: 1752700000070,
     category: "Muebles",
-    name: "Cómoda Alfere 121",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Alfere 121",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 220,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3777/comoda-alfere-121-blanco_3777376.jpg?w=300&h=225&p=fw", "https://img.muebles.es/detailed/3777/comoda-alfere-121-roble-wotan_3777382.jpg?w=60&h=60&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 10 días laborales",
     dimensions: { width: 80, height: 85.1, depth: 40 },
     materials: ["Madera"],
@@ -422,13 +422,13 @@ const rawProducts = [
   {
     id: 1752700000071,
     category: "Muebles",
-    name: "Cómoda Sorsale 101",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Sorsale 101",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 339,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3775/comoda-sorsale-101_3775144.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 103.2, height: 132, depth: 42 },
     materials: ["Madera", "Metal"],
@@ -438,13 +438,13 @@ const rawProducts = [
   {
     id: 1752700000072,
     category: "Muebles",
-    name: "Cómoda Austin 364",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Austin 364",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 309,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/4127/comoda-austin-364-congo_4127427.jpg?w=300&h=225&p=fw", "https://img.muebles.es/detailed/3775/comoda-austin-364-roble-wotan_3775333.jpg?w=60&h=60&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 10 días laborales",
     dimensions: { width: 132, height: 91.2, depth: 35 },
     materials: ["Madera"],
@@ -455,13 +455,13 @@ const rawProducts = [
   {
     id: 1752700000073,
     category: "Muebles",
-    name: "Cómoda Sorsale 103",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Sorsale 103",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 339,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3775/comoda-sorsale-103_3775347.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 193.2, height: 90.2, depth: 42 },
     materials: ["Madera", "Metal"],
@@ -471,13 +471,13 @@ const rawProducts = [
   {
     id: 1752700000074,
     category: "Muebles",
-    name: "Cómoda Sorsale 104",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Sorsale 104",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 299,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3775/comoda-sorsale-104_3775509.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 153.2, height: 90.2, depth: 42 },
     materials: ["Madera", "Metal"],
@@ -488,13 +488,13 @@ const rawProducts = [
   {
     id: 1752700000075,
     category: "Muebles",
-    name: "Cómoda Sorsale 105",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Sorsale 105",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 239,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3775/comoda-sorsale-105_3775540.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 103.2, height: 90.2, depth: 42 },
     materials: ["Madera", "Metal"],
@@ -504,13 +504,13 @@ const rawProducts = [
   {
     id: 1752700000076,
     category: "Muebles",
-    name: "Cómoda Salcira 100",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Salcira 100",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 439,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3773/comoda-salcira-100_3773377.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 8 días laborales",
     dimensions: { width: 103, height: 80, depth: 39 },
     materials: ["MDF", "Vidrio templado"],
@@ -520,13 +520,13 @@ const rawProducts = [
   {
     id: 1752700000077,
     category: "Muebles",
-    name: "Cómoda Comfivo Virfera 100",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Comfivo Virfera 100",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 239,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3780/comoda-comfivo-virfera-100-blanco-blanco-brillante_3780685.jpg?w=300&h=225&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 4 días laborales",
     dimensions: { width: 100, height: 85, depth: 40 },
     materials: ["Aglomerado laminado"],
@@ -537,13 +537,13 @@ const rawProducts = [
   {
     id: 1752700000078,
     category: "Muebles",
-    name: "Cómoda Sarasota 174",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    name: "Gavetero Sarasota 174",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 369,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3642/comoda-sarasota-174-madera-gris-blanco-brillante_3642181.jpg?w=300&h=225&p=fw", "https://img.muebles.es/detailed/3642/comoda-sarasota-174-roble-wotan-blanco-brillante_3642185.jpg?w=60&h=60&p=fw"],
-    hint: "cómoda moderna",
+    hint: "gavetero moderno",
     deliveryTime: "Aproximadamente en 13 días laborales",
     dimensions: { width: 150, height: 68, depth: 40 },
     materials: ["Aglomerado laminado", "Vidrio"],
@@ -571,7 +571,7 @@ const rawProducts = [
     category: "Sala",
     subcategory: "Muebles de TV",
     name: "Mueble TV Elbvelu 125",
-    description: "Una cómoda elegante y funcional para tu hogar.",
+    description: "Un gavetero elegante y funcional para tu hogar.",
     price: 119,
     rating: 4,
     reviews: 15,
@@ -640,18 +640,18 @@ const parseDeliveryTime = (timeString?: string): number => {
 };
 
 const mapCategory = (p: any): string => {
-    if (p.category === 'Sala') return 'Salón';
+    if (p.category === 'Salón' || p.category === 'Sala') return 'Sala';
     if (p.category === 'Puertas') return 'Puertas';
     const lowerName = p.name.toLowerCase();
     const lowerHint = p.hint.toLowerCase();
 
     if (lowerHint.includes('mueble tv') || lowerHint.includes('mesa de centro') || lowerHint.includes('aparador')) {
-        return 'Salón';
+        return 'Sala';
     }
-    if (lowerHint.includes('cómoda')) {
+    if (lowerHint.includes('gavetero')) {
         return 'Dormitorio';
     }
-    return 'Salón'; // Default category
+    return 'Sala'; // Default category
 };
 
 export const ALL_PRODUCTS: Product[] = rawProducts.map((p: any) => ({
@@ -712,8 +712,8 @@ export const COLOR_MAP: { [key: string]: string } = {
 };
 
 
-export const MAX_PRICE = Math.ceil(Math.max(...ALL_PRODUCTS.map(p => p.price)) / 100) * 100;
-export const MIN_PRICE = Math.floor(Math.min(...ALL_PRODUCTS.map(p => p.price)) / 100) * 100;
+export const MAX_PRICE = 20000;
+export const MIN_PRICE = 0;
 
 export const PROVINCES = [
     "Santo Domingo", "Distrito Nacional", "La Altagracia", "Puerto Rico", "Azua", "Bahoruco", "Barahona", "Dajabón", "Duarte", "El Seibo", "Elías Piña", "Espaillat", "Hato Mayor", "Independencia", "La Romana", "La Vega", "María Trinidad Sánchez", "Monseñor Nouel", "Montecristi", "Monte Plata", "Pedernales", "Peravia", "Puerto Plata", "Hermanas Mirabal", "Samaná", "San Cristóbal", "San Juan", "San Pedro de Macorís", "Sánchez Ramírez", "Santiago", "Santiago Rodríguez", "Valverde"
@@ -959,6 +959,12 @@ export const CLIENT_LOGOS = [
   { url: 'https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-400.svg', alt: 'SavvyCal' },
   { url: 'https://tailwindui.com/img/logos/158x48/statamic-logo-gray-400.svg', alt: 'Statamic' },
   { url: 'https://tailwindui.com/img/logos/158x48/workcation-logo-gray-400.svg', alt: 'Workcation' },
+  { url: 'https://tailwindui.com/img/logos/158x48/mirage-logo-gray-400.svg', alt: 'Mirage' },
+  { url: 'https://tailwindui.com/img/logos/158x48/laravel-logo-gray-400.svg', alt: 'Laravel' },
+  { url: 'https://tailwindui.com/img/logos/158x48/statickit-logo-gray-400.svg', alt: 'StaticKit' },
+  { url: 'https://tailwindui.com/img/logos/158x48/tailwind-ui-logo-gray-400.svg', alt: 'Tailwind UI' },
+  { url: 'https://tailwindui.com/img/logos/158x48/focus-application-logo-gray-400.svg', alt: 'Focus' },
+  { url: 'https://tailwindui.com/img/logos/158x48/heimdal-logo-gray-400.svg', alt: 'Heimdal' },
 ];
 
 export const WHY_CHOOSE_US_POINTS = [
@@ -1027,3 +1033,10 @@ export const DOMINICAN_REPUBLIC_LOCATIONS = {
   "Santo Domingo": ["Santo Domingo Este", "Boca Chica", "Los Alcarrizos", "Pedro Brand", "San Antonio de Guerra", "Santo Domingo Norte", "Santo Domingo Oeste"],
   "Valverde": ["Mao", "Esperanza", "Laguna Salada"]
 };
+
+export const OUR_HISTORY_IMAGES = [
+  { url: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600', alt: 'Artesano trabajando en un taller de carpintería' },
+  { url: 'https://images.unsplash.com/photo-1556761175-b413da4b248a?q=80&w=600', alt: 'Bocetos y planos de diseño de muebles sobre una mesa' },
+  { url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
+  { url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
+];
