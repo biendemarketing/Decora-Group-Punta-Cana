@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown } from 'lucide-react';
 import { NAV_LINKS } from '../constants';
@@ -11,6 +12,8 @@ import BanoMegaMenu from './BanoMegaMenu';
 import InfantilesMegaMenu from './InfantilesMegaMenu';
 import ProyectosMegaMenu from './ProyectosMegaMenu';
 import CotizarMegaMenu from './CotizarMegaMenu';
+import PuertasMegaMenu from './PuertasMegaMenu';
+import { useCurrency, useCart, useWishlist } from '../App';
 
 interface HeaderProps {
   onSelectCategory: (category: string) => void;
@@ -20,9 +23,14 @@ interface HeaderProps {
   onSelectQuoteType: (type: string) => void;
   onViewAboutPage: () => void;
   onViewContactPage: () => void;
+  onViewCart: () => void;
+  onViewWishlist: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, onSelectQuoteType, onViewAboutPage, onViewContactPage }) => {
+const Header: React.FC<HeaderProps> = ({ 
+    onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, 
+    onSelectQuoteType, onViewAboutPage, onViewContactPage, onViewCart, onViewWishlist
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSalonMenuOpen, setIsSalonMenuOpen] = useState(false);
   const [isDormitorioMenuOpen, setIsDormitorioMenuOpen] = useState(false);
@@ -31,8 +39,12 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
   const [isOficinaMenuOpen, setIsOficinaMenuOpen] = useState(false);
   const [isBanoMenuOpen, setIsBanoMenuOpen] = useState(false);
   const [isInfantilesMenuOpen, setIsInfantilesMenuOpen] = useState(false);
+  const [isPuertasMenuOpen, setIsPuertasMenuOpen] = useState(false);
   const [isProyectosMenuOpen, setIsProyectosMenuOpen] = useState(false);
   const [isCotizarMenuOpen, setIsCotizarMenuOpen] = useState(false);
+  const { currency, setCurrency } = useCurrency();
+  const { itemCount } = useCart();
+  const { wishlistCount } = useWishlist();
 
 
   const closeAllMegaMenus = () => {
@@ -43,13 +55,14 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
     setIsOficinaMenuOpen(false);
     setIsBanoMenuOpen(false);
     setIsInfantilesMenuOpen(false);
+    setIsPuertasMenuOpen(false);
     setIsProyectosMenuOpen(false);
     setIsCotizarMenuOpen(false);
   };
   
   const handleNavLinkClick = (link: string) => {
     if (link === 'Proyectos') {
-      onGoHome();
+      onSelectProjectCategory(''); // Show all projects
     } else if (link === 'Cotizar a medida') {
       onViewQuotePage();
     } else {
@@ -77,8 +90,13 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
              <button onClick={onViewContactPage} className="hover:text-[#5a1e38]">Contacto</button>
              <span className="text-gray-300">|</span>
             <div className="flex items-center"><Phone className="h-4 w-4 mr-1 text-[#5a1e38]"/> (849) 456-1963</div>
-            <button className="flex items-center">
-              ES <ChevronDown className="h-3 w-3 ml-1" />
+            <button 
+              onClick={() => setCurrency(currency === 'USD' ? 'RD$' : 'USD')} 
+              className="flex items-center px-2 py-1 rounded hover:bg-gray-200 transition-colors"
+              aria-label={`Cambiar moneda. Actual: ${currency}`}
+            >
+              <span className="font-semibold text-xs">{currency}</span>
+              <ChevronDown className="h-3 w-3 ml-1" />
             </button>
           </div>
         </div>
@@ -111,12 +129,21 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
              <button className="p-2 rounded-full text-gray-600 hover:text-[#5a1e38] transition-colors">
               <User className="h-6 w-6" />
             </button>
-            <button className="p-2 rounded-full text-gray-600 hover:text-[#5a1e38] transition-colors">
+            <button onClick={onViewWishlist} className="relative p-2 rounded-full text-gray-600 hover:text-[#5a1e38] transition-colors">
               <Heart className="h-6 w-6" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 bg-[#5a1e38] text-white text-xs rounded-full">
+                  {wishlistCount}
+                </span>
+              )}
             </button>
-             <button className="relative p-2 rounded-full text-gray-600 hover:text-[#5a1e38] transition-colors">
+             <button onClick={onViewCart} className="relative p-2 rounded-full text-gray-600 hover:text-[#5a1e38] transition-colors">
               <ShoppingCart className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 bg-[#5a1e38] text-white text-xs rounded-full">0</span>
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 bg-[#5a1e38] text-white text-xs rounded-full">
+                  {itemCount}
+                </span>
+              )}
             </button>
             <div className="lg:hidden">
               <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-gray-600 hover:bg-gray-100">
@@ -166,6 +193,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
                       ${link === 'Oficina' && isOficinaMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Baño' && isBanoMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Muebles infantiles' && isInfantilesMenuOpen ? 'text-[#5a1e38]' : ''}
+                      ${link === 'Puertas' && isPuertasMenuOpen ? 'text-[#5a1e38]' : ''}
                       ${link === 'Proyectos' && isProyectosMenuOpen ? 'text-[#5a1e38]' : ''}
                        ${link === 'Cotizar a medida' && isCotizarMenuOpen ? 'text-[#5a1e38]' : ''}
                     `}
@@ -178,6 +206,7 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
                       else if (link === 'Oficina') setIsOficinaMenuOpen(true);
                       else if (link === 'Baño') setIsBanoMenuOpen(true);
                       else if (link === 'Muebles infantiles') setIsInfantilesMenuOpen(true);
+                      else if (link === 'Puertas') setIsPuertasMenuOpen(true);
                       else if (link === 'Proyectos') setIsProyectosMenuOpen(true);
                       else if (link === 'Cotizar a medida') setIsCotizarMenuOpen(true);
                     }}
@@ -242,6 +271,14 @@ const Header: React.FC<HeaderProps> = ({ onSelectCategory, onSelectProjectCatego
             onMouseEnter={() => setIsInfantilesMenuOpen(true)}
           >
             <InfantilesMegaMenu onSelectCategory={() => onSelectCategory('Muebles infantiles')} onClose={closeAllMegaMenus} />
+          </div>
+        )}
+        {isPuertasMenuOpen && (
+          <div 
+            className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
+            onMouseEnter={() => setIsPuertasMenuOpen(true)}
+          >
+            <PuertasMegaMenu onSelectCategory={() => onSelectCategory('Puertas')} onClose={closeAllMegaMenus} />
           </div>
         )}
         {isProyectosMenuOpen && (

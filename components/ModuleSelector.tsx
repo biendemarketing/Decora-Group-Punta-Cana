@@ -1,5 +1,6 @@
 import React from 'react';
 import QuoteStep from './QuoteStep';
+import { useCurrency } from '../App';
 
 interface ModuleOption {
   name: string;
@@ -24,6 +25,8 @@ const ModuleSelector: React.FC<ModuleSelectorProps> = ({
   onSelectionChange,
   selectionLimit,
 }) => {
+  const { formatPrice } = useCurrency();
+
   const handleSelection = (option: ModuleOption) => {
     const isSelected = selectedOptions.some(item => item.name === option.name);
     let newSelection;
@@ -71,6 +74,7 @@ const ModuleSelector: React.FC<ModuleSelectorProps> = ({
                     </div>
                     <div className="p-2 text-center bg-white rounded-b-md">
                         <p className="font-semibold text-xs text-gray-800 leading-tight">{option.name}</p>
+                        {option.price > 0 && <p className="text-xs text-gray-500">{formatPrice(option.price)}</p>}
                     </div>
                 </label>
             ))}

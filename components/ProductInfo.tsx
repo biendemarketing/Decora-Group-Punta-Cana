@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import type { Product } from '../types';
-import { Star, Truck, ShieldCheck, CheckCircle, Package, Minus, Plus } from 'lucide-react';
+import { Star, Truck, ShieldCheck, CheckCircle, Package, Minus, Plus, Heart } from 'lucide-react';
+import { useCurrency, useCart, useWishlist } from '../App';
 
 interface ProductInfoProps {
   product: Product;
@@ -8,10 +10,11 @@ interface ProductInfoProps {
 
 const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
+  const { formatPrice } = useCurrency();
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isProductInWishlist } = useWishlist();
 
-  const handleQuantityChange = (amount: number) => {
-    setQuantity(prev => Math.max(1, prev + amount));
-  };
+  const isInWishlist = isProductInWishlist(product.id);
   
   const benefits = [
     { icon: Truck, text: "Entrega y subida a domicilio gratis" },
@@ -19,6 +22,19 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     { icon: Package, text: "Sin pago por adelantado" },
     { icon: ShieldCheck, text: "365 días - garantía" },
   ];
+
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+    // Optionally show a confirmation message
+  };
+
+  const handleWishlistToggle = () => {
+    if (isInWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
 
   return (
     <div className="flex flex-col space-y-5">
@@ -45,7 +61,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       </div>
       
       {/* Price */}
-      <p className="text-4xl font-extrabold text-gray-900">{product.price} €</p>
+      <p className="text-4xl font-extrabold text-gray-900">{formatPrice(product.price)}</p>
       
       {/* Benefits */}
       <div className="border-t border-b border-gray-200 py-4">
@@ -73,15 +89,25 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       </div>
 
       {/* Quantity and Add to Cart */}
-      <div className="flex items-center space-x-4 pt-4">
+      <div className="flex items-stretch space-x-4 pt-4">
          <div className="flex items-center border border-gray-300 rounded-md">
-            <button onClick={() => handleQuantityChange(-1)} className="p-3 text-gray-500 hover:text-gray-800"><Minus className="h-4 w-4" /></button>
+            <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="p-3 text-gray-500 hover:text-gray-800"><Minus className="h-4 w-4" /></button>
             <input type="text" value={quantity} readOnly className="w-12 text-center border-l border-r border-gray-300 focus:outline-none" />
-            <button onClick={() => handleQuantityChange(1)} className="p-3 text-gray-500 hover:text-gray-800"><Plus className="h-4 w-4" /></button>
+            <button onClick={() => setQuantity(prev => prev + 1)} className="p-3 text-gray-500 hover:text-gray-800"><Plus className="h-4 w-4" /></button>
          </div>
-         <button className="flex-1 bg-[#5a1e38] text-white font-semibold py-3 px-6 rounded-md hover:bg-[#4d182e] transition-colors">
+         <button 
+            onClick={handleAddToCart}
+            className="flex-1 bg-[#5a1e38] text-white font-semibold py-3 px-6 rounded-md hover:bg-[#4d182e] transition-colors"
+         >
             Añadir al carrito
          </button>
+         <button
+            onClick={handleWishlistToggle}
+            className="p-3 border border-gray-300 rounded-md text-gray-500 hover:text-red-500 hover:border-red-400 transition-colors"
+            aria-label={isInWishlist ? "Quitar de la lista de deseos" : "Añadir a la lista de deseos"}
+          >
+            <Heart className={`h-6 w-6 transition-all ${isInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
+          </button>
       </div>
     </div>
   );

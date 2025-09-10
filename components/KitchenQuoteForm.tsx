@@ -17,6 +17,7 @@ import PaymentAndTerms from './PaymentAndTerms';
 import StickyTotalBar from './StickyTotalBar';
 import TermsModal from './TermsModal';
 import InstallationSelector from './InstallationSelector';
+import { useCurrency } from '../App';
 
 // --- Reusable Sub-components defined locally ---
 
@@ -57,6 +58,7 @@ const ImageSelector = ({ options, selectedOption, onSelect, gridCols = 'grid-col
 };
 
 const AccessorySelector = ({ options, selectedOptions, onSelectionChange }: any) => {
+  const { formatPrice } = useCurrency();
   const handleSelection = (option: any) => {
     const isSelected = selectedOptions.some((item: any) => item.name === option.name);
     let newSelection;
@@ -93,7 +95,7 @@ const AccessorySelector = ({ options, selectedOptions, onSelectionChange }: any)
           </div>
           <div className="p-2 text-center bg-white rounded-b-md">
             <p className="font-semibold text-xs text-gray-800 leading-tight">{option.name}</p>
-            <p className="text-xs text-gray-500">USD ${option.price}</p>
+            <p className="text-xs text-gray-500">{formatPrice(option.price)}</p>
           </div>
         </label>
       ))}

@@ -1,21 +1,25 @@
 import React from 'react';
 import type { Product } from '../types';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCurrency } from '../App';
 
 interface SimilarProductsProps {
   products: Product[];
   onProductSelect: (product: Product) => void;
 }
 
-const SimilarProductCard: React.FC<{ product: Product, onProductSelect: (product: Product) => void }> = ({ product, onProductSelect }) => (
-  <button onClick={() => onProductSelect(product)} className="group w-64 flex-shrink-0 text-left">
-    <div className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
-      <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:opacity-80 transition-opacity" />
-    </div>
-    <h3 className="mt-2 text-sm font-medium text-gray-800">{product.name}</h3>
-    <p className="mt-1 text-base font-bold text-gray-900">{product.price.toLocaleString()} €</p>
-  </button>
-);
+const SimilarProductCard: React.FC<{ product: Product, onProductSelect: (product: Product) => void }> = ({ product, onProductSelect }) => {
+  const { formatPrice } = useCurrency();
+  return (
+    <button onClick={() => onProductSelect(product)} className="group w-64 flex-shrink-0 text-left">
+      <div className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
+        <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:opacity-80 transition-opacity" />
+      </div>
+      <h3 className="mt-2 text-sm font-medium text-gray-800">{product.name}</h3>
+      <p className="mt-1 text-base font-bold text-gray-900">{formatPrice(product.price)}</p>
+    </button>
+  );
+};
 
 const SimilarProducts: React.FC<SimilarProductsProps> = ({ products, onProductSelect }) => {
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);

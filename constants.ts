@@ -4,7 +4,7 @@ import type { Product, Project } from './types';
 
 export const NAV_LINKS = [
   "Salón", "Dormitorio", "Cocina", 
-  "Recibidor", "Oficina", "Baño", "Muebles infantiles", "Proyectos", "Cotizar a medida"
+  "Recibidor", "Oficina", "Baño", "Muebles infantiles", "Puertas", "Proyectos", "Cotizar a medida"
 ];
 
 export const HERO_SLIDES = [
@@ -126,6 +126,13 @@ export const INFANTILES_SUB_CATEGORIES = [
   { name: 'Mesitas de noche', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_bedside_tables.png' },
   { name: 'Pufs', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bean_bags.png' },
   { name: 'Todo el mobiliario infantil', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+export const PUERTAS_SUB_CATEGORIES = [
+  { name: 'Puertas Interiores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
+  { name: 'Puertas Exteriores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
+  { name: 'Revestimiento de pared', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
+  { name: 'Todas las Puertas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
 ];
 
 export const ALL_PROJECTS: Project[] = [
@@ -575,6 +582,54 @@ const rawProducts = [
     materials: ["Madera"],
     colors: ["Marrón"],
     setType: "Partes separadas"
+  },
+  {
+    id: 1752700000301,
+    category: "Puertas",
+    name: "Puerta Interior de Roble Clásico",
+    description: "Puerta de madera de roble macizo con un acabado natural, perfecta para interiores tradicionales.",
+    price: 350,
+    rating: 5,
+    reviews: 22,
+    images: ["https://picsum.photos/id/1013/400/300"],
+    hint: "puerta interior madera",
+    deliveryTime: "Aproximadamente en 15 días laborales",
+    dimensions: { width: 90, height: 210, depth: 4 },
+    materials: ["Madera de Roble"],
+    colors: ["Marrón"],
+    setType: "Sólido"
+  },
+  {
+    id: 1752700000302,
+    category: "Puertas",
+    name: "Puerta Exterior de Metal Moderna",
+    description: "Puerta de seguridad de alta resistencia con diseño minimalista en metal negro.",
+    price: 780,
+    rating: 4.5,
+    reviews: 18,
+    images: ["https://picsum.photos/id/1014/400/300"],
+    hint: "puerta exterior seguridad",
+    deliveryTime: "Aproximadamente en 25 días laborales",
+    dimensions: { width: 100, height: 220, depth: 6 },
+    materials: ["Metal", "Acero"],
+    colors: ["Negro"],
+    setType: "Sólido"
+  },
+  {
+    id: 1752700000303,
+    category: "Puertas",
+    name: "Panel de Revestimiento 3D",
+    description: "Panel decorativo de pared con diseño geométrico en 3D para crear un punto focal en cualquier habitación.",
+    price: 85,
+    rating: 4,
+    reviews: 30,
+    images: ["https://picsum.photos/id/1016/400/300"],
+    hint: "revestimiento pared decorativo",
+    deliveryTime: "Aproximadamente en 10 días laborales",
+    dimensions: { width: 50, height: 50, depth: 2 },
+    materials: ["PVC", "Yeso"],
+    colors: ["Blanco"],
+    setType: "Partes separadas"
   }
 ];
 
@@ -586,6 +641,7 @@ const parseDeliveryTime = (timeString?: string): number => {
 
 const mapCategory = (p: any): string => {
     if (p.category === 'Sala') return 'Salón';
+    if (p.category === 'Puertas') return 'Puertas';
     const lowerName = p.name.toLowerCase();
     const lowerHint = p.hint.toLowerCase();
 
