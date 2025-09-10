@@ -55,6 +55,7 @@ export interface Filters {
   ledLighting: string | null; // 'Si', 'No', or null
   materials: string[];
   colors: string[];
+  category: string[];
 }
 
 export interface SubCategory {

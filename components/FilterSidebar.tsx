@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Filters } from '../types';
-import { MATERIALS, COLORS, MAX_PRICE, MIN_PRICE, DELIVERY_TIMES, SET_TYPES, COLOR_MAP } from '../constants';
+import { MATERIALS, COLORS, MAX_PRICE, MIN_PRICE, DELIVERY_TIMES, SET_TYPES, COLOR_MAP, CATEGORIES } from '../constants';
 import { ChevronUp } from 'lucide-react';
 import { useCurrency } from '../App';
 
@@ -42,6 +42,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, 
 
   // State for open sections is now managed here
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    "Categorías": true,
     "Color": true,
   });
 
@@ -72,12 +73,12 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, 
     onFilterChange({ priceRange: { min: newMin, max: newMax }});
   };
 
-  const handleCheckboxChange = (category: 'materials' | 'colors' | 'setType' | 'deliveryTime', value: string) => {
-    const currentValues = filters[category];
+  const handleCheckboxChange = (filterType: 'materials' | 'colors' | 'setType' | 'deliveryTime' | 'category', value: string) => {
+    const currentValues = filters[filterType] as string[];
     const newValues = currentValues.includes(value)
       ? currentValues.filter(v => v !== value)
       : [...currentValues, value];
-    onFilterChange({ [category]: newValues });
+    onFilterChange({ [filterType]: newValues });
   };
   
   const handleLedChange = (value: 'Si' | 'No') => {
@@ -118,6 +119,17 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, 
       </div>
 
       <div className="px-4">
+        <CollapsibleSection title="Categorías" isOpen={!!openSections['Categorías']} onToggle={() => toggleSection('Categorías')}>
+            <div className="space-y-2">
+            {CATEGORIES.map(item => (
+                <label key={item} className="flex items-center cursor-pointer">
+                    <input type="checkbox" checked={filters.category.includes(item)} onChange={() => handleCheckboxChange('category', item)} className="h-4 w-4 rounded border-gray-300 text-[#5a1e38] focus:ring-[#5a1e38] bg-white" />
+                    <span className="ml-2 text-sm text-gray-600">{item}</span>
+                </label>
+            ))}
+            </div>
+        </CollapsibleSection>
+
         <CollapsibleSection title="Precio" isOpen={!!openSections['Precio']} onToggle={() => toggleSection('Precio')}>
             <div className="flex items-center justify-between mb-4 text-sm">
                 <input 

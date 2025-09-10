@@ -223,7 +223,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
   
   const [view, setView] = useState<View>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedProjectCategory, setSelectedProjectCategory] = useState<string | null>(null);
@@ -239,6 +238,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
     ledLighting: null,
     materials: [],
     colors: [],
+    category: [],
   });
   
   useEffect(() => {
@@ -259,19 +259,29 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
             }
             break;
         case 'category':
-            if (selectedCategory) {
-                const categoryTitle = selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory;
+            if (filters.category.length > 0) {
+                const categoryTitle = filters.category.length === 1 ? filters.category[0] : 'Varios';
                 title = `${categoryTitle} | Decora Group`;
-                description = `Explora nuestra colección de ${selectedCategory.toLowerCase()}. Encuentra diseños de alta calidad para tu hogar en Decora Group.`;
+                description = `Explora nuestra colección de ${categoryTitle.toLowerCase()}. Encuentra diseños de alta calidad para tu hogar en Decora Group.`;
+            } else {
+                 title = `Todos Nuestros Productos | Decora Group`;
+                 description = `Explora toda nuestra colección de productos. Encuentra diseños de alta calidad para tu hogar en Decora Group.`;
             }
             break;
     }
     updateSEO(title, description, structuredData);
-  }, [view, selectedProduct, selectedCategory, selectedProject, selectedProjectCategory, selectedQuoteType]);
+  }, [view, selectedProduct, filters, selectedProject, selectedProjectCategory, selectedQuoteType]);
+
+  const resetFilters = useCallback(() => {
+    setFilters({
+      priceRange: { min: MIN_PRICE, max: MAX_PRICE }, deliveryTime: [], setType: [], ledLighting: null, materials: [], colors: [], category: [],
+    });
+    setCurrentPage(1);
+  }, []);
 
   const resetToHome = () => {
     setView('home');
-    setSelectedCategory(null);
+    resetFilters();
     setSelectedProduct(null);
     setSelectedProject(null);
     setSelectedProjectCategory(null);
@@ -295,13 +305,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
     setCurrentPage(1);
   }, []);
 
-  const resetFilters = useCallback(() => {
-    setFilters({
-      priceRange: { min: MIN_PRICE, max: MAX_PRICE }, deliveryTime: [], setType: [], ledLighting: null, materials: [], colors: [],
-    });
-    setCurrentPage(1);
-  }, []);
-
   const handleProductSelect = useCallback((product: Product) => {
     setSelectedProduct(product);
     setView('productDetail');
@@ -309,11 +312,19 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
 
   const handleSelectCategory = useCallback((category: string) => {
     setSearchQuery('');
-    setSelectedCategory(category);
     setView('category');
-    resetFilters();
     setCurrentPage(1);
-  }, [resetFilters]);
+    // Reset all filters and set the new category
+    setFilters({
+      priceRange: { min: MIN_PRICE, max: MAX_PRICE },
+      deliveryTime: [],
+      setType: [],
+      ledLighting: null,
+      materials: [],
+      colors: [],
+      category: category === 'Todos los productos' ? [] : [category],
+    });
+  }, []);
 
   const handleSelectProjectCategory = useCallback((category: string) => {
     setSelectedProjectCategory(category);
@@ -327,10 +338,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
   
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
-    setSelectedCategory("Todos los productos");
+    handleFilterChange({ category: [] }); // Search across all categories
     setView('category');
     setCurrentPage(1);
-  }, []);
+  }, [handleFilterChange]);
 
   const handleSelectQuoteType = useCallback((type: string) => {
     const whatsappServices = ['Muebles Personalizados', 'Mobiliario Comercial', 'Construcciones Especializadas'];
@@ -421,9 +432,9 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
       : ALL_PRODUCTS;
 
     return baseProducts.filter(product => {
-      if (selectedCategory && selectedCategory !== 'Todos los productos' && product.category !== selectedCategory) return false;
+      const { category, priceRange, materials, colors, deliveryTime, setType, ledLighting } = filters;
       
-      const { priceRange, materials, colors, deliveryTime, setType, ledLighting } = filters;
+      if (category.length > 0 && !category.includes(product.category)) return false;
       if (product.price < priceRange.min || product.price > priceRange.max) return false;
       if (materials.length > 0 && !materials.some(m => product.materials.includes(m))) return false;
       if (colors.length > 0 && !colors.some(c => product.colors.includes(c))) return false;
@@ -445,7 +456,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
       }
       return true;
     });
-  }, [filters, selectedCategory, searchQuery]);
+  }, [filters, searchQuery]);
 
   const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -459,6 +470,19 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
     return projectsData.filter(project => project.category === selectedProjectCategory);
   }, [selectedProjectCategory, projectsData]);
   
+  const getCategoryPageTitle = () => {
+    if (searchQuery) {
+      return `Resultados para "${searchQuery}"`;
+    }
+    if (filters.category.length === 1) {
+      return filters.category[0];
+    }
+    if (filters.category.length > 1) {
+      return 'Productos Seleccionados';
+    }
+    return 'Todos Nuestros Productos';
+  };
+
   // --- RENDER LOGIC ---
   if (view === 'login') return <LoginPage onLogin={handleLogin} />;
 
@@ -532,7 +556,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
                       <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
                           <div className="max-w-7xl mx-auto">
                           <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
-                              {searchQuery ? `Resultados para "${searchQuery}"` : (selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory)}
+                            {getCategoryPageTitle()}
                           </h1>
                           <div className="lg:grid lg:grid-cols-4 lg:gap-8">
                               <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>

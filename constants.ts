@@ -842,6 +842,12 @@ export const ALL_PRODUCTS: Product[] = rawProducts.map((p: any) => {
   };
 });
 
+const NON_PRODUCT_CATEGORIES = ['blog', 'proyectos', 'cotizar'];
+export const CATEGORIES = MENU_ITEMS_DATA
+  .filter(item => !NON_PRODUCT_CATEGORIES.includes(item.key))
+  .map(item => item.title)
+  .sort();
+
 export const PRODUCT_DETAIL_DATA: Product = ALL_PRODUCTS[0];
 
 export const MATERIALS = [...new Set(ALL_PRODUCTS.flatMap(p => p.materials))].sort();

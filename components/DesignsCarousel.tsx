@@ -1,12 +1,35 @@
 import React, { useRef } from 'react';
 import { SubCategory } from '../types';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  ArrowRight,
+  UtensilsCrossed,
+  Bath,
+  Sofa,
+  Palette,
+  DoorOpen,
+  Building,
+  Store,
+  Sparkles
+} from 'lucide-react';
 
 interface DesignsCarouselProps {
   projectCategories: SubCategory[];
   onSelectProjectCategory: (category: string) => void;
   onViewAllProjects: () => void;
 }
+
+const iconMap: { [key: string]: React.ElementType } = {
+  'Cocinas Personalizadas': UtensilsCrossed,
+  'Baños Modernos': Bath,
+  'Muebles a Medida': Sofa,
+  'Diseño de Interiores': Palette,
+  'Puertas de Interior y Exterior': DoorOpen,
+  'Mobiliario de Oficina': Building,
+  'Proyectos Comerciales': Store,
+  'Default': Sparkles
+};
+
 
 const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, onSelectProjectCategory, onViewAllProjects }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -45,25 +68,31 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
             ref={scrollContainerRef}
             className="flex items-start space-x-8 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
           >
-            {projectCategories.map((category) => (
+            {projectCategories.map((category) => {
+              const Icon = iconMap[category.name] || iconMap['Default'];
+              return (
               <a 
                 href="#" 
                 key={category.id} 
                 onClick={(e) => { e.preventDefault(); onSelectProjectCategory(category.name); }}
                 className="flex-shrink-0 w-40 text-center group snap-center"
               >
-                <div className="w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-white transform group-hover:scale-105 transition-transform duration-300">
+                <div className="relative w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-white transform group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={category.imageUrl}
                     alt={category.name}
                     className="w-full h-full object-cover"
                   />
+                  <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <Icon className="h-8 w-8 text-white" />
+                  </div>
                 </div>
                 <h3 className="mt-4 text-sm font-semibold text-gray-800 group-hover:text-[#5a1e38] transition-colors">
                   {category.name}
                 </h3>
               </a>
-            ))}
+              );
+            })}
           </div>
 
           <button 
