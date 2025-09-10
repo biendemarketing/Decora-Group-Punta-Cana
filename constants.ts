@@ -1,9 +1,211 @@
-import type { Product, Project, NavigationData, TopBarLink } from './types';
+import type { Product, Project, NavigationData, TopBarLink, MenuItem, SubCategory } from './types';
 
-export const NAV_LINKS = [
-  "Sala", "Dormitorio", "Cocina", 
-  "Recibidor", "Oficina", "Baño", "Muebles infantiles", "Puertas", "Blog", "Proyectos", "Cotizar a medida"
+const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
+  id: crypto.randomUUID(),
+  name: item.name,
+  imageUrl: item.imageUrl,
+  title: item.title || item.name,
+  description: item.description,
+  quoteType: item.quoteType,
+});
+
+const SALA_SUB_CATEGORIES_DATA = [
+  { name: 'Juegos de muebles de sala', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wall_units.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Mesas de centro', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/coffee_tables.png' },
+  { name: 'Muebles TV', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/tv_tables.png' },
+  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
+  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
+  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
+  { name: 'Juegos de mesas y sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
+  { name: 'Mesas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/oval_table.png' },
+  { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chairs_new_1.png' },
+  { name: 'Todos los muebles de sala', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
 ];
+
+const DORMITORIO_SUB_CATEGORIES_DATA = [
+  { name: 'Camas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bed-menu.png' },
+  { name: 'Juegos de dormitorio', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bedroom_sets.png' },
+  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Colchones', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/mattresses.png' },
+  { name: 'Mesitas de noche', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bedside_tables.png' },
+  { name: 'Tocadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/makeup_tables.png' },
+  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
+  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
+  { name: 'Paneles de pared suaves', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
+  { name: 'Somieres', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bed_slats.png' },
+  { name: 'Todos los muebles de dormitorio', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+const COCINA_SUB_CATEGORIES_DATA = [
+  { name: 'Juegos de cocina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_sets.png' },
+  { name: 'Armarios de cocinas modulares', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/modular_kitchen.png' },
+  { name: 'Juegos de comedor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
+  { name: 'Mesas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_tables.png' },
+  { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chairs_new_1.png' },
+  { name: 'Mesas de bar', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bar_tables.png' },
+  { name: 'Sillas de barra', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bar_chair.png' },
+  { name: 'Bancos esquineros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_corners.png' },
+  { name: 'Todos los muebles de cocina y comedor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+const RECIBIDOR_SUB_CATEGORIES_DATA = [
+  { name: 'Juegos de pasillo', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
+  { name: 'Zapateros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shoe_cabinets.png' },
+  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
+  { name: 'Percheros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/racks1.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
+  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
+  { name: 'Paneles de pared suaves', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
+  { name: 'Consolas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/console_tables.png' },
+  { name: 'Todos los muebles de recibidor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+const OFICINA_SUB_CATEGORIES_DATA = [
+  { name: 'Juegos de oficina en casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_furniture_sets.png' },
+  { name: 'Mesas de oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_tables.png' },
+  { name: 'Sillas de oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_chairs.png' },
+  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
+  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
+  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Archivadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/drawer_blocks.png' },
+  { name: 'Mesas de ordenador esquinera', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/corner_tables.png' },
+  { name: 'Escritorios de altura regulable', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/adjusting_tables.png' },
+  { name: 'Todos los muebles de oficina en casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+const BANO_SUB_CATEGORIES_DATA = [
+  { name: 'Juegos de muebles de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_sets.png' },
+  { name: 'Armarios de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_standing_cabinets.png' },
+  { name: 'Estanterías de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_shelves.png' },
+  { name: 'Todos los muebles de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+const INFANTILES_SUB_CATEGORIES_DATA = [
+  { name: 'Juegos', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_room_sets.png' },
+  { name: 'Camas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_beds.png' },
+  { name: 'Literas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bunk_beds.png' },
+  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_wardrobes.png' },
+  { name: 'Escritorios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_tables.png' },
+  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
+  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
+  { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_chairs.png' },
+  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_cabinets.png' },
+  { name: 'Mesitas de noche', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_bedside_tables.png' },
+  { name: 'Pufs', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bean_bags.png' },
+  { name: 'Todo el mobiliario infantil', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+const PUERTAS_SUB_CATEGORIES_DATA = [
+  { name: 'Puertas Interiores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
+  { name: 'Puertas Exteriores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
+  { name: 'Revestimiento de pared', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
+  { name: 'Todas las Puertas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
+];
+
+const PROYECTOS_SUB_CATEGORIES_DATA = [
+  { name: 'Cocinas Personalizadas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_sets.png' },
+  { name: 'Baños Modernos', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_sets.png' },
+  { name: 'Muebles a Medida', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/modular_furniture.png' },
+  { name: 'Diseño de Interiores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg' },
+  { name: 'Puertas de Interior y Exterior', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
+  { name: 'Mobiliario de Oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_furniture_sets.png' },
+  { name: 'Proyectos Comerciales', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg' },
+];
+
+export const QUOTE_PROJECT_TYPES_DATA = [
+  {
+    title: 'TV Wall',
+    description: 'Espacios de muebles de TV y similares.',
+    imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg',
+    quoteType: 'TV Wall',
+  },
+  {
+    title: 'Closets',
+    description: 'Reach in, walk in y personalizados.',
+    imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg',
+    quoteType: 'Closets',
+  },
+  {
+    title: 'Cocinas',
+    description: 'Modulares personalizados.',
+    imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop',
+    quoteType: 'Cocinas',
+  },
+  {
+    title: 'Muebles Personalizados',
+    description: 'Diseño o solicitud de mobiliario con funciones especiales.',
+    imageUrl: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop',
+    quoteType: 'Muebles Personalizados',
+  },
+  {
+    title: 'Mobiliario Comercial',
+    description: 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop',
+    quoteType: 'Mobiliario Comercial',
+  },
+  {
+    title: 'Construcciones Especializadas',
+    description: 'Desde el revestimiento de una pared hasta la construcción de una tiny house.',
+    imageUrl: 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop',
+    quoteType: 'Construcciones Especializadas',
+  },
+];
+
+const HERRAJES_SUB_CATEGORIES_DATA = [
+    { name: 'Lavamanos', imageUrl: 'https://picsum.photos/id/1070/100/100' },
+    { name: 'Fregaderos', imageUrl: 'https://picsum.photos/id/1071/100/100' },
+    { name: 'Correderas', imageUrl: 'https://picsum.photos/id/1072/100/100' },
+    { name: 'Esquineros', imageUrl: 'https://picsum.photos/id/1073/100/100' },
+    { name: 'Torres', imageUrl: 'https://picsum.photos/id/1074/100/100' },
+    { name: 'Llavines', imageUrl: 'https://picsum.photos/id/1075/100/100' },
+    { name: 'Patas', imageUrl: 'https://picsum.photos/id/1076/100/100' },
+    { name: 'Tiradores', imageUrl: 'https://picsum.photos/id/1077/100/100' },
+    { name: 'Bisagras', imageUrl: 'https://picsum.photos/id/1078/100/100' },
+    { name: 'Llaves', imageUrl: 'https://picsum.photos/id/1079/100/100' },
+];
+
+const ELECTRODOMESTICOS_SUB_CATEGORIES_DATA = [
+    { name: 'Estufas', imageUrl: 'https://picsum.photos/id/201/100/100' },
+    { name: 'Neveras', imageUrl: 'https://picsum.photos/id/202/100/100' },
+    { name: 'Lavadoras', imageUrl: 'https://picsum.photos/id/203/100/100' },
+    { name: 'Hornos', imageUrl: 'https://picsum.photos/id/204/100/100' },
+    { name: 'Microondas', imageUrl: 'https://picsum.photos/id/206/100/100' },
+    { name: 'Campanas', imageUrl: 'https://picsum.photos/id/208/100/100' },
+];
+
+const MENU_ITEMS_DATA: Omit<MenuItem, 'id'>[] = [
+  { key: 'sala', title: "Sala", isVisible: true, featuredImageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg', subCategories: SALA_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'dormitorio', title: "Dormitorio", isVisible: true, featuredImageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-bedroom-side-image.jpg', subCategories: DORMITORIO_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'cocina', title: "Cocina", isVisible: true, featuredImageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-kitchen-side-image.jpg', subCategories: COCINA_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'recibidor', title: "Recibidor", isVisible: true, featuredImageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-hallway-side-image.jpg', subCategories: RECIBIDOR_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'oficina', title: "Oficina", isVisible: true, featuredImageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg', subCategories: OFICINA_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'bano', title: "Baño", isVisible: true, featuredImageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-bathroom-side-image.jpg', subCategories: BANO_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'infantiles', title: "Muebles infantiles", isVisible: true, featuredImageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-childrens-room-side-image.jpg', subCategories: INFANTILES_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'puertas', title: "Puertas", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1013/600/800', subCategories: PUERTAS_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'herrajes', title: "Herrajes y Accesorios", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1080/600/800', subCategories: HERRAJES_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'electrodomesticos', title: "Electrodomésticos", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/225/600/800', subCategories: ELECTRODOMESTICOS_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'blog', title: "Blog", isVisible: true, featuredImageUrl: '', subCategories: [] },
+  { key: 'proyectos', title: "Proyectos", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1076/600/800', subCategories: PROYECTOS_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'cotizar', title: "Cotizar a medida", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1076/600/800', subCategories: QUOTE_PROJECT_TYPES_DATA.map(item => generateSubCategory({ ...item, name: item.title })) },
+];
+
+
+export const INITIAL_NAVIGATION_DATA: NavigationData = {
+  menuItems: MENU_ITEMS_DATA.map(item => ({ ...item, id: crypto.randomUUID() })),
+  logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
+  footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
+  topBarLinks: [
+    { id: 'about', text: 'Nosotros' },
+    { id: 'faq', text: 'FAQ' },
+    { id: 'legal', text: 'Aviso Legal y Términos y Condiciones' },
+    { id: 'contact', text: 'Contacto' },
+  ],
+};
+
 
 export const HERO_SLIDES = [
   {
@@ -23,115 +225,9 @@ export const HERO_SLIDES = [
   },
 ];
 
-export const PROYECTOS_SUB_CATEGORIES = [
-  { name: 'Cocinas Personalizadas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_sets.png' },
-  { name: 'Baños Modernos', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_sets.png' },
-  { name: 'Muebles a Medida', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/modular_furniture.png' },
-  { name: 'Diseño de Interiores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg' },
-  { name: 'Puertas de Interior y Exterior', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
-  { name: 'Mobiliario de Oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_furniture_sets.png' },
-  { name: 'Proyectos Comerciales', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg' },
-];
-
 // This now mirrors the mega menu for consistency
-export const DESIGN_CATEGORIES = PROYECTOS_SUB_CATEGORIES;
+export const DESIGN_CATEGORIES = PROYECTOS_SUB_CATEGORIES_DATA;
 
-export const SALA_SUB_CATEGORIES = [
-  { name: 'Juegos de muebles de sala', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wall_units.png' },
-  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
-  { name: 'Mesas de centro', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/coffee_tables.png' },
-  { name: 'Muebles TV', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/tv_tables.png' },
-  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
-  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
-  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
-  { name: 'Juegos de mesas y sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
-  { name: 'Mesas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/oval_table.png' },
-  { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chairs_new_1.png' },
-  { name: 'Todos los muebles de sala', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
-
-export const DORMITORIO_SUB_CATEGORIES = [
-  { name: 'Camas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bed-menu.png' },
-  { name: 'Juegos de dormitorio', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bedroom_sets.png' },
-  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
-  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
-  { name: 'Colchones', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/mattresses.png' },
-  { name: 'Mesitas de noche', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bedside_tables.png' },
-  { name: 'Tocadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/makeup_tables.png' },
-  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
-  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
-  { name: 'Paneles de pared suaves', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
-  { name: 'Somieres', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bed_slats.png' },
-  { name: 'Todos los muebles de dormitorio', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
-
-export const COCINA_SUB_CATEGORIES = [
-  { name: 'Juegos de cocina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_sets.png' },
-  { name: 'Armarios de cocinas modulares', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/modular_kitchen.png' },
-  { name: 'Juegos de comedor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/dining_sets.png' },
-  { name: 'Mesas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_tables.png' },
-  { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chairs_new_1.png' },
-  { name: 'Mesas de bar', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bar_tables.png' },
-  { name: 'Sillas de barra', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bar_chair.png' },
-  { name: 'Bancos esquineros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_corners.png' },
-  { name: 'Todos los muebles de cocina y comedor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
-
-export const RECIBIDOR_SUB_CATEGORIES = [
-  { name: 'Juegos de pasillo', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
-  { name: 'Zapateros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shoe_cabinets.png' },
-  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
-  { name: 'Percheros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/racks1.png' },
-  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
-  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
-  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
-  { name: 'Paneles de pared suaves', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
-  { name: 'Consolas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/console_tables.png' },
-  { name: 'Todos los muebles de recibidor', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
-
-export const OFICINA_SUB_CATEGORIES = [
-  { name: 'Juegos de oficina en casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_furniture_sets.png' },
-  { name: 'Mesas de oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_tables.png' },
-  { name: 'Sillas de oficina', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/office_chairs.png' },
-  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
-  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wardrobes.png' },
-  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/cabinets.png' },
-  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
-  { name: 'Archivadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/drawer_blocks.png' },
-  { name: 'Mesas de ordenador esquinera', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/corner_tables.png' },
-  { name: 'Escritorios de altura regulable', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/adjusting_tables.png' },
-  { name: 'Todos los muebles de oficina en casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
-
-export const BANO_SUB_CATEGORIES = [
-  { name: 'Juegos de muebles de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_sets.png' },
-  { name: 'Armarios de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_standing_cabinets.png' },
-  { name: 'Estanterías de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_shelves.png' },
-  { name: 'Todos los muebles de baño', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
-
-export const INFANTILES_SUB_CATEGORIES = [
-  { name: 'Juegos', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_room_sets.png' },
-  { name: 'Camas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_beds.png' },
-  { name: 'Literas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bunk_beds.png' },
-  { name: 'Armarios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_wardrobes.png' },
-  { name: 'Escritorios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_tables.png' },
-  { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
-  { name: 'Estanterías', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/shelves.png' },
-  { name: 'Sillas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_chairs.png' },
-  { name: 'Aparadores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_cabinets.png' },
-  { name: 'Mesitas de noche', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/children_bedside_tables.png' },
-  { name: 'Pufs', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bean_bags.png' },
-  { name: 'Todo el mobiliario infantil', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
-
-export const PUERTAS_SUB_CATEGORIES = [
-  { name: 'Puertas Interiores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
-  { name: 'Puertas Exteriores', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/hallway_sets.png' },
-  { name: 'Revestimiento de pared', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/soft_wall_panels.png' },
-  { name: 'Todas las Puertas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/all_furniture.png' },
-];
 
 export const ALL_PROJECTS: Project[] = [
   {
@@ -628,7 +724,35 @@ const rawProducts = [
     materials: ["PVC", "Yeso"],
     colors: ["Blanco"],
     setType: "Partes separadas"
-  }
+  },
+  {
+    id: 1752700000401,
+    category: "Herrajes y Accesorios",
+    name: "Tirador de Gabinete Moderno",
+    description: "Tirador de metal cepillado para gabinetes de cocina y baño.",
+    price: 15,
+    rating: 5,
+    reviews: 50,
+    images: ["https://picsum.photos/id/1077/400/300"],
+    hint: "tirador metal",
+    deliveryTime: "Aproximadamente en 5 días laborales",
+    materials: ["Metal"],
+    colors: ["Gris"],
+  },
+  {
+    id: 1752700000501,
+    category: "Electrodomésticos",
+    name: "Estufa de Gas 6 Quemadores",
+    description: "Estufa de acero inoxidable con 6 quemadores y horno de gran capacidad.",
+    price: 950,
+    rating: 4.8,
+    reviews: 45,
+    images: ["https://picsum.photos/id/201/400/300"],
+    hint: "estufa acero inoxidable",
+    deliveryTime: "Aproximadamente en 7 días laborales",
+    materials: ["Acero"],
+    colors: ["Gris"],
+  },
 ];
 
 const parseDeliveryTime = (timeString?: string): number => {
@@ -637,51 +761,63 @@ const parseDeliveryTime = (timeString?: string): number => {
   return match ? parseInt(match[1], 10) : 99;
 };
 
-const mapCategory = (p: any): string => {
-    if (p.category === 'Salón' || p.category === 'Sala') return 'Sala';
-    if (p.category === 'Puertas') return 'Puertas';
+const mapProductToCategory = (p: any): { category: string; subcategory?: string } => {
     const lowerName = p.name.toLowerCase();
     const lowerHint = p.hint.toLowerCase();
+    const combinedText = `${lowerName} ${lowerHint}`;
 
-    if (lowerHint.includes('mueble tv') || lowerHint.includes('mesa de centro') || lowerHint.includes('aparador')) {
-        return 'Sala';
-    }
-    if (lowerHint.includes('gavetero')) {
-        return 'Dormitorio';
-    }
-    return 'Sala'; // Default category
+    // New Categories
+    if (combinedText.includes('tirador')) return { category: 'Herrajes y Accesorios', subcategory: 'Tiradores' };
+    if (combinedText.includes('bisagra')) return { category: 'Herrajes y Accesorios', subcategory: 'Bisagras' };
+    if (combinedText.includes('lavamanos')) return { category: 'Herrajes y Accesorios', subcategory: 'Lavamanos' };
+    if (combinedText.includes('fregadero')) return { category: 'Herrajes y Accesorios', subcategory: 'Fregaderos' };
+    if (combinedText.includes('estufa')) return { category: 'Electrodomésticos', subcategory: 'Estufas' };
+    if (combinedText.includes('nevera')) return { category: 'Electrodomésticos', subcategory: 'Neveras' };
+    
+    // Existing Categories
+    if (p.category === 'Puertas') return { category: 'Puertas' };
+    if (combinedText.includes('mueble tv')) return { category: 'Sala', subcategory: 'Muebles TV' };
+    if (combinedText.includes('mesa de centro')) return { category: 'Sala', subcategory: 'Mesas de centro' };
+    if (combinedText.includes('gavetero')) return { category: 'Dormitorio', subcategory: 'Gaveteros' };
+    if (p.category === 'Salón' || p.category === 'Sala') return { category: 'Sala' };
+
+    return { category: 'Muebles' }; // Default fallback
 };
 
-export const ALL_PRODUCTS: Product[] = rawProducts.map((p: any) => ({
-  id: p.id,
-  name: p.name,
-  price: p.price,
-  imageUrl: p.images[0].replace('?w=300&h=225&p=fw', '?w=400&h=300&p=fw'),
-  category: mapCategory(p),
-  description: p.description,
-  materials: p.materials || ["Aglomerado laminado"],
-  colors: p.colors || ["Marrón"],
-  dimensions: p.dimensions,
-  images: p.images.map((img: string) => img.startsWith('http') ? img : `https://decoragrouppuntacana.com/${img}`),
-  sku: String(p.id),
-  rating: p.rating,
-  reviews: p.reviews,
-  reviewsCount: p.reviews,
-  hint: p.hint,
-  deliveryTime: parseDeliveryTime(p.deliveryTime),
-  setType: p.setType,
-  ledLighting: p.ledLighting,
-  specs: {
-    'Entrega': p.deliveryTime || 'No especificado',
-    'Ancho': p.dimensions ? `${p.dimensions.width} cm` : 'N/A',
-    'Alto': p.dimensions ? `${p.dimensions.height} cm` : 'N/A',
-    'Fondo': p.dimensions ? `${p.dimensions.depth} cm` : 'N/A',
-    'Materiales': (p.materials && p.materials.length > 0) ? p.materials.join(', ') : 'No especificado',
-    'Colores': (p.colors && p.colors.length > 0) ? p.colors.join(', ') : 'No especificado',
-    'Código del artículo': String(p.id),
-  },
-  additionalInfo: p.ledLighting ? [{ icon: 'Led', text: 'Iluminación LED' }] : [],
-}));
+export const ALL_PRODUCTS: Product[] = rawProducts.map((p: any) => {
+  const { category, subcategory } = mapProductToCategory(p);
+  return {
+    id: p.id,
+    name: p.name,
+    price: p.price,
+    imageUrl: p.images[0].replace('?w=300&h=225&p=fw', '?w=400&h=300&p=fw'),
+    category: category,
+    subcategory: subcategory,
+    description: p.description,
+    materials: p.materials || ["Aglomerado laminado"],
+    colors: p.colors || ["Marrón"],
+    dimensions: p.dimensions,
+    images: p.images.map((img: string) => img.startsWith('http') ? img : `https://decoragrouppuntacana.com/${img}`),
+    sku: String(p.id),
+    rating: p.rating,
+    reviews: p.reviews,
+    reviewsCount: p.reviews,
+    hint: p.hint,
+    deliveryTime: parseDeliveryTime(p.deliveryTime),
+    setType: p.setType,
+    ledLighting: p.ledLighting,
+    specs: {
+      'Entrega': p.deliveryTime || 'No especificado',
+      'Ancho': p.dimensions ? `${p.dimensions.width} cm` : 'N/A',
+      'Alto': p.dimensions ? `${p.dimensions.height} cm` : 'N/A',
+      'Fondo': p.dimensions ? `${p.dimensions.depth} cm` : 'N/A',
+      'Materiales': (p.materials && p.materials.length > 0) ? p.materials.join(', ') : 'No especificado',
+      'Colores': (p.colors && p.colors.length > 0) ? p.colors.join(', ') : 'No especificado',
+      'Código del artículo': String(p.id),
+    },
+    additionalInfo: p.ledLighting ? [{ icon: 'Led', text: 'Iluminación LED' }] : [],
+  };
+});
 
 export const PRODUCT_DETAIL_DATA: Product = ALL_PRODUCTS[0];
 
@@ -760,46 +896,6 @@ export const SERVICES_DATA = [
     quoteType: 'Construcciones Especializadas',
   },
 ];
-
-export const QUOTE_PROJECT_TYPES = [
-  {
-    title: 'TV Wall',
-    description: 'Espacios de muebles de TV y similares.',
-    imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg',
-    quoteType: 'TV Wall',
-  },
-  {
-    title: 'Closets',
-    description: 'Reach in, walk in y personalizados.',
-    imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg',
-    quoteType: 'Closets',
-  },
-  {
-    title: 'Cocinas',
-    description: 'Modulares personalizados.',
-    imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop',
-    quoteType: 'Cocinas',
-  },
-  {
-    title: 'Muebles Personalizados',
-    description: 'Diseño o solicitud de mobiliario con funciones especiales.',
-    imageUrl: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop',
-    quoteType: 'Muebles Personalizados',
-  },
-  {
-    title: 'Mobiliario Comercial',
-    description: 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...',
-    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop',
-    quoteType: 'Mobiliario Comercial',
-  },
-  {
-    title: 'Construcciones Especializadas',
-    description: 'Desde el revestimiento de una pared hasta la construcción de una tiny house.',
-    imageUrl: 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop',
-    quoteType: 'Construcciones Especializadas',
-  },
-];
-
 
 export const WORK_PROCESS_STEPS = [
   {
@@ -1038,27 +1134,3 @@ export const OUR_HISTORY_IMAGES = [
   { url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
   { url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
 ];
-
-const TOP_BAR_LINKS: TopBarLink[] = [
-    { id: 'about', text: 'Nosotros' },
-    { id: 'faq', text: 'FAQ' },
-    { id: 'legal', text: 'Aviso Legal y Términos y Condiciones' },
-    { id: 'contact', text: 'Contacto' },
-];
-
-export const INITIAL_NAVIGATION_DATA: NavigationData = {
-  navLinks: NAV_LINKS,
-  sala: SALA_SUB_CATEGORIES,
-  dormitorio: DORMITORIO_SUB_CATEGORIES,
-  cocina: COCINA_SUB_CATEGORIES,
-  recibidor: RECIBIDOR_SUB_CATEGORIES,
-  oficina: OFICINA_SUB_CATEGORIES,
-  bano: BANO_SUB_CATEGORIES,
-  infantiles: INFANTILES_SUB_CATEGORIES,
-  puertas: PUERTAS_SUB_CATEGORIES,
-  proyectos: PROYECTOS_SUB_CATEGORIES,
-  cotizar: QUOTE_PROJECT_TYPES.map(p => ({ ...p, name: p.title })),
-  logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
-  footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
-  topBarLinks: TOP_BAR_LINKS,
-};

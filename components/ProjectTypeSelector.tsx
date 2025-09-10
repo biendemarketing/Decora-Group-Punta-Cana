@@ -1,5 +1,7 @@
+
 import React from 'react';
-import { QUOTE_PROJECT_TYPES } from '../constants';
+// FIX: Corrected the import name from QUOTE_PROJECT_TYPES to the correctly exported QUOTE_PROJECT_TYPES_DATA.
+import { QUOTE_PROJECT_TYPES_DATA } from '../constants';
 
 interface ProjectTypeSelectorProps {
   onSelectQuoteType: (type: string) => void;
@@ -13,7 +15,7 @@ const ProjectTypeSelector: React.FC<ProjectTypeSelectorProps> = ({ onSelectQuote
           Selecciona el Tipo de Proyecto
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {QUOTE_PROJECT_TYPES.map((project) => (
+          {QUOTE_PROJECT_TYPES_DATA.map((project) => (
             <div 
               key={project.title} 
               className="bg-gray-50 text-gray-800 rounded-lg shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:scale-105"

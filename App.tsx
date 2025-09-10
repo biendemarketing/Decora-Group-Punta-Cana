@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem, NavigationData, TopBarLink } from './types';
+import type { Filters, Product, Project, CartItem, NavigationData } from './types';
 import { ALL_PRODUCTS, ALL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -231,7 +231,13 @@ const AppContent: React.FC = () => {
     const storedNavData = localStorage.getItem('navigationData');
     if (storedNavData) {
       try {
-        setNavigationData(JSON.parse(storedNavData));
+        const parsedData = JSON.parse(storedNavData);
+        // Basic validation to ensure the loaded data has the expected structure
+        if (parsedData && Array.isArray(parsedData.menuItems)) {
+          setNavigationData(parsedData);
+        } else {
+          localStorage.removeItem('navigationData');
+        }
       } catch (error) {
         console.error("Error parsing navigation data from localStorage", error);
         localStorage.removeItem('navigationData');
@@ -239,10 +245,11 @@ const AppContent: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('navigationData', JSON.stringify(navigationData));
-  }, [navigationData]);
-
+  const handleSaveChanges = (newNavData: NavigationData) => {
+    setNavigationData(newNavData);
+    localStorage.setItem('navigationData', JSON.stringify(newNavData));
+    alert("Cambios guardados exitosamente!");
+  };
 
   const [filters, setFilters] = useState<Filters>({
     priceRange: { min: MIN_PRICE, max: MAX_PRICE },
@@ -423,113 +430,19 @@ const AppContent: React.FC = () => {
   }, [selectedProjectCategory]);
   
   // --- RENDER LOGIC ---
-
-  // Admin View (isolated, no header/footer)
   if (view === 'login') return <LoginPage onLogin={handleLogin} />;
+
   if (view === 'admin') {
-      if (!isAuthenticated) {
-        setView('login');
-        return <LoginPage onLogin={handleLogin} />;
-      }
-      return <AdminPanel navigationData={navigationData} onNavigationChange={setNavigationData} onLogout={handleLogout} />;
+    if (!isAuthenticated) {
+      setView('login');
+      return <LoginPage onLogin={handleLogin} />;
+    }
+    return <AdminPanel initialNavigationData={navigationData} onSaveChanges={handleSaveChanges} onLogout={handleLogout} />;
   }
 
-  // Print View
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
 
-  // Public Views (with Header/Footer)
-  const renderPublicContent = () => {
-      switch(view) {
-          case 'blog': return <BlogPage />;
-          case 'cart': return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;
-          case 'wishlist': return <WishlistPage onProductSelect={handleProductSelect} />;
-          case 'checkout':
-              return <QuoteCheckoutPage 
-                  customerInfo={customerInfo}
-                  onCustomerInfoChange={setCustomerInfo}
-                  onPrintQuote={handlePrintQuote}
-                  onWhatsAppQuote={handleWhatsAppQuote}
-                  onGoBackToCart={() => setView('cart')}
-                  onContinueShopping={() => handleSelectCategory("Todos los productos")}
-              />;
-          case 'about': return <AboutUsPage />;
-          case 'contact': return <ContactPage />;
-          case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} />;
-          case 'quote': return <CustomQuotePage onSelectQuoteType={handleSelectQuoteType} />;
-          case 'projectDetail': return <ProjectDetailPage project={selectedProject!} onBack={() => setView('projects')} onGoHome={resetToHome} />;
-          case 'projects':
-              return (
-                  <main>
-                      <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
-                          <div className="max-w-7xl mx-auto">
-                              <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
-                              Proyectos{selectedProjectCategory ? `: ${selectedProjectCategory}` : ''}
-                              </h1>
-                              <ProjectGrid projects={filteredProjects} onProjectSelect={handleProjectSelect} />
-                          </div>
-                      </div>
-                  </main>
-              );
-          case 'productDetail':
-              return <ProductDetailPage product={selectedProduct!} onBack={() => setView('category')} onCategorySelect={handleSelectCategory} />;
-          case 'category':
-               return (
-                  <main>
-                  <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
-                      <div className="max-w-7xl mx-auto">
-                      <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
-                          {selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory}
-                      </h1>
-                      <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                          <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>
-                          <div className="lg:col-span-3 mt-8 lg:mt-0">
-                          <ProductGrid products={paginatedProducts} onProductSelect={handleProductSelect} />
-                          {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
-                          </div>
-                      </div>
-                      </div>
-                  </div>
-                  </main>
-              );
-          case 'home':
-          default:
-              return (
-                  <main>
-                      <Hero onQuoteClick={() => setView('quote')} onProjectsClick={() => { setSelectedProjectCategory(null); setView('projects'); }} />
-                      <DesignsCarousel onSelectProjectCategory={handleSelectProjectCategory} onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} />
-                      <CategoryGrid />
-                      <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
-                          <div className="max-w-7xl mx-auto">
-                              <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-4">Descubre Nuestra Selección</h2>
-                              <p className="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-12">Explora nuestra selección de muebles de alta calidad. Usa los filtros para encontrar la pieza ideal para ti.</p>
-                              <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                                  <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>
-                                  <div className="lg:col-span-3 mt-8 lg:mt-0">
-                                      <ProductGrid products={filteredProducts.slice(0, 30)} onProductSelect={handleProductSelect} />
-                                      <div className="text-center mt-12"><button onClick={() => handleSelectCategory("Todos los productos")} className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#5a1e38] hover:bg-[#4d182e]">Ver más productos</button></div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <ServicesSection onSelectQuoteType={handleSelectQuoteType} />
-                      <WorkProcessSection />
-                      <MagazineSection />
-                      <InstagramEmbed />
-                      <section className="py-16 bg-gray-50">
-                          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                              <div className="text-center mb-16"><h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Contáctanos</h2><p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Estamos aquí para hacer realidad tu proyecto. Conversemos sobre tus ideas.</p></div>
-                              <div className="bg-white shadow-xl rounded-2xl overflow-hidden"><div className="grid grid-cols-1 lg:grid-cols-2">
-                              <div className="p-8 sm:p-10 lg:p-12 space-y-10"><ContactInfo /><LocationMap /></div>
-                              <div className="p-8 sm:p-10 lg:p-12 bg-gray-50"><ContactForm /></div>
-                              </div></div>
-                          </div>
-                      </section>
-                  </main>
-              );
-      }
-  }
-  
-  return (
+  const PublicView = (
     <div className="bg-gray-50">
       <Header 
           navigationData={navigationData}
@@ -543,15 +456,106 @@ const AppContent: React.FC = () => {
           onViewCart={() => setView('cart')}
           onViewWishlist={() => setView('wishlist')}
           onViewBlogPage={() => setView('blog')}
-          onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')}
       />
-      {renderPublicContent()}
+      
+      {(() => {
+          switch(view) {
+              case 'blog': return <BlogPage />;
+              case 'cart': return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;
+              case 'wishlist': return <WishlistPage onProductSelect={handleProductSelect} />;
+              case 'checkout':
+                  return <QuoteCheckoutPage 
+                      customerInfo={customerInfo}
+                      onCustomerInfoChange={setCustomerInfo}
+                      onPrintQuote={handlePrintQuote}
+                      onWhatsAppQuote={handleWhatsAppQuote}
+                      onGoBackToCart={() => setView('cart')}
+                      onContinueShopping={() => handleSelectCategory("Todos los productos")}
+                  />;
+              case 'about': return <AboutUsPage />;
+              case 'contact': return <ContactPage />;
+              case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} />;
+              case 'quote': return <CustomQuotePage onSelectQuoteType={handleSelectQuoteType} />;
+              case 'projectDetail': return <ProjectDetailPage project={selectedProject!} onBack={() => setView('projects')} onGoHome={resetToHome} />;
+              case 'projects':
+                  return (
+                      <main>
+                          <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+                              <div className="max-w-7xl mx-auto">
+                                  <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
+                                  Proyectos{selectedProjectCategory ? `: ${selectedProjectCategory}` : ''}
+                                  </h1>
+                                  <ProjectGrid projects={filteredProjects} onProjectSelect={handleProjectSelect} />
+                              </div>
+                          </div>
+                      </main>
+                  );
+              case 'productDetail':
+                  return <ProductDetailPage product={selectedProduct!} onBack={() => setView('category')} onCategorySelect={handleSelectCategory} />;
+              case 'category':
+                   return (
+                      <main>
+                      <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+                          <div className="max-w-7xl mx-auto">
+                          <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
+                              {selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory}
+                          </h1>
+                          <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+                              <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>
+                              <div className="lg:col-span-3 mt-8 lg:mt-0">
+                              <ProductGrid products={paginatedProducts} onProductSelect={handleProductSelect} />
+                              {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+                              </div>
+                          </div>
+                          </div>
+                      </div>
+                      </main>
+                  );
+              case 'home':
+              default:
+                  return (
+                      <main>
+                          <Hero onQuoteClick={() => setView('quote')} onProjectsClick={() => { setSelectedProjectCategory(null); setView('projects'); }} />
+                          <DesignsCarousel onSelectProjectCategory={handleSelectProjectCategory} onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} />
+                          <CategoryGrid />
+                          <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+                              <div className="max-w-7xl mx-auto">
+                                  <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-4">Descubre Nuestra Selección</h2>
+                                  <p className="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-12">Explora nuestra selección de muebles de alta calidad. Usa los filtros para encontrar la pieza ideal para ti.</p>
+                                  <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+                                      <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>
+                                      <div className="lg:col-span-3 mt-8 lg:mt-0">
+                                          <ProductGrid products={filteredProducts.slice(0, 30)} onProductSelect={handleProductSelect} />
+                                          <div className="text-center mt-12"><button onClick={() => handleSelectCategory("Todos los productos")} className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#5a1e38] hover:bg-[#4d182e]">Ver más productos</button></div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <ServicesSection onSelectQuoteType={handleSelectQuoteType} />
+                          <WorkProcessSection />
+                          <MagazineSection />
+                          <InstagramEmbed />
+                          <section className="py-16 bg-gray-50">
+                              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                  <div className="text-center mb-16"><h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Contáctanos</h2><p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Estamos aquí para hacer realidad tu proyecto. Conversemos sobre tus ideas.</p></div>
+                                  <div className="bg-white shadow-xl rounded-2xl overflow-hidden"><div className="grid grid-cols-1 lg:grid-cols-2">
+                                  <div className="p-8 sm:p-10 lg:p-12 space-y-10"><ContactInfo /><LocationMap /></div>
+                                  <div className="p-8 sm:p-10 lg:p-12 bg-gray-50"><ContactForm /></div>
+                                  </div></div>
+                              </div>
+                          </section>
+                      </main>
+                  );
+          }
+      })()}
       <Footer 
         footerLogoUrl={navigationData.footerLogoUrl}
         onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')} 
       />
     </div>
   );
+
+  return PublicView;
 };
 
 

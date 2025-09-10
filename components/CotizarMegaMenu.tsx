@@ -2,12 +2,13 @@ import React from 'react';
 import { SubCategory } from '../types';
 
 interface CotizarMegaMenuProps {
-  quoteTypes: SubCategory[];
+  quoteTypes: SubCategory[]; // Renamed from subCategories for clarity
+  featuredImageUrl: string;
   onSelectQuoteType: (type: string) => void;
   onClose: () => void;
 }
 
-const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ quoteTypes, onSelectQuoteType, onClose }) => {
+const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ quoteTypes, featuredImageUrl, onSelectQuoteType, onClose }) => {
   const handleClick = (e: React.MouseEvent, quoteType: string) => {
     e.preventDefault();
     onSelectQuoteType(quoteType);
@@ -21,7 +22,7 @@ const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ quoteTypes, onSelectQ
           {quoteTypes.map((project) => (
             <a 
               href="#" 
-              key={project.title} 
+              key={project.id} 
               onClick={(e) => handleClick(e, project.quoteType!)} 
               className="group flex flex-col items-center text-center p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200"
             >
@@ -35,7 +36,7 @@ const CotizarMegaMenu: React.FC<CotizarMegaMenuProps> = ({ quoteTypes, onSelectQ
         </div>
         
         <div className="col-span-1 relative rounded-md overflow-hidden group h-full">
-          <img src="https://picsum.photos/id/1076/600/800" alt="Arquitecto revisando planos para un proyecto a medida" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <img src={featuredImageUrl} alt="Arquitecto revisando planos para un proyecto a medida" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
           <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-start justify-end p-6 text-white">
             <h3 className="text-xl font-bold">Proyectos a tu Medida</h3>
             <p className="text-sm mt-2">Creamos soluciones únicas que se adaptan perfectamente a tu espacio y estilo de vida.</p>

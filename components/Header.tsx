@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown } from 'lucide-react';
-import { NavigationData, SubCategory, TopBarLink } from '../types';
+import { NavigationData, SubCategory, TopBarLink, MenuItem } from '../types';
 import Logo from './Logo';
 import SalaMegaMenu from './SalonMegaMenu';
 import DormitorioMegaMenu from './DormitorioMegaMenu';
@@ -12,6 +12,8 @@ import InfantilesMegaMenu from './InfantilesMegaMenu';
 import ProyectosMegaMenu from './ProyectosMegaMenu';
 import CotizarMegaMenu from './CotizarMegaMenu';
 import PuertasMegaMenu from './PuertasMegaMenu';
+import HerrajesMegaMenu from './HerrajesMegaMenu';
+import ElectrodomesticosMegaMenu from './ElectrodomesticosMegaMenu';
 import { useCurrency, useCart, useWishlist } from '../App';
 
 interface HeaderProps {
@@ -26,8 +28,23 @@ interface HeaderProps {
   onViewCart: () => void;
   onViewWishlist: () => void;
   onViewBlogPage: () => void;
-  onViewAdminPage: () => void;
 }
+
+const megaMenuComponents: { [key: string]: React.FC<any> } = {
+  sala: SalaMegaMenu,
+  dormitorio: DormitorioMegaMenu,
+  cocina: CocinaMegaMenu,
+  recibidor: RecibidorMegaMenu,
+  oficina: OficinaMegaMenu,
+  bano: BanoMegaMenu,
+  infantiles: InfantilesMegaMenu,
+  puertas: PuertasMegaMenu,
+  herrajes: HerrajesMegaMenu,
+  electrodomesticos: ElectrodomesticosMegaMenu,
+  proyectos: ProyectosMegaMenu,
+  cotizar: CotizarMegaMenu,
+};
+
 
 const Header: React.FC<HeaderProps> = ({ 
     navigationData,
@@ -37,34 +54,13 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
-  const [isSalaMenuOpen, setIsSalaMenuOpen] = useState(false);
-  const [isDormitorioMenuOpen, setIsDormitorioMenuOpen] = useState(false);
-  const [isCocinaMenuOpen, setIsCocinaMenuOpen] = useState(false);
-  const [isRecibidorMenuOpen, setIsRecibidorMenuOpen] = useState(false);
-  const [isOficinaMenuOpen, setIsOficinaMenuOpen] = useState(false);
-  const [isBanoMenuOpen, setIsBanoMenuOpen] = useState(false);
-  const [isInfantilesMenuOpen, setIsInfantilesMenuOpen] = useState(false);
-  const [isPuertasMenuOpen, setIsPuertasMenuOpen] = useState(false);
-  const [isProyectosMenuOpen, setIsProyectosMenuOpen] = useState(false);
-  const [isCotizarMenuOpen, setIsCotizarMenuOpen] = useState(false);
+  const [openMenuKey, setOpenMenuKey] = useState<string | null>(null);
+
   const { currency, setCurrency } = useCurrency();
   const { itemCount } = useCart();
   const { wishlistCount } = useWishlist();
-
-  const getSubcategoriesFor = (link: string): SubCategory[] => {
-    const key = link.toLowerCase().replace(/ /g, '') as keyof NavigationData;
-    if (navigationData[key] && Array.isArray(navigationData[key])) {
-        return navigationData[key] as SubCategory[];
-    }
-     switch (link) { // Fallback for special cases
-        case "Muebles infantiles": return navigationData.infantiles;
-        case "Baño": return navigationData.bano;
-        case "Cotizar a medida": return navigationData.cotizar;
-     }
-    return [];
-  };
   
-  const linkActions: { [key in TopBarLink['id']]: () => void } = {
+  const linkActions: { [key: string]: () => void } = {
     about: onViewAboutPage,
     faq: () => {}, // Placeholder for FAQ page
     legal: () => {}, // Placeholder for Legal page
@@ -72,41 +68,63 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const closeAllMegaMenus = () => {
-    setIsSalaMenuOpen(false);
-    setIsDormitorioMenuOpen(false);
-    setIsCocinaMenuOpen(false);
-    setIsRecibidorMenuOpen(false);
-    setIsOficinaMenuOpen(false);
-    setIsBanoMenuOpen(false);
-    setIsInfantilesMenuOpen(false);
-    setIsPuertasMenuOpen(false);
-    setIsProyectosMenuOpen(false);
-    setIsCotizarMenuOpen(false);
+    setOpenMenuKey(null);
   };
   
-  const handleNavLinkClick = (link: string) => {
-    if (link === 'Proyectos') {
-      onSelectProjectCategory(''); // Show all projects
-    } else if (link === 'Cotizar a medida') {
-      onViewQuotePage();
-    } else if (link === 'Blog') {
-      onViewBlogPage();
-    } else {
-      onSelectCategory(link);
+  const handleNavLinkClick = (menuItem: MenuItem) => {
+    switch (menuItem.key) {
+      case 'proyectos':
+        onSelectProjectCategory(''); // Show all projects
+        break;
+      case 'cotizar':
+        onViewQuotePage();
+        break;
+      case 'blog':
+        onViewBlogPage();
+        break;
+      default:
+        onSelectCategory(menuItem.title);
+        break;
     }
+    closeAllMegaMenus();
   };
 
-  const handleMobileSubItemClick = (mainCategory: string, subItem: SubCategory) => {
-    if (mainCategory === 'Proyectos') {
+  const handleMobileSubItemClick = (mainItem: MenuItem, subItem: SubCategory) => {
+    if (mainItem.key === 'proyectos') {
       onSelectProjectCategory(subItem.name);
-    } else if (mainCategory === 'Cotizar a medida') {
+    } else if (mainItem.key === 'cotizar') {
       onSelectQuoteType(subItem.quoteType!);
     } else {
-      onSelectCategory(mainCategory);
+      onSelectCategory(subItem.name); // Or mainItem.title if you want the parent category page
     }
     setIsMenuOpen(false);
   };
 
+  const visibleMenuItems = navigationData.menuItems.filter(item => item.isVisible);
+
+  const renderMegaMenu = () => {
+    if (!openMenuKey) return null;
+    const MegaMenuComponent = megaMenuComponents[openMenuKey];
+    const menuItem = navigationData.menuItems.find(item => item.key === openMenuKey);
+    if (!MegaMenuComponent || !menuItem) return null;
+
+    const props = {
+      subCategories: menuItem.subCategories,
+      featuredImageUrl: menuItem.featuredImageUrl,
+      onSelectCategory: () => { handleNavLinkClick(menuItem); },
+      onSelectProjectCategory: onSelectProjectCategory,
+      onSelectQuoteType: onSelectQuoteType,
+      onClose: closeAllMegaMenus,
+      // CotizarMegaMenu has a different prop name
+      ...(openMenuKey === 'cotizar' && { quoteTypes: menuItem.subCategories }),
+    };
+
+    return (
+      <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setOpenMenuKey(openMenuKey)}>
+        <MegaMenuComponent {...props} />
+      </div>
+    );
+  }
 
   return (
     <header className="bg-white sticky top-0 z-50 shadow-sm">
@@ -214,87 +232,62 @@ const Header: React.FC<HeaderProps> = ({
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center h-12">
               <div className="flex space-x-8">
-                {navigationData.navLinks.map((link) => (
+                {visibleMenuItems.map((item) => (
                   <a 
-                    key={link} 
+                    key={item.id} 
                     href="#"
                     onClick={(e) => { 
                       e.preventDefault(); 
-                      handleNavLinkClick(link);
+                      handleNavLinkClick(item);
                     }}
                     className={`flex-shrink-0 text-gray-700 hover:text-[#5a1e38] font-medium transition-colors duration-200 text-sm tracking-wide 
-                      ${link === 'Sala' && isSalaMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Dormitorio' && isDormitorioMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Cocina' && isCocinaMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Recibidor' && isRecibidorMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Oficina' && isOficinaMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Baño' && isBanoMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Muebles infantiles' && isInfantilesMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Puertas' && isPuertasMenuOpen ? 'text-[#5a1e38]' : ''}
-                      ${link === 'Proyectos' && isProyectosMenuOpen ? 'text-[#5a1e38]' : ''}
-                       ${link === 'Cotizar a medida' && isCotizarMenuOpen ? 'text-[#5a1e38]' : ''}
+                      ${openMenuKey === item.key ? 'text-[#5a1e38]' : ''}
                     `}
                     onMouseEnter={() => {
-                      closeAllMegaMenus();
-                      if (link === 'Sala') setIsSalaMenuOpen(true);
-                      else if (link === 'Dormitorio') setIsDormitorioMenuOpen(true);
-                      else if (link === 'Cocina') setIsCocinaMenuOpen(true);
-                      else if (link === 'Recibidor') setIsRecibidorMenuOpen(true);
-                      else if (link === 'Oficina') setIsOficinaMenuOpen(true);
-                      else if (link === 'Baño') setIsBanoMenuOpen(true);
-                      else if (link === 'Muebles infantiles') setIsInfantilesMenuOpen(true);
-                      else if (link === 'Puertas') setIsPuertasMenuOpen(true);
-                      else if (link === 'Proyectos') setIsProyectosMenuOpen(true);
-                      else if (link === 'Cotizar a medida') setIsCotizarMenuOpen(true);
+                      if (item.subCategories.length > 0) {
+                        setOpenMenuKey(item.key);
+                      } else {
+                        closeAllMegaMenus();
+                      }
                     }}
                   >
-                    {link}
+                    {item.title}
                   </a>
                 ))}
               </div>
             </div>
         </div>
-        {isSalaMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsSalaMenuOpen(true)}><SalaMegaMenu subCategories={navigationData.sala} onSelectCategory={() => onSelectCategory('Sala')} onClose={closeAllMegaMenus} /></div>}
-        {isDormitorioMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsDormitorioMenuOpen(true)}><DormitorioMegaMenu subCategories={navigationData.dormitorio} onSelectCategory={() => onSelectCategory('Dormitorio')} onClose={closeAllMegaMenus} /></div>}
-        {isCocinaMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsCocinaMenuOpen(true)}><CocinaMegaMenu subCategories={navigationData.cocina} onSelectCategory={() => onSelectCategory('Cocina')} onClose={closeAllMegaMenus} /></div>}
-        {isRecibidorMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsRecibidorMenuOpen(true)}><RecibidorMegaMenu subCategories={navigationData.recibidor} onSelectCategory={() => onSelectCategory('Recibidor')} onClose={closeAllMegaMenus} /></div>}
-        {isOficinaMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsOficinaMenuOpen(true)}><OficinaMegaMenu subCategories={navigationData.oficina} onSelectCategory={() => onSelectCategory('Oficina')} onClose={closeAllMegaMenus} /></div>}
-        {isBanoMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsBanoMenuOpen(true)}><BanoMegaMenu subCategories={navigationData.bano} onSelectCategory={() => onSelectCategory('Baño')} onClose={closeAllMegaMenus} /></div>}
-        {isInfantilesMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsInfantilesMenuOpen(true)}><InfantilesMegaMenu subCategories={navigationData.infantiles} onSelectCategory={() => onSelectCategory('Muebles infantiles')} onClose={closeAllMegaMenus} /></div>}
-        {isPuertasMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsPuertasMenuOpen(true)}><PuertasMegaMenu subCategories={navigationData.puertas} onSelectCategory={() => onSelectCategory('Puertas')} onClose={closeAllMegaMenus} /></div>}
-        {isProyectosMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsProyectosMenuOpen(true)}><ProyectosMegaMenu subCategories={navigationData.proyectos} onSelectProjectCategory={onSelectProjectCategory} onClose={closeAllMegaMenus} /></div>}
-        {isCotizarMenuOpen && <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setIsCotizarMenuOpen(true)}><CotizarMegaMenu quoteTypes={navigationData.cotizar} onSelectQuoteType={onSelectQuoteType} onClose={closeAllMegaMenus} /></div>}
+        {renderMegaMenu()}
       </nav>
       
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="lg:hidden border-t border-gray-200">
           <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navigationData.navLinks.map((link) => {
-              const subItems = getSubcategoriesFor(link);
-              const isSubMenuOpen = openMobileSubMenu === link;
+            {visibleMenuItems.map((item) => {
+              const isSubMenuOpen = openMobileSubMenu === item.key;
               
-              if (subItems.length === 0) {
+              if (item.subCategories.length === 0) {
                 return (
-                  <a key={link} href="#" onClick={(e) => { e.preventDefault(); handleNavLinkClick(link); setIsMenuOpen(false); }}
+                  <a key={item.key} href="#" onClick={(e) => { e.preventDefault(); handleNavLinkClick(item); setIsMenuOpen(false); }}
                     className="w-full block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left">
-                    {link}
+                    {item.title}
                   </a>
                 );
               }
 
               return (
-                <div key={link}>
-                  <button onClick={() => setOpenMobileSubMenu(isSubMenuOpen ? null : link)}
+                <div key={item.key}>
+                  <button onClick={() => setOpenMobileSubMenu(isSubMenuOpen ? null : item.key)}
                     className="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left"
                     aria-expanded={isSubMenuOpen}>
-                    <span>{link}</span>
+                    <span>{item.title}</span>
                     <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform ${isSubMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {isSubMenuOpen && (
                      <div className="pl-6 pt-1 pb-2 space-y-1 border-l-2 ml-4">
-                        {subItems?.map((subItem) => (
-                           <a key={subItem.name || subItem.title} href="#" onClick={(e) => { e.preventDefault(); handleMobileSubItemClick(link, subItem); }}
+                        {item.subCategories.map((subItem) => (
+                           <a key={subItem.id} href="#" onClick={(e) => { e.preventDefault(); handleMobileSubItemClick(item, subItem); }}
                              className="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-[#5a1e38] hover:bg-gray-100">
                              {subItem.name || subItem.title}
                            </a>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { SubCategory } from '../types';
 
-interface DormitorioMegaMenuProps {
+interface HerrajesMegaMenuProps {
   subCategories: SubCategory[];
   featuredImageUrl: string;
   onSelectCategory: () => void;
   onClose: () => void;
 }
 
-const DormitorioMegaMenu: React.FC<DormitorioMegaMenuProps> = ({ subCategories, featuredImageUrl, onSelectCategory, onClose }) => {
+const HerrajesMegaMenu: React.FC<HerrajesMegaMenuProps> = ({ subCategories, featuredImageUrl, onSelectCategory, onClose }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onSelectCategory();
@@ -30,15 +30,15 @@ const DormitorioMegaMenu: React.FC<DormitorioMegaMenuProps> = ({ subCategories, 
         </div>
         
         <div className="col-span-1 relative rounded-md overflow-hidden group h-full">
-          <img src={featuredImageUrl} alt="Dormitorio elegante con cama grande y decoración minimalista" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <img src={featuredImageUrl} alt="Colección de herrajes y accesorios de alta calidad" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end p-4">
-            <h3 className="text-white text-lg font-bold">Muebles de dormitorio</h3>
+            <h3 className="text-white text-lg font-bold">Herrajes y Accesorios</h3>
           </div>
-          <a href="#" onClick={handleClick} className="absolute inset-0" aria-label="Ver todos los muebles de dormitorio"></a>
+          <a href="#" onClick={handleClick} className="absolute inset-0" aria-label="Ver todos los herrajes y accesorios"></a>
         </div>
       </div>
     </div>
   );
 };
 
-export default DormitorioMegaMenu;
+export default HerrajesMegaMenu;

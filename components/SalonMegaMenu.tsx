@@ -3,11 +3,12 @@ import { SubCategory } from '../types';
 
 interface SalaMegaMenuProps {
   subCategories: SubCategory[];
+  featuredImageUrl: string;
   onSelectCategory: () => void;
   onClose: () => void;
 }
 
-const SalaMegaMenu: React.FC<SalaMegaMenuProps> = ({ subCategories, onSelectCategory, onClose }) => {
+const SalaMegaMenu: React.FC<SalaMegaMenuProps> = ({ subCategories, featuredImageUrl, onSelectCategory, onClose }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onSelectCategory();
@@ -19,7 +20,7 @@ const SalaMegaMenu: React.FC<SalaMegaMenuProps> = ({ subCategories, onSelectCate
       <div className="grid grid-cols-4 gap-6 py-5">
         <div className="col-span-3 grid grid-cols-6 gap-x-4 gap-y-3">
           {subCategories.map((category) => (
-            <a href="#" key={category.name} onClick={handleClick} className="group flex flex-col items-center text-center p-1 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+            <a href="#" key={category.id} onClick={handleClick} className="group flex flex-col items-center text-center p-1 rounded-lg hover:bg-gray-50 transition-colors duration-200">
               <div className="w-16 h-16 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center border">
                 <img src={category.imageUrl} alt={`Icono de la categoría ${category.name}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               </div>
@@ -29,7 +30,7 @@ const SalaMegaMenu: React.FC<SalaMegaMenuProps> = ({ subCategories, onSelectCate
         </div>
         
         <div className="col-span-1 relative rounded-md overflow-hidden group h-full">
-          <img src="https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg" alt="Sala moderna con sofá gris y decoración elegante" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <img src={featuredImageUrl} alt="Sala moderna con sofá gris y decoración elegante" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end p-4">
             <h3 className="text-white text-lg font-bold">Muebles de sala</h3>
           </div>
