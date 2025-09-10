@@ -92,4 +92,7 @@ export interface NavigationData {
   footerLogoUrl: string;
   topBarLinks: TopBarLink[];
   topBarBenefits: TopBarBenefit[];
+  exchangeRate: number;
+  contactPhoneNumber: string;
+  contactPhoneLink: string;
 }

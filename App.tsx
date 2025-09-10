@@ -211,8 +211,12 @@ const updateSEO = (title: string, description: string, structuredData?: object) 
   }
 };
 
+interface AppContentProps {
+  navigationData: NavigationData;
+  onSaveChanges: (newNavData: NavigationData) => void;
+}
 
-const AppContent: React.FC = () => {
+const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }) => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
   
@@ -225,32 +229,7 @@ const AppContent: React.FC = () => {
   const [selectedQuoteType, setSelectedQuoteType] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({ name: '', email: '', phone: '', address: '' });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [navigationData, setNavigationData] = useState<NavigationData>(INITIAL_NAVIGATION_DATA);
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    const storedNavData = localStorage.getItem('navigationData');
-    if (storedNavData) {
-      try {
-        const parsedData = JSON.parse(storedNavData);
-        // Basic validation to ensure the loaded data has the expected structure
-        if (parsedData && Array.isArray(parsedData.menuItems)) {
-          setNavigationData(parsedData);
-        } else {
-          localStorage.removeItem('navigationData');
-        }
-      } catch (error) {
-        console.error("Error parsing navigation data from localStorage", error);
-        localStorage.removeItem('navigationData');
-      }
-    }
-  }, []);
-
-  const handleSaveChanges = (newNavData: NavigationData) => {
-    setNavigationData(newNavData);
-    localStorage.setItem('navigationData', JSON.stringify(newNavData));
-    alert("Cambios guardados exitosamente!");
-  };
 
   const [filters, setFilters] = useState<Filters>({
     priceRange: { min: MIN_PRICE, max: MAX_PRICE },
@@ -460,12 +439,12 @@ const AppContent: React.FC = () => {
       setView('login');
       return <LoginPage onLogin={handleLogin} />;
     }
-    return <AdminPanel initialNavigationData={navigationData} onSaveChanges={handleSaveChanges} onLogout={handleLogout} />;
+    return <AdminPanel initialNavigationData={navigationData} onSaveChanges={onSaveChanges} onLogout={handleLogout} />;
   }
 
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
 
-  const PublicView = (
+  return (
     <div className="bg-gray-50">
       <Header 
           navigationData={navigationData}
@@ -579,34 +558,57 @@ const AppContent: React.FC = () => {
       />
     </div>
   );
-
-  return PublicView;
 };
 
 
 const App: React.FC = () => {
+  const [navigationData, setNavigationData] = useState<NavigationData>(INITIAL_NAVIGATION_DATA);
   const [currency, setCurrency] = useState<Currency>('USD');
-  const EXCHANGE_RATE_USD_TO_DOP = 58.50;
+
+  useEffect(() => {
+    const storedNavData = localStorage.getItem('navigationData');
+    if (storedNavData) {
+      try {
+        const parsedData = JSON.parse(storedNavData);
+        if (parsedData && Array.isArray(parsedData.menuItems)) {
+          setNavigationData(parsedData);
+        } else {
+          localStorage.removeItem('navigationData');
+        }
+      } catch (error) {
+        console.error("Error parsing navigation data from localStorage", error);
+        localStorage.removeItem('navigationData');
+      }
+    }
+  }, []);
+
+  const handleSaveChanges = (newNavData: NavigationData) => {
+    setNavigationData(newNavData);
+    localStorage.setItem('navigationData', JSON.stringify(newNavData));
+    alert("Cambios guardados exitosamente!");
+  };
+  
+  const exchangeRate = navigationData.exchangeRate;
 
   const formatPrice = useMemo(() => (priceInUsd: number) => {
     if (priceInUsd === undefined || priceInUsd === null) priceInUsd = 0;
     if (currency === 'USD') {
       return `US$ ${priceInUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     } else {
-      const priceInDop = priceInUsd * EXCHANGE_RATE_USD_TO_DOP;
+      const priceInDop = priceInUsd * exchangeRate;
       return `RD$ ${priceInDop.toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
-  }, [currency]);
+  }, [currency, exchangeRate]);
 
   const currencyContextValue = {
-    currency, setCurrency, exchangeRate: EXCHANGE_RATE_USD_TO_DOP, formatPrice,
+    currency, setCurrency, exchangeRate, formatPrice,
   };
 
   return (
     <CurrencyContext.Provider value={currencyContextValue}>
       <CartProvider>
         <WishlistProvider>
-          <AppContent />
+          <AppContent navigationData={navigationData} onSaveChanges={handleSaveChanges} />
         </WishlistProvider>
       </CartProvider>
     </CurrencyContext.Provider>

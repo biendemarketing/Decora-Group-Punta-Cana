@@ -175,7 +175,9 @@ const Header: React.FC<HeaderProps> = ({
                 </React.Fragment>
              ))}
              <span className="text-gray-300">|</span>
-            <div className="flex items-center"><Phone className="h-4 w-4 mr-1 text-[#5a1e38]"/> (849) 456-1963</div>
+            <a href={navigationData.contactPhoneLink} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-[#5a1e38]">
+              <Phone className="h-4 w-4 mr-1 text-[#5a1e38]"/> {navigationData.contactPhoneNumber}
+            </a>
             <button 
               onClick={() => setCurrency(currency === 'USD' ? 'RD$' : 'USD')} 
               className="flex items-center px-2 py-1 rounded hover:bg-gray-200 transition-colors"

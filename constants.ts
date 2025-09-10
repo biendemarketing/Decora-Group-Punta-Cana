@@ -209,6 +209,9 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
     { id: crypto.randomUUID(), icon: 'CreditCard', text: 'Pago a la entrega' },
     { id: crypto.randomUUID(), icon: 'ShieldCheck', text: '365 días - garantía' },
   ],
+  exchangeRate: 58.50,
+  contactPhoneNumber: "(849) 456-1963",
+  contactPhoneLink: "https://wa.me/18494561963",
 };
 
 

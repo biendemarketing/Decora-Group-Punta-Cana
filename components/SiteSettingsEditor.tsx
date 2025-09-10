@@ -100,6 +100,40 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ navigationData,
           ))}
         </div>
       </div>
+
+       <div className="border-t pt-6">
+        <h3 className="text-lg font-bold mb-4 text-gray-800">Configuraciones Generales</h3>
+        <div className="space-y-4">
+            <div>
+                <label className="block text-sm font-medium text-gray-700">Tasa de Cambio (USD a RD$)</label>
+                <input 
+                    type="number"
+                    value={navigationData.exchangeRate}
+                    onChange={(e) => onNavigationChange({ ...navigationData, exchangeRate: parseFloat(e.target.value) || 0 })}
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm p-2 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                    step="0.01"
+                />
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700">Teléfono de Contacto (Texto)</label>
+                <input 
+                    type="text"
+                    value={navigationData.contactPhoneNumber}
+                    onChange={(e) => onNavigationChange({ ...navigationData, contactPhoneNumber: e.target.value })}
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm p-2 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                />
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700">Enlace del Teléfono (URL)</label>
+                <input 
+                    type="text"
+                    value={navigationData.contactPhoneLink}
+                    onChange={(e) => onNavigationChange({ ...navigationData, contactPhoneLink: e.target.value })}
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm p-2 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                />
+            </div>
+        </div>
+    </div>
     </div>
   );
 };
