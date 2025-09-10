@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem, NavigationData } from './types';
+import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory } from './types';
 import { ALL_PRODUCTS, INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -391,6 +391,12 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
   };
 
   const handleNavigate = useCallback((key: string) => {
+    const menuItem = navigationData.menuItems.find(item => item.key === key);
+    if(menuItem) {
+      handleSelectCategory(menuItem.title);
+      return;
+    }
+
     switch (key) {
       case 'products':
         handleSelectCategory("Todos los productos");
@@ -415,7 +421,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
         resetToHome();
         break;
     }
-  }, [handleSelectCategory]);
+  }, [handleSelectCategory, navigationData.menuItems]);
 
   const filteredProducts = useMemo(() => {
     const baseProducts = searchQuery
@@ -579,7 +585,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
                             onSelectProjectCategory={handleSelectProjectCategory} 
                             onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} 
                           />
-                          <CategoryGrid />
+                          <CategoryGrid 
+                            popularCategories={navigationData.popularCategories}
+                            onSelectCategory={handleSelectCategory}
+                          />
                           <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
                               <div className="max-w-7xl mx-auto">
                                   <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-4">Descubre Nuestra Selección</h2>

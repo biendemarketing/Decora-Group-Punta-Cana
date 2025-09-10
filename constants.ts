@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, TopBarLink, MenuItem, SubCategory, TopBarBenefit, HeroSlide } from './types';
+import type { Product, Project, NavigationData, PopularCategory, TopBarLink, MenuItem, SubCategory, TopBarBenefit, HeroSlide } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -225,6 +225,12 @@ const HERO_SLIDES_DATA: Omit<HeroSlide, 'id'>[] = [
 export const INITIAL_NAVIGATION_DATA: NavigationData = {
   menuItems: MENU_ITEMS_DATA.map(item => ({ ...item, id: crypto.randomUUID() })),
   heroSlides: HERO_SLIDES_DATA.map(slide => ({ ...slide, id: crypto.randomUUID() })),
+  popularCategories: [
+    { id: crypto.randomUUID(), name: 'Salas', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg', link: 'Sala' },
+    { id: crypto.randomUUID(), name: 'Dormitorios', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-bedroom-side-image.jpg', link: 'Dormitorio' },
+    { id: crypto.randomUUID(), name: 'Terrazas y Jardines', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-outdoors-side-image.jpg', link: 'Sala' },
+    { id: crypto.randomUUID(), name: 'Oficinas en Casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg', link: 'Oficina' },
+  ],
   logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
   footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
   topBarLinks: [

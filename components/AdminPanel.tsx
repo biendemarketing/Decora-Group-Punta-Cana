@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Hero from './Hero';
+import CategoryGrid from './CategoryGrid';
 import HeaderEditor from './HeaderEditor';
 import SiteSettingsEditor from './SiteSettingsEditor';
 import HeroSliderEditor from './HeroSliderEditor';
 import AdminSidebar from './AdminSidebar';
 import ProjectsEditor from './ProjectsEditor';
+import PopularCategoriesEditor from './PopularCategoriesEditor';
 import { NavigationData, Project } from '../types';
 import { LogOut, Save, XCircle } from 'lucide-react';
 
@@ -18,7 +20,7 @@ interface AdminPanelProps {
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, initialProjectsData, onSaveChanges, onLogout }) => {
   const dummyFunc = () => console.log("Action disabled in preview mode.");
-  const [activeEditor, setActiveEditor] = useState<'menu' | 'slider' | 'settings' | 'projects'>('settings');
+  const [activeEditor, setActiveEditor] = useState<'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories'>('settings');
   
   const [draftNavData, setDraftNavData] = useState<NavigationData>(() => JSON.parse(JSON.stringify(initialNavigationData)));
   const [draftProjectsData, setDraftProjectsData] = useState<Project[]>(() => JSON.parse(JSON.stringify(initialProjectsData)));
@@ -97,6 +99,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, initialP
                     onSlidesChange={(newSlides) => setDraftNavData(prev => ({ ...prev, heroSlides: newSlides }))}
                   />
                 )}
+                {activeEditor === 'popularCategories' && (
+                  <PopularCategoriesEditor
+                    categories={draftNavData.popularCategories}
+                    onCategoriesChange={(newCategories) => setDraftNavData(prev => ({ ...prev, popularCategories: newCategories }))}
+                    menuItems={draftNavData.menuItems}
+                  />
+                )}
                  {activeEditor === 'projects' && (
                   <ProjectsEditor
                     projects={draftProjectsData}
@@ -127,6 +136,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, initialP
               onSearch={dummyFunc}
             />
             <Hero heroSlides={draftNavData.heroSlides} onNavigate={dummyFunc} />
+            <CategoryGrid 
+              popularCategories={draftNavData.popularCategories}
+              onSelectCategory={dummyFunc}
+            />
             <div className="p-8 bg-gray-50 h-auto flex items-center justify-center">
               <p className="text-center text-gray-500">
                 El resto de la página se mostraría aquí...

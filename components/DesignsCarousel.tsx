@@ -83,7 +83,7 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
                     alt={category.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-[#5a1e38]/75 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <Icon className="h-8 w-8 text-white" />
                   </div>
                 </div>

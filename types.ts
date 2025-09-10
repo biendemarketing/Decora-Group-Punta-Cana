@@ -103,9 +103,17 @@ export interface HeroSlide {
     buttons: HeroButton[];
 }
 
+export interface PopularCategory {
+  id: string;
+  name: string;
+  imageUrl: string;
+  link: string; // The category TITLE to navigate to
+}
+
 export interface NavigationData {
   menuItems: MenuItem[];
   heroSlides: HeroSlide[];
+  popularCategories: PopularCategory[];
   logoUrl: string;
   footerLogoUrl: string;
   topBarLinks: TopBarLink[];
