@@ -71,6 +71,12 @@ export interface TopBarLink {
   text: string;
 }
 
+export interface TopBarBenefit {
+  id: string;
+  icon: string;
+  text: string;
+}
+
 export interface MenuItem {
   id: string;
   key: string;
@@ -85,4 +91,5 @@ export interface NavigationData {
   logoUrl: string;
   footerLogoUrl: string;
   topBarLinks: TopBarLink[];
+  topBarBenefits: TopBarBenefit[];
 }

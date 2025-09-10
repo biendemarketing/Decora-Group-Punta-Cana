@@ -99,6 +99,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
         <div className="lg:col-span-2">
           <h2 className="text-xl font-semibold mb-4 text-gray-700">Vista Previa en Vivo</h2>
           <div className="border-4 border-gray-300 rounded-lg overflow-hidden shadow-2xl bg-white transform scale-[0.85] origin-top">
+            {/* FIX: Added missing searchQuery and onSearch props to satisfy HeaderProps interface. */}
             <Header
               navigationData={draftData}
               onSelectCategory={dummyFunc}
@@ -111,6 +112,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
               onViewCart={dummyFunc}
               onViewWishlist={dummyFunc}
               onViewBlogPage={dummyFunc}
+              searchQuery=""
+              onSearch={dummyFunc}
             />
             <div className="p-8 bg-gray-50 h-64 flex items-center justify-center">
               <p className="text-center text-gray-500">El resto de la página se mostraría aquí...</p>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown, Package, Gem, Lightbulb, Award, CheckCircle } from 'lucide-react';
 import { NavigationData, SubCategory, TopBarLink, MenuItem } from '../types';
 import Logo from './Logo';
 import SalaMegaMenu from './SalonMegaMenu';
@@ -28,6 +28,8 @@ interface HeaderProps {
   onViewCart: () => void;
   onViewWishlist: () => void;
   onViewBlogPage: () => void;
+  searchQuery: string;
+  onSearch: (query: string) => void;
 }
 
 const megaMenuComponents: { [key: string]: React.FC<any> } = {
@@ -45,16 +47,34 @@ const megaMenuComponents: { [key: string]: React.FC<any> } = {
   cotizar: CotizarMegaMenu,
 };
 
+const benefitIconMap: { [key: string]: React.ElementType } = {
+  Truck,
+  CreditCard,
+  ShieldCheck,
+  Phone,
+  Package,
+  Gem,
+  Lightbulb,
+  Award,
+  Heart,
+  CheckCircle,
+};
+
 
 const Header: React.FC<HeaderProps> = ({ 
     navigationData,
     onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, 
     onSelectQuoteType, onViewAboutPage, onViewContactPage, onViewCart, onViewWishlist,
-    onViewBlogPage
+    onViewBlogPage, searchQuery, onSearch
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
   const [openMenuKey, setOpenMenuKey] = useState<string | null>(null);
+  const [searchInputValue, setSearchInputValue] = useState(searchQuery);
+
+  useEffect(() => {
+    setSearchInputValue(searchQuery);
+  }, [searchQuery]);
 
   const { currency, setCurrency } = useCurrency();
   const { itemCount } = useCart();
@@ -87,6 +107,11 @@ const Header: React.FC<HeaderProps> = ({
         break;
     }
     closeAllMegaMenus();
+  };
+  
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(searchInputValue);
   };
 
   const handleMobileSubItemClick = (mainItem: MenuItem, subItem: SubCategory) => {
@@ -132,9 +157,15 @@ const Header: React.FC<HeaderProps> = ({
       <div className="hidden md:block bg-gray-100 text-gray-600 text-xs border-b border-gray-200">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-8">
           <div className="flex items-center space-x-4">
-            <div className="flex items-center"><Truck className="h-4 w-4 mr-1 text-[#5a1e38]"/> Entrega gratis en Punta Cana</div>
-            <div className="flex items-center"><CreditCard className="h-4 w-4 mr-1 text-[#5a1e38]"/> Pago a la entrega</div>
-            <div className="flex items-center"><ShieldCheck className="h-4 w-4 mr-1 text-[#5a1e38]"/> 365 días - garantía</div>
+            {navigationData.topBarBenefits.map(benefit => {
+              const Icon = benefitIconMap[benefit.icon];
+              return (
+                <div key={benefit.id} className="flex items-center">
+                  {Icon && <Icon className="h-4 w-4 mr-1 text-[#5a1e38]" />}
+                  {benefit.text}
+                </div>
+              );
+            })}
           </div>
           <div className="flex items-center space-x-3">
              {navigationData.topBarLinks.map((link, index) => (
@@ -167,17 +198,19 @@ const Header: React.FC<HeaderProps> = ({
           </div>
           
           <div className="hidden lg:flex flex-1 justify-center px-8">
-             <div className="w-full max-w-lg relative">
-               <input
+            <form onSubmit={handleSearchSubmit} className="w-full max-w-lg relative">
+              <input
                 type="text"
                 placeholder="Buscar productos, marcas y más..."
-                className="w-full bg-white rounded-md py-3 pl-12 pr-14 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5a1e38] focus:border-transparent transition-all"
-               />
-               <Camera className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 cursor-pointer"/>
-               <button className="absolute right-0 top-0 bottom-0 px-4 flex items-center bg-gray-100 rounded-r-md border-l border-gray-300 hover:bg-gray-200">
-                 <Search className="h-5 w-5 text-gray-600" />
-               </button>
-            </div>
+                value={searchInputValue}
+                onChange={(e) => setSearchInputValue(e.target.value)}
+                className="w-full bg-white rounded-md py-3 pl-12 pr-14 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5a1e38] focus:border-transparent transition-all text-gray-900"
+              />
+              <Camera className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 cursor-pointer"/>
+              <button type="submit" className="absolute right-0 top-0 bottom-0 px-4 flex items-center bg-gray-100 rounded-r-md border-l border-gray-300 hover:bg-gray-200">
+                <Search className="h-5 w-5 text-gray-600" />
+              </button>
+            </form>
           </div>
 
           <div className="flex items-center space-x-2 sm:space-x-4 lg:flex-1 justify-end">
@@ -211,17 +244,19 @@ const Header: React.FC<HeaderProps> = ({
       
       {/* Search Bar for Mobile/Tablet */}
       <div className="lg:hidden px-4 sm:px-6 pb-4 border-b border-gray-200">
-        <div className="w-full relative">
-            <input
+        <form onSubmit={handleSearchSubmit} className="w-full relative">
+          <input
             type="text"
             placeholder="Buscar productos, marcas y más..."
-            className="w-full bg-gray-100 rounded-md py-3 pl-12 pr-14 border border-transparent focus:outline-none focus:ring-2 focus:ring-[#5a1e38] focus:bg-white"
-            />
-            <Camera className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 cursor-pointer"/>
-            <button className="absolute right-0 top-0 bottom-0 px-4 flex items-center">
-                <Search className="h-5 w-5 text-gray-600" />
-            </button>
-        </div>
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
+            className="w-full bg-gray-100 rounded-md py-3 pl-12 pr-14 border border-transparent focus:outline-none focus:ring-2 focus:ring-[#5a1e38] focus:bg-white text-gray-900"
+          />
+          <Camera className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 cursor-pointer"/>
+          <button type="submit" className="absolute right-0 top-0 bottom-0 px-4 flex items-center">
+              <Search className="h-5 w-5 text-gray-600" />
+          </button>
+        </form>
       </div>
 
       {/* Navigation Bar */}

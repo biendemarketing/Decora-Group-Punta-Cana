@@ -226,6 +226,7 @@ const AppContent: React.FC = () => {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({ name: '', email: '', phone: '', address: '' });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [navigationData, setNavigationData] = useState<NavigationData>(INITIAL_NAVIGATION_DATA);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const storedNavData = localStorage.getItem('navigationData');
@@ -296,6 +297,7 @@ const AppContent: React.FC = () => {
     setSelectedProjectCategory(null);
     setSelectedQuoteType(null);
     setCurrentPage(1);
+    setSearchQuery('');
   }
   
   const handlePageChange = (page: number) => {
@@ -326,6 +328,7 @@ const AppContent: React.FC = () => {
   }, []);
 
   const handleSelectCategory = useCallback((category: string) => {
+    setSearchQuery('');
     setSelectedCategory(category);
     setView('category');
     resetFilters();
@@ -340,6 +343,13 @@ const AppContent: React.FC = () => {
   const handleProjectSelect = useCallback((project: Project) => {
     setSelectedProject(project);
     setView('projectDetail');
+  }, []);
+  
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+    setSelectedCategory("Todos los productos");
+    setView('category');
+    setCurrentPage(1);
   }, []);
 
   const handleSelectQuoteType = useCallback((type: string) => {
@@ -390,7 +400,20 @@ const AppContent: React.FC = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    return ALL_PRODUCTS.filter(product => {
+    const baseProducts = searchQuery
+      ? ALL_PRODUCTS.filter(product => {
+          const term = searchQuery.toLowerCase();
+          return (
+            product.name.toLowerCase().includes(term) ||
+            product.description.toLowerCase().includes(term) ||
+            product.category.toLowerCase().includes(term) ||
+            (product.subcategory && product.subcategory.toLowerCase().includes(term)) ||
+            product.hint.toLowerCase().includes(term)
+          );
+        })
+      : ALL_PRODUCTS;
+
+    return baseProducts.filter(product => {
       if (selectedCategory && selectedCategory !== 'Todos los productos' && product.category !== selectedCategory) return false;
       
       const { priceRange, materials, colors, deliveryTime, setType, ledLighting } = filters;
@@ -415,7 +438,7 @@ const AppContent: React.FC = () => {
       }
       return true;
     });
-  }, [filters, selectedCategory]);
+  }, [filters, selectedCategory, searchQuery]);
 
   const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -456,6 +479,8 @@ const AppContent: React.FC = () => {
           onViewCart={() => setView('cart')}
           onViewWishlist={() => setView('wishlist')}
           onViewBlogPage={() => setView('blog')}
+          searchQuery={searchQuery}
+          onSearch={handleSearch}
       />
       
       {(() => {
@@ -498,7 +523,7 @@ const AppContent: React.FC = () => {
                       <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">
                           <div className="max-w-7xl mx-auto">
                           <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-12">
-                              {selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory}
+                              {searchQuery ? `Resultados para "${searchQuery}"` : (selectedCategory === 'Todos los productos' ? 'Todos Nuestros Productos' : selectedCategory)}
                           </h1>
                           <div className="lg:grid lg:grid-cols-4 lg:gap-8">
                               <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>

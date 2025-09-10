@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, TopBarLink, MenuItem, SubCategory } from './types';
+import type { Product, Project, NavigationData, TopBarLink, MenuItem, SubCategory, TopBarBenefit } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -203,6 +203,11 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
     { id: 'faq', text: 'FAQ' },
     { id: 'legal', text: 'Aviso Legal y Términos y Condiciones' },
     { id: 'contact', text: 'Contacto' },
+  ],
+  topBarBenefits: [
+    { id: crypto.randomUUID(), icon: 'Truck', text: 'Entrega gratis en Punta Cana' },
+    { id: crypto.randomUUID(), icon: 'CreditCard', text: 'Pago a la entrega' },
+    { id: crypto.randomUUID(), icon: 'ShieldCheck', text: '365 días - garantía' },
   ],
 };
 
