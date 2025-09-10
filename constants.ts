@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, TopBarLink, MenuItem, SubCategory, TopBarBenefit } from './types';
+import type { Product, Project, NavigationData, TopBarLink, MenuItem, SubCategory, TopBarBenefit, HeroSlide } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -193,9 +193,38 @@ const MENU_ITEMS_DATA: Omit<MenuItem, 'id'>[] = [
   { key: 'cotizar', title: "Cotizar a medida", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1076/600/800', subCategories: QUOTE_PROJECT_TYPES_DATA.map(item => generateSubCategory({ ...item, name: item.title })) },
 ];
 
+const HERO_SLIDES_DATA: Omit<HeroSlide, 'id'>[] = [
+  {
+    imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1920&auto=format&fit=crop",
+    title: "Diseño y Calidad Insuperables",
+    subtitle: "Muebles que transforman tu espacio",
+    buttons: [
+      { id: crypto.randomUUID(), text: "Cotización automática", link: 'quote', style: 'primary', icon: 'Calculator' },
+      { id: crypto.randomUUID(), text: "Ver productos", link: 'products', style: 'secondary', icon: 'Eye' },
+    ],
+  },
+  {
+    imageUrl: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1920&auto=format&fit=crop",
+    title: "Entrega Garantizada y Segura",
+    subtitle: "Recibe tus muebles justo a tiempo, sin prepago.",
+    buttons: [
+      { id: crypto.randomUUID(), text: "Nuestros Proyectos", link: 'projects', style: 'primary', icon: 'Wrench' },
+    ],
+  },
+   {
+    imageUrl: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=1920&auto=format&fit=crop",
+    title: "Estilo Que Inspira",
+    subtitle: "Descubre colecciones que definen tu hogar.",
+    buttons: [
+      { id: crypto.randomUUID(), text: "Sobre Nosotros", link: 'about', style: 'secondary', icon: 'Users' },
+      { id: crypto.randomUUID(), text: "Contáctanos", link: 'contact', style: 'primary', icon: 'Phone' },
+    ],
+  },
+];
 
 export const INITIAL_NAVIGATION_DATA: NavigationData = {
   menuItems: MENU_ITEMS_DATA.map(item => ({ ...item, id: crypto.randomUUID() })),
+  heroSlides: HERO_SLIDES_DATA.map(slide => ({ ...slide, id: crypto.randomUUID() })),
   logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
   footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
   topBarLinks: [
@@ -214,23 +243,13 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   contactPhoneLink: "https://wa.me/18494561963",
 };
 
-
-export const HERO_SLIDES = [
-  {
-    imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1920&auto=format&fit=crop",
-    title: "Diseño y Calidad Insuperables",
-    subtitle: "Muebles que transforman tu espacio",
-  },
-  {
-    imageUrl: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1920&auto=format&fit=crop",
-    title: "Entrega Garantizada y Segura",
-    subtitle: "Recibe tus muebles justo a tiempo, sin prepago.",
-  },
-   {
-    imageUrl: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=1920&auto=format&fit=crop",
-    title: "Estilo Que Inspira",
-    subtitle: "Descubre colecciones que definen tu hogar.",
-  },
+export const PREDEFINED_LINKS = [
+    { key: 'products', label: 'Ver todos los productos' },
+    { key: 'projects', label: 'Ver todos los proyectos' },
+    { key: 'quote', label: 'Ir a Cotizar a Medida' },
+    { key: 'about', label: 'Ir a Sobre Nosotros' },
+    { key: 'contact', label: 'Ir a Contacto' },
+    { key: 'blog', label: 'Ir al Blog' },
 ];
 
 // This now mirrors the mega menu for consistency

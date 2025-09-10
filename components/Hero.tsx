@@ -1,40 +1,63 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { HERO_SLIDES } from '../constants';
+import { ChevronLeft, ChevronRight, Calculator, Eye, Wrench, Users, Phone } from 'lucide-react';
+import { HeroSlide } from '../types';
 
 interface HeroProps {
-  onQuoteClick: () => void;
-  onProjectsClick: () => void;
+  heroSlides: HeroSlide[];
+  onNavigate: (key: string) => void;
 }
 
-const Hero: React.FC<HeroProps> = ({ onQuoteClick, onProjectsClick }) => {
+const iconMap: { [key: string]: React.ElementType } = {
+  Calculator,
+  Eye,
+  Wrench,
+  Users,
+  Phone,
+  Default: () => null,
+};
+
+
+const Hero: React.FC<HeroProps> = ({ heroSlides, onNavigate }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = useCallback(() => {
+    if (!heroSlides || heroSlides.length === 0) return;
     const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? HERO_SLIDES.length - 1 : currentIndex - 1;
+    const newIndex = isFirstSlide ? heroSlides.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
-  }, [currentIndex]);
+  }, [currentIndex, heroSlides]);
 
   const nextSlide = useCallback(() => {
-    const isLastSlide = currentIndex === HERO_SLIDES.length - 1;
+    if (!heroSlides || heroSlides.length === 0) return;
+    const isLastSlide = currentIndex === heroSlides.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
-  }, [currentIndex]);
+  }, [currentIndex, heroSlides]);
 
   useEffect(() => {
+    if (!heroSlides || heroSlides.length === 0) return;
     const slideInterval = setInterval(nextSlide, 5000);
     return () => clearInterval(slideInterval);
-  }, [nextSlide]);
+  }, [nextSlide, heroSlides]);
+  
+  if (!heroSlides || heroSlides.length === 0) {
+    return (
+      <div className="relative bg-gray-800 h-[60vh] min-h-[500px] w-full flex items-center justify-center">
+        <p className="text-white">No hay diapositivas para mostrar.</p>
+      </div>
+    );
+  }
+
+  const currentSlide = heroSlides[currentIndex];
 
   return (
     <div className="relative bg-gray-800 h-[60vh] min-h-[500px] w-full overflow-hidden">
       {/* Slides container */}
       <div className="absolute inset-0">
-        {HERO_SLIDES.map((slide, index) => (
+        {heroSlides.map((slide, index) => (
           <div
-            key={index}
+            key={slide.id}
             className={`absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 ease-in-out ${currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
             style={{ backgroundImage: `url('${slide.imageUrl}')` }}
           >
@@ -46,25 +69,30 @@ const Hero: React.FC<HeroProps> = ({ onQuoteClick, onProjectsClick }) => {
       {/* Text content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white flex flex-col items-center justify-center h-full">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight drop-shadow-lg">
-          <span className="block">{HERO_SLIDES[currentIndex].title}</span>
+          <span className="block">{currentSlide.title}</span>
         </h1>
         <p className="mt-4 text-xl sm:text-2xl text-gray-200 drop-shadow-md max-w-3xl">
-          {HERO_SLIDES[currentIndex].subtitle}
+          {currentSlide.subtitle}
         </p>
         
          <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={onQuoteClick}
-              className="px-8 py-3 bg-[#5a1e38] text-white font-semibold rounded-md shadow-lg hover:bg-[#4d182e] transform hover:scale-105 transition-all duration-300"
-            >
-              Cotización automática
-            </button>
-            <button
-              onClick={onProjectsClick}
-              className="px-8 py-3 bg-black/30 backdrop-blur-sm text-white font-semibold rounded-md shadow-lg border border-white/20 hover:bg-white/20 transform hover:scale-105 transition-all duration-300"
-            >
-              Ver proyectos
-            </button>
+            {currentSlide.buttons.map(button => {
+                const Icon = iconMap[button.icon] || iconMap.Default;
+                const buttonClasses = button.style === 'primary'
+                    ? "bg-[#5a1e38] text-white hover:bg-[#4d182e]"
+                    : "bg-black/30 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20";
+                
+                return (
+                    <button
+                        key={button.id}
+                        onClick={() => onNavigate(button.link)}
+                        className={`flex items-center gap-2 px-8 py-3 font-semibold rounded-md shadow-lg transform hover:scale-105 transition-all duration-300 ${buttonClasses}`}
+                    >
+                        <Icon className="h-5 w-5" />
+                        {button.text}
+                    </button>
+                );
+            })}
         </div>
       </div>
       
@@ -84,7 +112,7 @@ const Hero: React.FC<HeroProps> = ({ onQuoteClick, onProjectsClick }) => {
 
       {/* Carousel Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-30">
-        {HERO_SLIDES.map((_, index) => (
+        {heroSlides.map((_, index) => (
           <button 
             key={index}
             onClick={() => setCurrentIndex(index)}

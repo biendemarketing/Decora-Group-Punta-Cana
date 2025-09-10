@@ -86,8 +86,25 @@ export interface MenuItem {
   subCategories: SubCategory[];
 }
 
+export interface HeroButton {
+    id: string;
+    text: string;
+    link: string; // key from PREDEFINED_LINKS
+    style: 'primary' | 'secondary';
+    icon: string; // key from iconMap
+}
+
+export interface HeroSlide {
+    id: string;
+    title: string;
+    subtitle: string;
+    imageUrl: string;
+    buttons: HeroButton[];
+}
+
 export interface NavigationData {
   menuItems: MenuItem[];
+  heroSlides: HeroSlide[];
   logoUrl: string;
   footerLogoUrl: string;
   topBarLinks: TopBarLink[];

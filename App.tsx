@@ -378,6 +378,33 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }
     setView('home');
   };
 
+  const handleNavigate = useCallback((key: string) => {
+    switch (key) {
+      case 'products':
+        handleSelectCategory("Todos los productos");
+        break;
+      case 'projects':
+        setSelectedProjectCategory(null);
+        setView('projects');
+        break;
+      case 'quote':
+        setView('quote');
+        break;
+      case 'about':
+        setView('about');
+        break;
+      case 'contact':
+        setView('contact');
+        break;
+      case 'blog':
+        setView('blog');
+        break;
+      default:
+        resetToHome();
+        break;
+    }
+  }, [handleSelectCategory]);
+
   const filteredProducts = useMemo(() => {
     const baseProducts = searchQuery
       ? ALL_PRODUCTS.filter(product => {
@@ -519,7 +546,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, onSaveChanges }
               default:
                   return (
                       <main>
-                          <Hero onQuoteClick={() => setView('quote')} onProjectsClick={() => { setSelectedProjectCategory(null); setView('projects'); }} />
+                          <Hero heroSlides={navigationData.heroSlides} onNavigate={handleNavigate} />
                           <DesignsCarousel onSelectProjectCategory={handleSelectProjectCategory} onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} />
                           <CategoryGrid />
                           <div id="product-grid-section" className="bg-white py-12 px-4 sm:px-6 lg:px-8">

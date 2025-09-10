@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import HeaderEditor from './HeaderEditor';
 import SiteSettingsEditor from './SiteSettingsEditor';
+import HeroSliderEditor from './HeroSliderEditor'; // Import the new editor
 import { NavigationData } from '../types';
-import { LogOut, LayoutDashboard, Settings, Save, XCircle } from 'lucide-react';
+import { LogOut, LayoutDashboard, Settings, Save, XCircle, Image as ImageIcon } from 'lucide-react';
 
 interface AdminPanelProps {
   initialNavigationData: NavigationData;
@@ -13,7 +14,7 @@ interface AdminPanelProps {
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveChanges, onLogout }) => {
   const dummyFunc = () => console.log("Action disabled in preview mode.");
-  const [activeTab, setActiveTab] = useState<'menu' | 'settings'>('menu');
+  const [activeTab, setActiveTab] = useState<'menu' | 'settings' | 'slider'>('menu');
   const [draftData, setDraftData] = useState<NavigationData>(() => JSON.parse(JSON.stringify(initialNavigationData)));
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
   
   const hasChanges = JSON.stringify(draftData) !== JSON.stringify(initialNavigationData);
 
-  const TabButton: React.FC<{ tabId: 'menu' | 'settings'; children: React.ReactNode, icon: React.ElementType }> = ({ tabId, children, icon: Icon }) => (
+  const TabButton: React.FC<{ tabId: 'menu' | 'settings' | 'slider'; children: React.ReactNode, icon: React.ElementType }> = ({ tabId, children, icon: Icon }) => (
     <button
       onClick={() => setActiveTab(tabId)}
       className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
@@ -77,6 +78,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
         <div className="lg:col-span-1 bg-white p-6 rounded-lg shadow-lg flex flex-col max-h-[calc(100vh-120px)]">
           <nav className="flex-shrink-0 flex space-x-2 border-b pb-4 mb-6">
             <TabButton tabId="menu" icon={LayoutDashboard}>Menú Principal</TabButton>
+            <TabButton tabId="slider" icon={ImageIcon}>Slider Principal</TabButton>
             <TabButton tabId="settings" icon={Settings}>Logos y Barra Superior</TabButton>
           </nav>
           <div className="flex-grow overflow-y-auto pr-2">
@@ -84,6 +86,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
               <HeaderEditor
                 navigationData={draftData}
                 onNavigationChange={setDraftData}
+              />
+            )}
+             {activeTab === 'slider' && (
+              <HeroSliderEditor
+                slides={draftData.heroSlides}
+                onSlidesChange={(newSlides) => setDraftData(prev => ({ ...prev, heroSlides: newSlides }))}
               />
             )}
             {activeTab === 'settings' && (
@@ -115,8 +123,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialNavigationData, onSaveCh
               searchQuery=""
               onSearch={dummyFunc}
             />
-            <div className="p-8 bg-gray-50 h-64 flex items-center justify-center">
-              <p className="text-center text-gray-500">El resto de la página se mostraría aquí...</p>
+            <div className="p-8 bg-gray-50 h-auto flex items-center justify-center">
+              <p className="text-center text-gray-500">
+                {activeTab === 'slider' ? 'La vista previa del slider se muestra en el encabezado de arriba.' : 'El resto de la página se mostraría aquí...'}
+              </p>
             </div>
           </div>
         </div>
