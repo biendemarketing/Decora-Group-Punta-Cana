@@ -221,7 +221,29 @@ export interface BlogPost {
   tagIds: string[];
 }
 
-export type CatalogueType = 'pdf' | 'drive' | 'gallery' | 'productCollection';
+export type CatalogueLayout = 'list' | 'grid';
+
+export interface CatalogueCoverConfig {
+    type: 'template' | 'custom';
+    templateId?: string;
+    customImageUrl?: string;
+    title: string;
+    subtitle?: string;
+    showLogo: boolean;
+    showSocials: boolean;
+}
+
+export interface CatalogueConfig {
+    cover: CatalogueCoverConfig;
+    backCover: CatalogueCoverConfig;
+    includedCategoryIds: string[];
+    includedSubCategoryIds: string[];
+    layout: CatalogueLayout;
+    hidePrices: boolean;
+}
+
+
+export type CatalogueType = 'pdf' | 'drive' | 'gallery' | 'productCollection' | 'generated';
 
 export interface Catalogue {
   id: string;
@@ -233,7 +255,8 @@ export interface Catalogue {
   pdfUrl?: string;
   driveUrl?: string;
   galleryImages?: string[];
-  productIds?: number[]; // For future use
+  productIds?: number[];
+  config?: CatalogueConfig;
 }
 
 // --- Content Management Interfaces ---

@@ -37,6 +37,7 @@ import FAQPage from './components/FAQPage';
 import LegalPage from './components/LegalPage';
 import JobDetailPage from './components/JobDetailPage';
 import JobApplicationPage from './components/JobApplicationPage';
+import PrintCataloguePage from './components/PrintCataloguePage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -179,7 +180,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication' | 'printCatalogue';
 
 interface CustomerInfo {
     name: string;
@@ -312,6 +313,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const [selectedProjectCategory, setSelectedProjectCategory] = useState<string | null>(null);
   const [selectedQuoteType, setSelectedQuoteType] = useState<string | null>(null);
   const [selectedCatalogue, setSelectedCatalogue] = useState<Catalogue | null>(null);
+  const [catalogueToPrint, setCatalogueToPrint] = useState<Catalogue | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({ name: '', email: '', phone: '', address: '' });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -459,6 +461,23 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         setView('checkout'); 
     }, 500);
   }, []);
+
+    const handlePrintCatalogue = useCallback((catalogue: Catalogue) => {
+        if (catalogue.type !== 'generated') return;
+        setCatalogueToPrint(catalogue);
+        setView('printCatalogue');
+    }, []);
+
+    useEffect(() => {
+        if (view === 'printCatalogue') {
+            const timer = setTimeout(() => {
+                window.print();
+                setView('catalogueDetail'); // Go back to the detail page after print dialog
+                setCatalogueToPrint(null); // Clean up
+            }, 500); // Delay to allow component to render
+            return () => clearTimeout(timer);
+        }
+    }, [view]);
 
   const handleWhatsAppQuote = () => {
     let message = `Hola Decora Group, quisiera solicitar una cotización para los siguientes artículos:\n\n`;
@@ -629,6 +648,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
              onLogout={handleLogout} 
            />;
   }
+    
+    if (view === 'printCatalogue' && catalogueToPrint) {
+        return <PrintCataloguePage catalogue={catalogueToPrint} products={productsData} navigationData={navigationData} />;
+    }
 
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
 
@@ -659,7 +682,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
               case 'jobDetail': return <JobDetailPage job={selectedJobVacancy!} onBack={() => setView('about')} onApply={handleApplyForJob} />;
               case 'legal': return <LegalPage legalContent={navigationData.legalContent} />;
               case 'faq': return <FAQPage faqContent={navigationData.faqContent} />;
-              case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} />;
+              case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} onPrintCatalogue={handlePrintCatalogue} />;
               case 'catalogues': return <CataloguesPage catalogues={navigationData.catalogues} onCatalogueSelect={handleViewCatalogueDetail} />;
               case 'blog': return <BlogPage blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />;
               case 'cart': return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;

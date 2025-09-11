@@ -21,7 +21,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeEditor, onSelectEdito
     { id: 'blog', label: 'Blog', icon: BookOpen },
     { id: 'quote', label: 'Cotizador', icon: Calculator },
     { id: 'projects', label: 'Proyectos', icon: Briefcase },
-    { id: 'catalogues', label: 'Catálogos', icon: BookCopy },
+    { id: 'catalogues', label: 'Gestor de Catálogos', icon: BookCopy },
     { id: 'products', label: 'Productos', icon: Package },
     { id: 'footer', label: 'Pie de Página', icon: Anchor },
     { id: 'integrations', label: 'Integraciones', icon: Link2 },

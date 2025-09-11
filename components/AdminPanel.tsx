@@ -82,7 +82,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       case 'blog':
         return <BlogEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       case 'catalogues':
-        return <CataloguesEditor catalogues={draftNavData.catalogues} onCataloguesChange={(newCatalogues) => setDraftNavData(prev => ({ ...prev, catalogues: newCatalogues }))} />;
+        return <CataloguesEditor 
+                    catalogues={draftNavData.catalogues} 
+                    onCataloguesChange={(newCatalogues) => setDraftNavData(prev => ({ ...prev, catalogues: newCatalogues }))}
+                    navigationData={draftNavData}
+                    productsData={draftProductsData}
+                />;
       case 'quote':
         return <QuoteEditor quoteConfig={draftNavData.quoteConfig} onQuoteConfigChange={(newConfig) => setDraftNavData(prev => ({...prev, quoteConfig: newConfig}))} />;
       case 'projects':

@@ -9,6 +9,12 @@ const generateSubCategory = (item: { name: string; imageUrl: string; title?: str
   quoteType: item.quoteType,
 });
 
+export const CATALOGUE_COVER_TEMPLATES = [
+    { id: 'minimalist_light', name: 'Minimalista Claro', previewUrl: 'https://i.imgur.com/7G14QpW.png' },
+    { id: 'elegant_dark', name: 'Elegante Oscuro', previewUrl: 'https://i.imgur.com/I7p4m7U.png' },
+    { id: 'modern_grid', name: 'Moderno con Grid', previewUrl: 'https://i.imgur.com/k2x2j4A.png' },
+];
+
 const SALA_SUB_CATEGORIES_DATA = [
   { name: 'Juegos de muebles de sala', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wall_units.png' },
   { name: 'Gaveteros', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png' },
@@ -376,7 +382,7 @@ const INITIAL_FOOTER_CONTENT: FooterContent = {
     }
   ],
   contactInfo: {
-    address: "Punta Cana, Rep. Dominicana",
+    address: "Av. Barceló, CANATOWN, Punta Cana 23000",
     phone: "(849) 456-1963",
     email: "decoragrouppc@gmail.com"
   },

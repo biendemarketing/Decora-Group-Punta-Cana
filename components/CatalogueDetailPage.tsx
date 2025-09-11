@@ -6,9 +6,10 @@ import Lightbox from './Lightbox';
 interface CatalogueDetailPageProps {
   catalogue: Catalogue;
   onBack: () => void;
+  onPrintCatalogue: (catalogue: Catalogue) => void;
 }
 
-const CatalogueDetailPage: React.FC<CatalogueDetailPageProps> = ({ catalogue, onBack }) => {
+const CatalogueDetailPage: React.FC<CatalogueDetailPageProps> = ({ catalogue, onBack, onPrintCatalogue }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -19,6 +20,17 @@ const CatalogueDetailPage: React.FC<CatalogueDetailPageProps> = ({ catalogue, on
   
   const renderContent = () => {
     switch (catalogue.type) {
+      case 'generated':
+        return (
+          <div className="text-center p-8 border rounded-lg bg-gray-50">
+             <FileText className="h-12 w-12 mx-auto text-blue-500 mb-4" />
+             <h3 className="text-lg font-semibold text-gray-800">Catálogo Personalizado</h3>
+             <p className="text-sm text-gray-600 mt-2 mb-6">Este catálogo ha sido generado con nuestra herramienta. Puedes descargarlo en formato PDF.</p>
+             <button onClick={() => onPrintCatalogue(catalogue)} className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-md text-white bg-green-600 hover:bg-green-700">
+                <Download className="h-4 w-4" /> Descargar PDF
+             </button>
+          </div>
+        );
       case 'pdf':
         return (
           <div className="text-center p-8 border rounded-lg bg-gray-50">

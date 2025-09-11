@@ -38,9 +38,11 @@ const LegalPage: React.FC<LegalPageProps> = ({ legalContent }) => {
 
         <div className="bg-white p-8 rounded-lg shadow-md">
           {activePage ? (
-            <div className="prose max-w-none">
-              <h2 className="text-2xl font-bold mb-4">{activePage.title}</h2>
-              <p>{activePage.content}</p>
+            <div className="prose max-w-none text-gray-700">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900">{activePage.title}</h2>
+              <div className="whitespace-pre-line">
+                {activePage.content}
+              </div>
             </div>
           ) : (
             <p>Selecciona un documento para ver su contenido.</p>
