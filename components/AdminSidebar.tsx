@@ -1,14 +1,14 @@
 import React from 'react';
 import {
     LayoutDashboard, Settings, Image as ImageIcon, Briefcase, Star, Package, LayoutList,
-    Calculator, BookOpen, BookCopy, FileText, Anchor, Link2, BarChart2, ShieldCheck, HardDrive, HelpCircle
+    Calculator, BookOpen, BookCopy, FileText, Anchor, Link2, BarChart2, ShieldCheck, HardDrive, HelpCircle, FileCode
 } from 'lucide-react';
 
 type EditorType =
     'dashboard' | 'analytics' | 'media' | 'audit' | 'adminHelp' |
     'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' |
     'services' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' |
-    'integrations' | 'vacancies' | 'quote' | 'help';
+    'integrations' | 'vacancies' | 'quote' | 'help' | 'documentation';
 
 interface AdminSidebarProps {
   activeEditor: EditorType;
@@ -27,7 +27,7 @@ const NavItem: React.FC<{
         onClick={onClick}
         className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors w-full text-left ${
             isActive
-            ? 'bg-gray-800 text-white shadow-sm'
+            ? 'bg-[#5a1e38] text-white shadow-sm'
             : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'
         }`}
     >
@@ -87,6 +87,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeEditor, onSelectEdito
             group: 'Soporte',
             items: [
                 { id: 'adminHelp', label: 'Centro de Ayuda', icon: HelpCircle },
+                { id: 'documentation', label: 'Documentación Técnica', icon: FileCode },
             ]
         }
     ];

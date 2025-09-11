@@ -1,7 +1,9 @@
+
 import React from 'react';
-import { Facebook, Instagram, Youtube, ArrowUp, Phone, Mail, MapPin } from 'lucide-react';
+import { Facebook, Instagram, Youtube, Phone, Mail, MapPin, Home, Menu, Heart, ShoppingCart } from 'lucide-react';
 import FooterLogo from './FooterLogo';
 import { FooterContent, FooterLink } from '../types';
+import { useCart, useWishlist } from '../App';
 
 const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg 
@@ -21,6 +23,9 @@ interface FooterProps {
   footerLogoUrl: string;
   onSelectProjectCategory: (category: string) => void;
   onNavigate: (key: string, detail?: string) => void;
+  isMenuOpen: boolean;
+  view: string;
+  onMenuToggle: (isOpen: boolean) => void;
 }
 
 const socialIconMap = {
@@ -30,13 +35,49 @@ const socialIconMap = {
     WhatsApp: WhatsAppIcon
 };
 
-const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl, onSelectProjectCategory, onNavigate }) => {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
+const NavItem: React.FC<{
+    label: string;
+    icon: React.ElementType;
+    isActive: boolean;
+    onClick?: () => void;
+    badgeCount?: number;
+    href?: string;
+}> = ({ label, icon: Icon, isActive, onClick, badgeCount = 0, href }) => {
+    
+    const content = (
+      <>
+        <div className="relative">
+          <Icon className={`h-6 w-6 transition-colors ${isActive ? 'text-[#5a1e38]' : 'text-gray-600'}`} />
+          {badgeCount > 0 && (
+            <span className="absolute -top-2 -right-3 flex items-center justify-center h-5 w-5 bg-[#5a1e38] text-white text-[10px] font-bold rounded-full border-2 border-white">
+              {badgeCount}
+            </span>
+          )}
+        </div>
+        <span className={`text-xs transition-colors ${isActive ? 'text-[#5a1e38] font-semibold' : 'text-gray-600'}`}>
+          {label}
+        </span>
+      </>
+    );
+
+    if (href) {
+        return (
+             <a href={href} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center space-y-1 flex-1 h-full">
+                {content}
+            </a>
+        )
+    }
+
+    return (
+        <button onClick={onClick} className="flex flex-col items-center justify-center space-y-1 flex-1 h-full">
+            {content}
+        </button>
+    );
+};
+
+const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl, onSelectProjectCategory, onNavigate, isMenuOpen, view, onMenuToggle }) => {
+  const { itemCount } = useCart();
+  const { wishlistCount } = useWishlist();
   
   const renderLink = (link: FooterLink) => {
     switch(link.linkType) {
@@ -66,7 +107,7 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
 
   return (
     <>
-      <footer className="bg-[#121212] text-gray-300" aria-labelledby="footer-heading">
+      <footer className="hidden md:block bg-[#121212] text-gray-300" aria-labelledby="footer-heading">
         <h2 id="footer-heading" className="sr-only">Footer</h2>
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -129,24 +170,15 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
         </div>
       </footer>
 
-      {/* Floating Action Buttons */}
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-center space-y-3">
-         <button 
-           onClick={scrollToTop}
-           className="h-12 w-12 flex items-center justify-center bg-gray-300 text-gray-800 rounded-full shadow-lg hover:bg-white transition-colors"
-           aria-label="Volver arriba"
-         >
-          <ArrowUp className="h-6 w-6" />
-        </button>
-        <a 
-          href="https://wa.me/18494561963" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="h-14 w-14 flex items-center justify-center bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-colors"
-          aria-label="Contactar por WhatsApp"
-        >
-          <WhatsAppIcon className="h-8 w-8" />
-        </a>
+      {/* --- Mobile Bottom Navigation Bar --- */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-2px_5px_rgba(0,0,0,0.05)] z-40">
+        <div className="flex justify-around h-16 pb-[env(safe-area-inset-bottom)]">
+          <NavItem label="Inicio" icon={Home} isActive={view === 'home'} onClick={() => onNavigate('home')} />
+          <NavItem label="Menú" icon={Menu} isActive={isMenuOpen} onClick={() => onMenuToggle(!isMenuOpen)} />
+          <NavItem label="Deseos" icon={Heart} isActive={view === 'wishlist'} onClick={() => onNavigate('wishlist')} badgeCount={wishlistCount} />
+          <NavItem label="Carrito" icon={ShoppingCart} isActive={view === 'cart'} onClick={() => onNavigate('cart')} badgeCount={itemCount} />
+          <NavItem label="Contacto" icon={WhatsAppIcon} isActive={false} href="https://wa.me/18494561963" />
+        </div>
       </div>
     </>
   );

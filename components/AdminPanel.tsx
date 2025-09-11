@@ -21,6 +21,7 @@ import MediaLibrary from './MediaLibrary';
 import AuditLog from './AuditLog';
 import HelpEditor from './HelpEditor';
 import AdminHelpPage from './AdminHelpPage';
+import DocumentationPage from './DocumentationPage';
 import { NavigationData, Project, Product } from '../types';
 import { LogOut, Save, XCircle } from 'lucide-react';
 
@@ -36,7 +37,7 @@ type EditorType =
     'dashboard' | 'analytics' | 'media' | 'audit' | 'adminHelp' |
     'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' |
     'services' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' |
-    'integrations' | 'vacancies' | 'quote' | 'help';
+    'integrations' | 'vacancies' | 'quote' | 'help' | 'documentation';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
   initialNavigationData,
@@ -87,6 +88,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         return <AuditLog />;
       case 'adminHelp':
         return <AdminHelpPage adminTopics={draftNavData.helpContent.adminTopics} />;
+      case 'documentation':
+        return <DocumentationPage />;
       case 'settings':
         return <SiteSettingsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       case 'menu':

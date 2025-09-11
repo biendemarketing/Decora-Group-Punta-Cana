@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown, Package, Gem, Lightbulb, Award, CheckCircle } from 'lucide-react';
 import { NavigationData, SubCategory, TopBarLink, MenuItem, Catalogue, Page } from '../types';
@@ -32,6 +33,8 @@ interface HeaderProps {
   onNavigate: (key: string) => void;
   searchQuery: string;
   onSearch: (query: string) => void;
+  isMenuOpen: boolean;
+  onMenuToggle: (isOpen: boolean) => void;
 }
 
 const megaMenuComponents: { [key: string]: React.FC<any> } = {
@@ -68,9 +71,9 @@ const Header: React.FC<HeaderProps> = ({
     navigationData,
     onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, 
     onSelectQuoteType, onViewCart, onViewWishlist,
-    onViewBlogPage, onViewCataloguesPage, onViewCatalogueDetail, onNavigate, searchQuery, onSearch
+    onViewBlogPage, onViewCataloguesPage, onViewCatalogueDetail, onNavigate, searchQuery, onSearch,
+    isMenuOpen, onMenuToggle
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
   const [openMenuKey, setOpenMenuKey] = useState<string | null>(null);
   const [searchInputValue, setSearchInputValue] = useState(searchQuery);
@@ -131,7 +134,7 @@ const Header: React.FC<HeaderProps> = ({
     } else {
       onSelectCategory(subItem.name); // Or mainItem.title if you want the parent category page
     }
-    setIsMenuOpen(false);
+    onMenuToggle(false);
   };
 
   const visibleMenuItems = navigationData.menuItems.filter(item => item.isVisible);
@@ -253,7 +256,7 @@ const Header: React.FC<HeaderProps> = ({
               )}
             </button>
             <div className="lg:hidden">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-gray-600 hover:bg-gray-100">
+              <button onClick={() => onMenuToggle(!isMenuOpen)} className="p-2 rounded-md text-gray-600 hover:bg-gray-100">
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
@@ -332,15 +335,15 @@ const Header: React.FC<HeaderProps> = ({
       
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden border-t border-gray-200">
-          <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="lg:hidden border-t border-gray-200 fixed top-[138px] left-0 right-0 bottom-0 bg-white z-40 overflow-y-auto">
+          <nav className="px-2 pt-2 pb-20 space-y-1 sm:px-3">
             {visibleMenuItems.map((item) => {
               const isSubMenuOpen = openMobileSubMenu === item.key;
               const hasSubItems = item.subCategories.length > 0 || item.key === 'catalogues';
               
               if (!hasSubItems) {
                 return (
-                  <a key={item.key} href="#" onClick={(e) => { e.preventDefault(); handleNavLinkClick(item); setIsMenuOpen(false); }}
+                  <a key={item.key} href="#" onClick={(e) => { e.preventDefault(); handleNavLinkClick(item); onMenuToggle(false); }}
                     className="w-full block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left">
                     {item.title}
                   </a>
@@ -369,7 +372,7 @@ const Header: React.FC<HeaderProps> = ({
               );
             })}
              {visibleCustomPages.map((page) => (
-                <a key={page.id} href="#" onClick={(e) => { e.preventDefault(); onNavigate(page.slug); setIsMenuOpen(false); }}
+                <a key={page.id} href="#" onClick={(e) => { e.preventDefault(); onNavigate(page.slug); onMenuToggle(false); }}
                     className="w-full block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left">
                     {page.title}
                 </a>

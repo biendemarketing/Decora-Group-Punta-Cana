@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page, LegalPage } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
@@ -41,6 +42,7 @@ import PrintCataloguePage from './components/PrintCataloguePage';
 import HelpPage from './components/HelpPage';
 import LegalDetailPage from './components/LegalDetailPage';
 import AdminHelpPage from './components/AdminHelpPage';
+import DocumentationPage from './components/DocumentationPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -227,6 +229,8 @@ interface AppContentProps {
   projectsData: Project[];
   productsData: Product[];
   onSaveChanges: (data: { navigation: NavigationData, projects: Project[], products: Product[] }) => void;
+  isMenuOpen: boolean;
+  onMenuToggle: (isOpen: boolean) => void;
 }
 
 export const processProducts = (products: any[]): Product[] => {
@@ -305,7 +309,7 @@ export const processProducts = (products: any[]): Product[] => {
   });
 };
 
-const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, productsData, onSaveChanges }) => {
+const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, productsData, onSaveChanges, isMenuOpen, onMenuToggle }) => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
   
@@ -527,6 +531,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   };
 
   const handleNavigate = useCallback((key: string, detail?: string) => {
+    onMenuToggle(false); // Close mobile menu on any navigation
+    
     // Check for special navigation types like legal pages
     if (key === 'legalDetail' && detail) {
         setActiveLegalPageId(detail);
@@ -589,11 +595,19 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         setView('help');
         setActiveSlug(null);
         break;
+      case 'cart':
+        setView('cart');
+        setActiveSlug(null);
+        break;
+      case 'wishlist':
+        setView('wishlist');
+        setActiveSlug(null);
+        break;
       default:
         resetToHome();
         break;
     }
-  }, [handleSelectCategory, navigationData.menuItems, navigationData.customPages]);
+  }, [handleSelectCategory, navigationData.menuItems, navigationData.customPages, onMenuToggle]);
 
   const handleViewJobDetail = useCallback((job: JobVacancy) => {
     setSelectedJobVacancy(job);
@@ -703,7 +717,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 pb-16 md:pb-0">
       <Header 
           navigationData={navigationData}
           onSelectCategory={handleSelectCategory} 
@@ -719,6 +733,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
           onNavigate={handleNavigate}
           searchQuery={searchQuery}
           onSearch={handleSearch}
+          isMenuOpen={isMenuOpen}
+          onMenuToggle={onMenuToggle}
       />
       
       {(() => {
@@ -752,7 +768,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                     // Fallback for not found page
                     return <div>Página no encontrada</div>;
                   }
-                  return <GenericPage page={pageData} onViewJobDetail={handleViewJobDetail} onApplyForJob={handleApplyForJob} />;
+                  return <GenericPage pageData={pageData} onViewJobDetail={handleViewJobDetail} onApplyForJob={handleApplyForJob} />;
               case 'contact': return <ContactPage content={navigationData.contactPage} />;
               case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} quoteConfig={navigationData.quoteConfig} />;
               case 'quote': return <CustomQuotePage projectTypes={navigationData.quoteConfig.projectTypes} onSelectQuoteType={handleSelectQuoteType} />;
@@ -865,6 +881,9 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')} 
         onSelectProjectCategory={handleSelectProjectCategory}
         onNavigate={handleNavigate}
+        isMenuOpen={isMenuOpen}
+        view={view}
+        onMenuToggle={onMenuToggle}
       />
     </div>
   );
@@ -875,6 +894,20 @@ const App: React.FC = () => {
   const [projectsData, setProjectsData] = useState<Project[]>(INITIAL_PROJECTS);
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [currency, setCurrency] = useState<Currency>('USD');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  useEffect(() => {
+    // Prevent body scroll when mobile menu is open
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    // Cleanup function to restore scroll on component unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const storedNavData = localStorage.getItem('navigationData');
@@ -887,6 +920,7 @@ const App: React.FC = () => {
           if (!parsedData.helpContent || !parsedData.helpContent.userTopics) { // Check for new structure
             parsedData.helpContent = INITIAL_NAVIGATION_DATA.helpContent;
           }
+          // FIX: Removed check for 'documentationContent' property as it does not exist on type 'NavigationData'.
           setNavigationData(parsedData);
         } else {
           localStorage.setItem('navigationData', JSON.stringify(INITIAL_NAVIGATION_DATA));
@@ -966,7 +1000,9 @@ const App: React.FC = () => {
             navigationData={navigationData} 
             projectsData={projectsData}
             productsData={productsData}
-            onSaveChanges={handleSaveChanges} 
+            onSaveChanges={handleSaveChanges}
+            isMenuOpen={isMenuOpen}
+            onMenuToggle={setIsMenuOpen} 
           />
         </WishlistProvider>
       </CartProvider>

@@ -1,3 +1,4 @@
+
 import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, FAQItem, LegalContent, InstagramShowcaseData, ContactContent, JobVacancy, Page, HelpContent } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({

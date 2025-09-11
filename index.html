@@ -2,7 +2,7 @@
 <html lang="es-DO">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
     <!-- SEO Meta Tags -->
     <title>Decora Group - Muebles a Medida y Diseño de Interiores</title>
@@ -51,7 +51,12 @@
     @media print {
       @page {
         size: letter;
-        margin: 0;
+        margin: 0.75in;
+      }
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 10pt;
       }
       body * {
         visibility: hidden;
@@ -64,9 +69,22 @@
         left: 0;
         top: 0;
         width: 100%;
+        margin: 0;
+        padding: 0;
       }
       .no-print {
         display: none !important;
+      }
+      /* Page break control */
+      h1, h2, h3, h4, h5, h6 {
+          break-after: avoid;
+      }
+      pre, blockquote, table, img, svg {
+          break-inside: avoid;
+      }
+      a {
+        text-decoration: none !important;
+        color: inherit !important;
       }
     }
     input[type="checkbox"] {

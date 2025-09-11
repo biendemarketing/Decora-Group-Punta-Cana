@@ -9,7 +9,7 @@ import HiringCTA from './HiringCTA';
 import { Page, PageSection, JobVacancy } from '../types';
 
 interface GenericPageProps {
-  page: Page;
+  pageData: Page;
   onViewJobDetail: (job: JobVacancy) => void;
   onApplyForJob: (jobTitle: string) => void;
 }
@@ -98,10 +98,10 @@ const sectionComponentMap: { [key: string]: React.FC<any> } = {
 };
 
 
-const GenericPage: React.FC<GenericPageProps> = ({ page, onViewJobDetail, onApplyForJob }) => {
+const GenericPage: React.FC<GenericPageProps> = ({ pageData, onViewJobDetail, onApplyForJob }) => {
   return (
     <main className="bg-white">
-      {page.sections.map((section: PageSection) => {
+      {pageData.sections.map((section: PageSection) => {
         const Component = sectionComponentMap[section.type];
         if (!Component) {
           console.warn(`No component found for section type: ${section.type}`);
