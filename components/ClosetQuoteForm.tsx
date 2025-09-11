@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { CLOSET_TYPES, CLOSET_MODULES, CLOSET_ACCESSORIES, INSTALLATION_OPTIONS, PAYMENT_OPTIONS, PROVINCES } from '../constants';
+import { QuoteConfig, ClosetTypeOption, InstallationOption } from '../types';
+import { PROVINCES } from '../constants';
 import QuoteStep from './QuoteStep';
 import NumberInputWithControls from './NumberInputWithControls';
 import ClosetTypeSelector from './ClosetTypeSelector';
@@ -13,20 +14,21 @@ import TermsModal from './TermsModal';
 
 interface ClosetQuoteFormProps {
   onBack: () => void;
+  quoteConfig: QuoteConfig;
 }
 
-const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
+const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack, quoteConfig }) => {
   const [formData, setFormData] = useState({
-    closetType: CLOSET_TYPES[0],
+    closetType: quoteConfig.closet.types[0],
     wallA: 100,
     wallB: 100,
     selectedModules: [],
     selectedAccessories: [],
-    installation: INSTALLATION_OPTIONS.find(o => o.label.includes('vacío')) || INSTALLATION_OPTIONS[0],
+    installation: quoteConfig.general.installationOptions.find(o => o.label.includes('vacío')) || quoteConfig.general.installationOptions[0],
     userInfo: {
       name: '', email: '', phone: '', location: PROVINCES[0], observations: '',
     },
-    paymentOption: PAYMENT_OPTIONS[0],
+    paymentOption: quoteConfig.general.paymentOptions[0],
     termsAccepted: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,9 +85,9 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
           <form onSubmit={handleSubmit} className="space-y-12">
             <QuoteStep title="1.- Selecciona tu tipo de closet:">
               <ClosetTypeSelector
-                types={CLOSET_TYPES}
+                types={quoteConfig.closet.types}
                 selectedType={formData.closetType}
-                onSelect={(type) => setFormData(p => ({ ...p, closetType: type, selectedModules: [] }))} // Reset modules on type change
+                onSelect={(type: ClosetTypeOption) => setFormData(p => ({ ...p, closetType: type, selectedModules: [] }))} // Reset modules on type change
               />
             </QuoteStep>
 
@@ -119,7 +121,7 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
             <ModuleSelector
                 title="4.- Módulos de tu closet:"
                 description="Selecciona los módulos que te gustaría tener en tu closet."
-                options={CLOSET_MODULES}
+                options={quoteConfig.closet.modules}
                 selectedOptions={formData.selectedModules}
                 onSelectionChange={(selection) => setFormData(p => ({...p, selectedModules: selection}))}
                 selectionLimit={moduleCapacity}
@@ -127,13 +129,13 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
 
             <ModuleSelector
                 title="5.- Accesorios del closet:"
-                options={CLOSET_ACCESSORIES}
+                options={quoteConfig.closet.accessories}
                 selectedOptions={formData.selectedAccessories}
                 onSelectionChange={(selection) => setFormData(p => ({...p, selectedAccessories: selection}))}
             />
 
             <QuoteStep title="6.- ¿Qué instalación requieres?">
-                <InstallationSelector options={INSTALLATION_OPTIONS} selectedValue={formData.installation} onChange={(option) => setFormData(p => ({...p, installation: option}))} />
+                <InstallationSelector options={quoteConfig.general.installationOptions} selectedValue={formData.installation} onChange={(option: InstallationOption) => setFormData(p => ({...p, installation: option}))} />
             </QuoteStep>
             
             <QuoteStep title="7.- Datos del usuario:">
@@ -141,7 +143,7 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack }) => {
             </QuoteStep>
 
             <PaymentAndTerms
-                paymentOptions={PAYMENT_OPTIONS}
+                paymentOptions={quoteConfig.general.paymentOptions}
                 selectedOption={formData.paymentOption}
                 onPaymentChange={(option) => setFormData(p => ({ ...p, paymentOption: option }))}
                 termsAccepted={formData.termsAccepted}

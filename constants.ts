@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, PopularCategory, TopBarLink, MenuItem, SubCategory, TopBarBenefit, HeroSlide } from './types';
+import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -116,38 +116,44 @@ const PROYECTOS_SUB_CATEGORIES_DATA = [
   { name: 'Proyectos Comerciales', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg' },
 ];
 
-export const QUOTE_PROJECT_TYPES_DATA = [
+const QUOTE_PROJECT_TYPES_DATA = [
   {
+    id: crypto.randomUUID(),
     title: 'TV Wall',
     description: 'Espacios de muebles de TV y similares.',
     imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg',
     quoteType: 'TV Wall',
   },
   {
+    id: crypto.randomUUID(),
     title: 'Closets',
     description: 'Reach in, walk in y personalizados.',
     imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg',
     quoteType: 'Closets',
   },
   {
+    id: crypto.randomUUID(),
     title: 'Cocinas',
     description: 'Modulares personalizados.',
     imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop',
     quoteType: 'Cocinas',
   },
   {
+    id: crypto.randomUUID(),
     title: 'Muebles Personalizados',
     description: 'Diseño o solicitud de mobiliario con funciones especiales.',
     imageUrl: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop',
     quoteType: 'Muebles Personalizados',
   },
   {
+    id: crypto.randomUUID(),
     title: 'Mobiliario Comercial',
     description: 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...',
     imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop',
     quoteType: 'Mobiliario Comercial',
   },
   {
+    id: crypto.randomUUID(),
     title: 'Construcciones Especializadas',
     description: 'Desde el revestimiento de una pared hasta la construcción de una tiny house.',
     imageUrl: 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop',
@@ -193,7 +199,7 @@ const MENU_ITEMS_DATA: Omit<MenuItem, 'id'>[] = [
   { key: 'cotizar', title: "Cotizar a medida", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1076/600/800', subCategories: QUOTE_PROJECT_TYPES_DATA.map(item => generateSubCategory({ ...item, name: item.title })) },
 ];
 
-const HERO_SLIDES_DATA: Omit<HeroSlide, 'id'>[] = [
+const HERO_SLIDES_DATA: Omit<NavigationData['heroSlides'][0], 'id'>[] = [
   {
     imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1920&auto=format&fit=crop",
     title: "Diseño y Calidad Insuperables",
@@ -222,6 +228,53 @@ const HERO_SLIDES_DATA: Omit<HeroSlide, 'id'>[] = [
   },
 ];
 
+const INITIAL_BLOG_CATEGORIES: BlogCategory[] = [
+  { id: 'cat1', name: 'Inspiración' },
+  { id: 'cat2', name: 'Tendencias' },
+  { id: 'cat3', name: 'Guías' },
+];
+
+const INITIAL_BLOG_TAGS: BlogTag[] = [
+  { id: 'tag1', name: 'Terrazas' },
+  { id: 'tag2', name: 'Caribe' },
+  { id: 'tag3', name: 'Colores' },
+  { id: 'tag4', name: 'Sofás' },
+];
+
+const INITIAL_BLOG_POSTS: BlogPost[] = [
+  {
+    id: crypto.randomUUID(),
+    title: "5 Ideas para tu Terraza en el Caribe",
+    description: "Aprovecha al máximo tu espacio exterior con estas ideas de diseño tropical que combinan comodidad, estilo y resistencia a los elementos.",
+    imageUrl: "https://picsum.photos/id/1011/600/400",
+    author: "Ana Martínez",
+    date: new Date('2024-07-20T10:00:00Z').toISOString(),
+    categoryId: 'cat1',
+    tagIds: ['tag1', 'tag2'],
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Colores que son Tendencia este Año",
+    description: "Desde tonos tierra hasta colores vibrantes, exploramos las paletas que definirán los interiores en 2024. ¡Atrévete a darle un nuevo aire a tu hogar!",
+    imageUrl: "https://picsum.photos/id/1015/600/400",
+    author: "Carlos Rodríguez",
+    date: new Date('2024-07-15T14:30:00Z').toISOString(),
+    categoryId: 'cat2',
+    tagIds: ['tag3'],
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Cómo elegir el sofá perfecto para tu espacio",
+    description: "El sofá es el corazón de la sala. Te damos una guía completa sobre tamaños, materiales, estilos y cómo encontrar el balance ideal entre confort y diseño.",
+    imageUrl: "https://picsum.photos/id/1025/600/400",
+    author: "María González",
+    date: new Date('2024-07-10T09:00:00Z').toISOString(),
+    categoryId: 'cat3',
+    tagIds: ['tag4'],
+  },
+];
+
+
 export const INITIAL_NAVIGATION_DATA: NavigationData = {
   menuItems: MENU_ITEMS_DATA.map(item => ({ ...item, id: crypto.randomUUID() })),
   heroSlides: HERO_SLIDES_DATA.map(slide => ({ ...slide, id: crypto.randomUUID() })),
@@ -231,6 +284,158 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
     { id: crypto.randomUUID(), name: 'Terrazas y Jardines', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-outdoors-side-image.jpg', link: 'Sala' },
     { id: crypto.randomUUID(), name: 'Oficinas en Casa', imageUrl: 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg', link: 'Oficina' },
   ],
+  services: [
+    { id: crypto.randomUUID(), title: 'Closets', description: 'Somos expertos en sacar el mejor provecho del espacio con diseños de closets a medida.', imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg', buttonText: 'Cotizar tu nuevo closet', quoteType: 'Closets' },
+    { id: crypto.randomUUID(), title: 'Cocinas', description: 'Diseño y construcción de cocinas optimizadas para mejor uso y eficiencia.', imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop', buttonText: 'Cotizar tu nueva cocina', quoteType: 'Cocinas' },
+    { id: crypto.randomUUID(), title: 'Muebles Personalizados', description: 'Diseño o solicitud de mobiliario con funciones especiales.', imageUrl: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop', buttonText: 'Cotizar', quoteType: 'Muebles Personalizados' },
+    { id: crypto.randomUUID(), title: 'Mobiliario Comercial', description: 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...', imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop', buttonText: 'Cotizar', quoteType: 'Mobiliario Comercial' },
+    { id: crypto.randomUUID(), title: 'Construcciones Especializadas', description: 'Desde el revestimiento de una pared hasta la construcción de una tiny house.', imageUrl: 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop', buttonText: 'Cotizar', quoteType: 'Construcciones Especializadas' },
+  ],
+  quoteConfig: {
+    projectTypes: QUOTE_PROJECT_TYPES_DATA,
+    tvWall: {
+      styles: [
+        { id: crypto.randomUUID(), name: 'Clásico', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-7.jpg' },
+        { id: crypto.randomUUID(), name: 'Clásico Vitrina', price: 255, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-2.jpg' },
+        { id: crypto.randomUUID(), name: 'Trilogy', price: 294, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-6.jpg' },
+        { id: crypto.randomUUID(), name: 'Trilogy Shell', price: 348, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-4.jpg' },
+        { id: crypto.randomUUID(), name: 'Bay Vitrina', price: 397, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-5.jpg' },
+        { id: crypto.randomUUID(), name: 'Bay Dual', price: 414, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-1.jpg' },
+        { id: crypto.randomUUID(), name: 'Librelux', price: 436, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-3.jpg' },
+        { id: crypto.randomUUID(), name: 'Librelux Shell', price: 448, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-8.jpg' },
+        { id: crypto.randomUUID(), name: 'MegaLux', price: 461, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg' },
+      ]
+    },
+    closet: {
+      types: [
+        { id: crypto.randomUUID(), name: 'Closet Tipo U', value: 9, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg' },
+        { id: crypto.randomUUID(), name: 'Closet Doble', value: 7, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/Closet-doble.jpg' },
+        { id: crypto.randomUUID(), name: 'Closet L', value: 6, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/Closet-L.jpg' },
+        { id: crypto.randomUUID(), name: 'Closet Simple', value: 5, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-sencillo.jpg' },
+        { id: crypto.randomUUID(), name: 'Armario', value: 4, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/armario.jpg' },
+      ],
+      modules: [
+        { id: crypto.randomUUID(), name: 'Perchero Simple', price: 350, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m1-perchero-simple-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Perchero Doble', price: 350, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m2-perchero-doble-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Perchero Doble Gaveta', price: 400, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m3-perchero-doble-gaveta-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Tramos', price: 350, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m4-modulo-tramos-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Percha Dos Gavetas', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m5-modulo-perchera-dos-gavetas-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Percha Tres Gavetas', price: 460, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m6-modulo-perchera-tres-gavetas-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Tramos Dos Gavetas', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m7-modulo-tramos-dos-gavetas-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Tramos Perchero', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m8-modulo-tramos-percheros-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Tramos Dos Gavetas, Perchero', price: 460, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m9-modulo-tramos-dos-gavetas-perchero-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Zapatera', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m10-modulo-zapatera-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Accesorios Zapatera', price: 450, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m11-modulo-accesorios-zapatera-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Accesorios Dos Gavetas, Zapatera', price: 480, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m12-modulo-accesorios-dos-gavetas-zapatera-768x1432.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Esquina Tramos', price: 500, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m13-modulo-esquina-tramos-768x1365.jpg' },
+        { id: crypto.randomUUID(), name: 'Módulo Esquina Perchero', price: 450, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m14-modulo-esquina-perchero-768x1365.jpg' },
+      ],
+      accessories: [
+        { id: crypto.randomUUID(), name: 'Iluminación LED', price: 450, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/iluminacion-closet.jpg' },
+        { id: crypto.randomUUID(), name: 'Pantalonera Extraíble', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/pantalonera-extraible.jpg' },
+        { id: crypto.randomUUID(), name: 'Porta Correa Extraíble', price: 180, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/porta-correa.jpg' },
+        { id: crypto.randomUUID(), name: 'Barra de Closet Desplegable', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/barra-de-closet-desglegable-.jpg' },
+        { id: crypto.randomUUID(), name: 'Gaveta de Accesorios', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/gavetas-de-accesorios.jpg' },
+        { id: crypto.randomUUID(), name: 'Perchero Extraíble', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/perchero-extraible.jpg' },
+      ]
+    },
+    kitchen: {
+      sizes: [
+        { id: crypto.randomUUID(), name: 'Pequeña 8 módulos (10 m²)', price: 2500, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-pequena-hom.jpg' },
+        { id: crypto.randomUUID(), name: 'Mediana 12 módulos (15 m²)', price: 3510, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-mediana-hom.jpg' },
+        { id: crypto.randomUUID(), name: 'Grande 16 módulos (25 m²)', price: 5518, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-grande-hom.jpg' },
+      ],
+      styles: [
+        { id: crypto.randomUUID(), name: 'Un color, melamina tipo madera', multiplier: 1, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-un-colo-hom.jpg', price: 0 },
+        { id: crypto.randomUUID(), name: 'Dos colores, melamina lisa y tipo madera', multiplier: 1.4, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-dos-colores-hom.jpg', price: 0 },
+        { id: crypto.randomUUID(), name: 'Tres colores, melamina tipo lisa, madera y piedra', multiplier: 1.5, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-tres-colores.jpg', price: 0 },
+        { id: crypto.randomUUID(), name: 'Madera preciosa (Roble)', multiplier: 2, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-roble-hom.jpg', price: 0 },
+      ],
+      countertops: [
+        { id: crypto.randomUUID(), name: 'Sin tope', multiplier: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/none.png', price: 0 },
+        { id: crypto.randomUUID(), name: 'Granito', multiplier: 0.6, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/granito.jpg', price: 0 },
+        { id: crypto.randomUUID(), name: 'Cuarzo', multiplier: 0.9, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cuarzo.jpg', price: 0 },
+        { id: crypto.randomUUID(), name: 'Aglomerado', multiplier: 0.5, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/aglomerado.jpg', price: 0 },
+      ],
+      sinks: [
+        { id: crypto.randomUUID(), name: 'Fregadero Tradicional', price: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/fregadero-tradicioanl.jpg' },
+        { id: crypto.randomUUID(), name: 'Fregadero Cuadrado', price: 100, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/fregadero-cuadrado.jpg' },
+        { id: crypto.randomUUID(), name: 'Fregadero Porcelana', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/fregadero-porcelana.jpg' },
+      ],
+      faucets: [
+        { id: crypto.randomUUID(), name: 'Tradicional Cromada', price: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/plateada-curva.jpg' },
+        { id: crypto.randomUUID(), name: 'Tradicional Dorada', price: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/dorada.jpg' },
+        { id: crypto.randomUUID(), name: 'Minimal Negra', price: 100, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/negra-recta.jpg' },
+        { id: crypto.randomUUID(), name: 'Moderna Negra', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/negra-con-dorado.jpg' },
+        { id: crypto.randomUUID(), name: 'Boca Flexi', price: 175, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/negra-boca-flexible.jpg' },
+        { id: crypto.randomUUID(), name: '3 en 1 Extraíble', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/clomada-3-en-1.jpg' },
+      ],
+      accessories: [
+        { id: crypto.randomUUID(), name: 'Despensa con Gavetas', price: 750, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/despensa-con-gavetas.jpg' },
+        { id: crypto.randomUUID(), name: 'Despensa Extraíble', price: 850, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/despensa-extraible.jpg' },
+        { id: crypto.randomUUID(), name: 'Gaveta en Zócalo', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/gaveta-zocalo.jpg' },
+        { id: crypto.randomUUID(), name: 'Mueble de Bandeja Esquina', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/mueble-de-esquina.jpg' },
+        { id: crypto.randomUUID(), name: 'Gavetas de Esquina', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/gaveta-de-esquina.jpg' },
+        { id: crypto.randomUUID(), name: 'Iluminación Bajo Gabinetes', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/iluminacion-bajo-gabinetes.jpg' },
+        { id: crypto.randomUUID(), name: 'Iluminación Dentro de Gabinetes', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/iluminacion-en-gabinetes.jpg' },
+        { id: crypto.randomUUID(), name: 'Especiero Extraíble', price: 160, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/especiero-extraible.jpg' },
+        { id: crypto.randomUUID(), name: 'Basurero Extraíble', price: 160, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/basurero-extraible.jpg' },
+        { id: crypto.randomUUID(), name: 'Gaveta Bajo Fregadero', price: 100, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/gaveta-bajo-fregadero.jpg' },
+        { id: crypto.randomUUID(), name: 'Escurridor de Gabinete Flotante', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/escrurridor-de-gabinete.jpg' },
+        { id: crypto.randomUUID(), name: 'Toma Corriente de Tope', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/enchufe-de-counter.jpg' },
+      ],
+    },
+    general: {
+      installationOptions: [
+        { id: crypto.randomUUID(), label: 'Instalación sobre pared de cemento.', price: 300, multiplier: 1.15 },
+        { id: crypto.randomUUID(), label: 'Instalación sobre pared de Sheetrock.', price: 450, multiplier: 1.2 },
+        { id: crypto.randomUUID(), label: 'Remoción de espacio existente e instalación de la nueva.', price: 650, multiplier: 1.2 },
+        { id: crypto.randomUUID(), label: 'Sin instalación.', price: 0, multiplier: 0 },
+      ],
+      paymentOptions: [
+        '70% con la orden, 30% contra entrega.',
+        'Pago de contacto al poner la orden (- 10%)',
+        'Pago Mensual por 6 meses + 10%.',
+      ]
+    }
+  },
+  workProcessSection: {
+    title: 'Proceso de Trabajo con Decora Group',
+    backgroundImageUrl: 'https://picsum.photos/id/1071/1920/1080',
+    steps: [
+      {
+        id: crypto.randomUUID(),
+        title: 'Cotiza',
+        description: 'A través de nuestra plataforma digital o enviando los planos y solicitando visita de reconocimiento.',
+        icon: 'FileText',
+      },
+      {
+        id: crypto.randomUUID(),
+        title: 'Asesoría',
+        description: 'Se optimiza el proceso con la asesoría del equipo de diseño y producción.',
+        icon: 'Edit3',
+      },
+      {
+        id: crypto.randomUUID(),
+        title: 'Presupuesto',
+        description: 'Recibes un presupuesto detallado y con el alcance del proyecto.',
+        icon: 'ShieldCheck',
+      },
+      {
+        id: crypto.randomUUID(),
+        title: 'Ejecución',
+        description: 'Ejecución y control de calidad de tu proyecto.',
+        icon: 'BookOpen',
+      },
+    ],
+  },
+  magazineSection: {
+    title: 'Magazine "Estilo Tropical"',
+    subtitle: 'Ideas, tendencias y guías para hacer de tu hogar un paraíso.',
+  },
+  blogPosts: INITIAL_BLOG_POSTS,
+  blogCategories: INITIAL_BLOG_CATEGORIES,
+  blogTags: INITIAL_BLOG_TAGS,
   logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
   footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
   topBarLinks: [
@@ -819,179 +1024,6 @@ export const ALL_FINISHES = ['Brillo', 'Mate', 'Corrugado', 'Texturizado', 'Supe
 export const STORES = [
     "Muebles Omar", "La Curacao", "Tiendas Corripio", "Plaza Lama"
 ];
-
-export const SERVICES_DATA = [
-  {
-    title: 'Closets',
-    description: 'Somos expertos en sacar el mejor provecho del espacio con diseños de closets a medida.',
-    imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg',
-    buttonText: 'Cotizar tu nuevo closet',
-    quoteType: 'Closets',
-  },
-  {
-    title: 'Cocinas',
-    description: 'Diseño y construcción de cocinas optimizadas para mejor uso y eficiencia.',
-    imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop',
-    buttonText: 'Cotizar tu nueva cocina',
-    quoteType: 'Cocinas',
-  },
-  {
-    title: 'Muebles Personalizados',
-    description: 'Diseño o solicitud de mobiliario con funciones especiales.',
-    imageUrl: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop',
-    buttonText: 'Cotizar',
-    quoteType: 'Muebles Personalizados',
-  },
-  {
-    title: 'Mobiliario Comercial',
-    description: 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...',
-    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop',
-    buttonText: 'Cotizar',
-    quoteType: 'Mobiliario Comercial',
-  },
-  {
-    title: 'Construcciones Especializadas',
-    description: 'Desde el revestimiento de una pared hasta la construcción de una tiny house.',
-    imageUrl: 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop',
-    buttonText: 'Cotizar',
-    quoteType: 'Construcciones Especializadas',
-  },
-];
-
-export const WORK_PROCESS_STEPS = [
-  {
-    title: 'Cotiza',
-    description: 'A través de nuestra plataforma digital o enviando los planos y solicitando visita de reconocimiento.',
-    icon: 'FileText',
-  },
-  {
-    title: 'Asesoría',
-    description: 'Se optimiza el proceso con la asesoría del equipo de diseño y producción.',
-    icon: 'Edit3',
-  },
-  {
-    title: 'Presupuesto',
-    description: 'Recibes un presupuesto detallado y con el alcance del proyecto.',
-    icon: 'ShieldCheck',
-  },
-  {
-    title: 'Ejecución',
-    description: 'Ejecución y control de calidad de tu proyecto.',
-    icon: 'BookOpen',
-  },
-];
-
-export const TV_WALL_STYLES = [
-    { name: 'Clásico', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-7.jpg' },
-    { name: 'Clásico Vitrina', price: 255, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-2.jpg' },
-    { name: 'Trilogy', price: 294, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-6.jpg' },
-    { name: 'Trilogy Shell', price: 348, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-4.jpg' },
-    { name: 'Bay Vitrina', price: 397, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-5.jpg' },
-    { name: 'Bay Dual', price: 414, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-1.jpg' },
-    { name: 'Librelux', price: 436, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-3.jpg' },
-    { name: 'Librelux Shell', price: 448, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-8.jpg' },
-    { name: 'MegaLux', price: 461, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg' },
-];
-
-export const INSTALLATION_OPTIONS = [
-    { label: 'Instalación sobre pared de cemento.', price: 300, multiplier: 1.15 },
-    { label: 'Instalación sobre pared de Sheetrock.', price: 450, multiplier: 1.2 },
-    { label: 'Remoción de espacio existente e instalación de la nueva.', price: 650, multiplier: 1.2 },
-    { label: 'Sin instalación.', price: 0, multiplier: 0 },
-];
-
-export const PAYMENT_OPTIONS = [
-    '70% con la orden, 30% contra entrega.',
-    'Pago de contacto al poner la orden (- 10%)',
-    'Pago Mensual por 6 meses + 10%.',
-];
-
-// New constants for Closet Quote Form
-export const CLOSET_TYPES = [
-  { name: 'Closet Tipo U', value: 9, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg' },
-  { name: 'Closet Doble', value: 7, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/Closet-doble.jpg' },
-  { name: 'Closet L', value: 6, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/Closet-L.jpg' },
-  { name: 'Closet Simple', value: 5, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/closet-sencillo.jpg' },
-  { name: 'Armario', value: 4, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/02/armario.jpg' },
-];
-
-export const CLOSET_MODULES = [
-  { name: 'Perchero Simple', price: 350, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m1-perchero-simple-768x1432.jpg' },
-  { name: 'Perchero Doble', price: 350, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m2-perchero-doble-768x1432.jpg' },
-  { name: 'Perchero Doble Gaveta', price: 400, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m3-perchero-doble-gaveta-768x1432.jpg' },
-  { name: 'Módulo Tramos', price: 350, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m4-modulo-tramos-768x1432.jpg' },
-  { name: 'Módulo Percha Dos Gavetas', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m5-modulo-perchera-dos-gavetas-768x1432.jpg' },
-  { name: 'Módulo Percha Tres Gavetas', price: 460, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m6-modulo-perchera-tres-gavetas-768x1432.jpg' },
-  { name: 'Módulo Tramos Dos Gavetas', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m7-modulo-tramos-dos-gavetas-768x1432.jpg' },
-  { name: 'Módulo Tramos Perchero', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m8-modulo-tramos-percheros-768x1432.jpg' },
-  { name: 'Módulo Tramos Dos Gavetas, Perchero', price: 460, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m9-modulo-tramos-dos-gavetas-perchero-768x1432.jpg' },
-  { name: 'Módulo Zapatera', price: 420, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m10-modulo-zapatera-768x1432.jpg' },
-  { name: 'Módulo Accesorios Zapatera', price: 450, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m11-modulo-accesorios-zapatera-768x1432.jpg' },
-  { name: 'Módulo Accesorios Dos Gavetas, Zapatera', price: 480, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m12-modulo-accesorios-dos-gavetas-zapatera-768x1432.jpg' },
-  { name: 'Módulo Esquina Tramos', price: 500, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m13-modulo-esquina-tramos-768x1365.jpg' },
-  { name: 'Módulo Esquina Perchero', price: 450, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/06/m14-modulo-esquina-perchero-768x1365.jpg' },
-];
-
-export const CLOSET_ACCESSORIES = [
-  { name: 'Iluminación LED', price: 450, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/iluminacion-closet.jpg' },
-  { name: 'Pantalonera Extraíble', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/pantalonera-extraible.jpg' },
-  { name: 'Porta Correa Extraíble', price: 180, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/porta-correa.jpg' },
-  { name: 'Barra de Closet Desplegable', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/barra-de-closet-desglegable-.jpg' },
-  { name: 'Gaveta de Accesorios', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/gavetas-de-accesorios.jpg' },
-  { name: 'Perchero Extraíble', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/perchero-extraible.jpg' },
-];
-
-// New constants for Kitchen Quote Form
-export const KITCHEN_SIZES = [
-  { name: 'Pequeña 8 módulos (10 m²)', price: 2500, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-pequena-hom.jpg' },
-  { name: 'Mediana 12 módulos (15 m²)', price: 3510, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-mediana-hom.jpg' },
-  { name: 'Grande 16 módulos (25 m²)', price: 5518, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-grande-hom.jpg' },
-];
-
-export const KITCHEN_STYLES = [
-  { name: 'Un color, melamina tipo madera', multiplier: 1, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-un-colo-hom.jpg' },
-  { name: 'Dos colores, melamina lisa y tipo madera', multiplier: 1.4, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-dos-colores-hom.jpg' },
-  { name: 'Tres colores, melamina tipo lisa, madera y piedra', multiplier: 1.5, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-tres-colores.jpg' },
-  { name: 'Madera preciosa (Roble)', multiplier: 2, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cocina-roble-hom.jpg' },
-];
-
-export const KITCHEN_COUNTERTOPS = [
-  { name: 'Sin tope', multiplier: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2025/05/none.png' },
-  { name: 'Granito', multiplier: 0.6, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/granito.jpg' },
-  { name: 'Cuarzo', multiplier: 0.9, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/cuarzo.jpg' },
-  { name: 'Aglomerado', multiplier: 0.5, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/aglomerado.jpg' },
-];
-
-export const KITCHEN_SINKS = [
-  { name: 'Fregadero Tradicional', price: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/fregadero-tradicioanl.jpg' },
-  { name: 'Fregadero Cuadrado', price: 100, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/fregadero-cuadrado.jpg' },
-  { name: 'Fregadero Porcelana', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/fregadero-porcelana.jpg' },
-];
-
-export const KITCHEN_FAUCETS = [
-  { name: 'Tradicional Cromada', price: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/plateada-curva.jpg' },
-  { name: 'Tradicional Dorada', price: 0, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/dorada.jpg' },
-  { name: 'Minimal Negra', price: 100, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/negra-recta.jpg' },
-  { name: 'Moderna Negra', price: 150, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/negra-con-dorado.jpg' },
-  { name: 'Boca Flexi', price: 175, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/negra-boca-flexible.jpg' },
-  { name: '3 en 1 Extraíble', price: 200, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/clomada-3-en-1.jpg' },
-];
-
-export const KITCHEN_ACCESSORIES = [
-    { name: 'Despensa con Gavetas', price: 750, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/despensa-con-gavetas.jpg' },
-    { name: 'Despensa Extraíble', price: 850, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/despensa-extraible.jpg' },
-    { name: 'Gaveta en Zócalo', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/gaveta-zocalo.jpg' },
-    { name: 'Mueble de Bandeja Esquina', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/mueble-de-esquina.jpg' },
-    { name: 'Gavetas de Esquina', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/gaveta-de-esquina.jpg' },
-    { name: 'Iluminación Bajo Gabinetes', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/iluminacion-bajo-gabinetes.jpg' },
-    { name: 'Iluminación Dentro de Gabinetes', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/iluminacion-en-gabinetes.jpg' },
-    { name: 'Especiero Extraíble', price: 160, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/especiero-extraible.jpg' },
-    { name: 'Basurero Extraíble', price: 160, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/basurero-extraible.jpg' },
-    { name: 'Gaveta Bajo Fregadero', price: 100, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/gaveta-bajo-fregadero.jpg' },
-    { name: 'Escurridor de Gabinete Flotante', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/escrurridor-de-gabinete.jpg' },
-    { name: 'Toma Corriente de Tope', price: 250, imageUrl: 'https://hom.com.do/wp-content/uploads/2024/07/enchufe-de-counter.jpg' },
-];
-
 
 export const TIMELINE_DATA = [
   { year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },

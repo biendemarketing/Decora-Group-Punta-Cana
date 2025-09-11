@@ -1,6 +1,8 @@
 import React from 'react';
 
+// FIX: Added 'id' to make the interface compatible with QuoteOption from types.ts
 interface Style {
+  id: string;
   name: string;
   price: number;
   imageUrl: string;

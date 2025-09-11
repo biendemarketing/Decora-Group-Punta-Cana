@@ -3,23 +3,25 @@ import { ArrowLeft } from 'lucide-react';
 import TvWallQuoteForm from './TvWallQuoteForm';
 import ClosetQuoteForm from './ClosetQuoteForm';
 import KitchenQuoteForm from './KitchenQuoteForm';
+import { QuoteConfig } from '../types';
 
 interface QuoteFormPageProps {
   projectType: string;
   onBack: () => void;
+  quoteConfig: QuoteConfig;
 }
 
-const QuoteFormPage: React.FC<QuoteFormPageProps> = ({ projectType, onBack }) => {
+const QuoteFormPage: React.FC<QuoteFormPageProps> = ({ projectType, onBack, quoteConfig }) => {
   if (projectType === 'TV Wall') {
-    return <TvWallQuoteForm onBack={onBack} />;
+    return <TvWallQuoteForm onBack={onBack} quoteConfig={quoteConfig} />;
   }
   
   if (projectType === 'Closets') {
-    return <ClosetQuoteForm onBack={onBack} />;
+    return <ClosetQuoteForm onBack={onBack} quoteConfig={quoteConfig} />;
   }
   
   if (projectType === 'Cocinas') {
-    return <KitchenQuoteForm onBack={onBack} />;
+    return <KitchenQuoteForm onBack={onBack} quoteConfig={quoteConfig} />;
   }
 
   // Placeholder for other quote forms

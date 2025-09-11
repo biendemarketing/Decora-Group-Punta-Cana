@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Link } from 'lucide-react';
 
 interface ImageUploaderProps {
@@ -10,7 +10,17 @@ interface ImageUploaderProps {
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onImageChange, isCompact = false, bgClass = 'bg-gray-200' }) => {
   const [uploadMethod, setUploadMethod] = useState<'upload' | 'url'>('upload');
-  const [urlInput, setUrlInput] = useState(imageUrl.startsWith('data:') ? '' : imageUrl);
+  const safeImageUrl = imageUrl || ''; // Guard against undefined
+  const [urlInput, setUrlInput] = useState(safeImageUrl.startsWith('data:') ? '' : safeImageUrl);
+
+  // Effect to sync local state if prop changes from parent
+  useEffect(() => {
+    const newSafeUrl = imageUrl || '';
+    if (newSafeUrl !== urlInput && !newSafeUrl.startsWith('data:')) {
+      setUrlInput(newSafeUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageUrl]);
 
   const handleFileChange = (file: File) => {
     const reader = new FileReader();
@@ -21,7 +31,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onImageChange, 
   };
 
   const handleUrlBlur = () => {
-    if (urlInput && urlInput !== imageUrl) {
+    if (urlInput !== imageUrl) {
       onImageChange(urlInput);
     }
   };
@@ -39,7 +49,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onImageChange, 
   return (
     <div className="border rounded-md">
       <div className={`flex items-center gap-4 p-2 ${bgClass}`}>
-        <img src={imageUrl} alt="Preview" className={`rounded border object-contain ${isCompact ? 'h-10 w-10' : 'h-16 w-auto'}`} />
+        <img src={safeImageUrl} alt="Preview" className={`rounded border object-contain ${isCompact ? 'h-10 w-10' : 'h-16 w-auto'}`} />
         <div className="flex-grow">
           <div className="flex border-b -mb-px">
             <TabButton method="upload"><Upload className="h-3 w-3 inline mr-1" /> Subir</TabButton>

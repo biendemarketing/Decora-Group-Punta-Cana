@@ -182,6 +182,7 @@ const ProductsEditor: React.FC<ProductsEditorProps> = ({ products, onProductsCha
   const FormView = () => {
     if (!editingProduct) return null;
     const inputClass = "w-full p-2 border border-gray-300 rounded bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500 shadow-sm";
+    const images = editingProduct.images || []; // Guard against undefined images array
     
     return (
     <div className="space-y-6">
@@ -227,7 +228,7 @@ const ProductsEditor: React.FC<ProductsEditorProps> = ({ products, onProductsCha
         <h4 className="font-semibold mb-2 text-gray-800">Materiales</h4>
         <div className="grid grid-cols-3 gap-2 p-2 border rounded max-h-32 overflow-y-auto">
             {ALL_MATERIALS.map(m => (
-              <label key={m} className="flex items-center text-sm text-gray-800"><input type="checkbox" checked={editingProduct.materials.includes(m)} onChange={() => handleMultiSelectChange('materials', m)} className="mr-2"/>{m}</label>
+              <label key={m} className="flex items-center text-sm text-gray-800"><input type="checkbox" checked={(editingProduct.materials || []).includes(m)} onChange={() => handleMultiSelectChange('materials', m)} className="mr-2"/>{m}</label>
             ))}
         </div>
       </div>
@@ -235,7 +236,7 @@ const ProductsEditor: React.FC<ProductsEditorProps> = ({ products, onProductsCha
         <h4 className="font-semibold mb-2 text-gray-800">Colores</h4>
         <div className="grid grid-cols-3 gap-2 p-2 border rounded max-h-32 overflow-y-auto">
             {ALL_COLORS.map(c => (
-              <label key={c} className="flex items-center text-sm text-gray-800"><input type="checkbox" checked={editingProduct.colors.includes(c)} onChange={() => handleMultiSelectChange('colors', c)} className="mr-2"/>{c}</label>
+              <label key={c} className="flex items-center text-sm text-gray-800"><input type="checkbox" checked={(editingProduct.colors || []).includes(c)} onChange={() => handleMultiSelectChange('colors', c)} className="mr-2"/>{c}</label>
             ))}
         </div>
       </div>
@@ -243,7 +244,7 @@ const ProductsEditor: React.FC<ProductsEditorProps> = ({ products, onProductsCha
         <h4 className="font-semibold mb-2 text-gray-800">Acabados</h4>
         <div className="grid grid-cols-3 gap-2 p-2 border rounded max-h-32 overflow-y-auto">
             {ALL_FINISHES.map(f => (
-              <label key={f} className="flex items-center text-sm text-gray-800"><input type="checkbox" checked={editingProduct.finish?.includes(f)} onChange={() => handleMultiSelectChange('finish', f)} className="mr-2"/>{f}</label>
+              <label key={f} className="flex items-center text-sm text-gray-800"><input type="checkbox" checked={(editingProduct.finish || []).includes(f)} onChange={() => handleMultiSelectChange('finish', f)} className="mr-2"/>{f}</label>
             ))}
         </div>
       </div>
@@ -254,13 +255,13 @@ const ProductsEditor: React.FC<ProductsEditorProps> = ({ products, onProductsCha
        <div>
         <h4 className="font-semibold mb-2 text-gray-800">Galería de Imágenes</h4>
         <div className="space-y-2">
-            {editingProduct.images.map((img, index) => (
+            {images.map((img, index) => (
                 <div key={index} className="flex items-center gap-2">
-                    <ImageUploader imageUrl={img} onImageChange={url => { const imgs=[...editingProduct.images]; imgs[index]=url; handleFieldChange('images', imgs);}} isCompact/>
-                    <button onClick={() => handleFieldChange('images', editingProduct.images.filter((_, i) => i !== index))} className="p-1 text-gray-400 hover:text-red-500"><Trash2 className="h-4 w-4"/></button>
+                    <ImageUploader imageUrl={img} onImageChange={url => { const imgs=[...images]; imgs[index]=url; handleFieldChange('images', imgs);}} isCompact/>
+                    <button onClick={() => handleFieldChange('images', images.filter((_, i) => i !== index))} className="p-1 text-gray-400 hover:text-red-500"><Trash2 className="h-4 w-4"/></button>
                 </div>
             ))}
-            <button onClick={() => handleFieldChange('images', [...editingProduct.images, ''])} className="text-sm p-2 border-dashed border-2 rounded w-full">Añadir imagen</button>
+            <button onClick={() => handleFieldChange('images', [...images, 'https://via.placeholder.com/400x300'])} className="text-sm p-2 border-dashed border-2 rounded w-full">Añadir imagen</button>
         </div>
       </div>
       <div className="flex justify-end gap-4 border-t pt-4">

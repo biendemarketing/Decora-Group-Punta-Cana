@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { TV_WALL_STYLES, INSTALLATION_OPTIONS, PAYMENT_OPTIONS, PROVINCES } from '../constants';
+import { QuoteConfig, QuoteOption, InstallationOption } from '../types';
+import { PROVINCES } from '../constants';
 import QuoteStep from './QuoteStep';
 import NumberInputWithControls from './NumberInputWithControls';
 import StyleSelector from './StyleSelector';
@@ -12,14 +13,15 @@ import TermsModal from './TermsModal';
 
 interface TvWallQuoteFormProps {
   onBack: () => void;
+  quoteConfig: QuoteConfig;
 }
 
-const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack }) => {
+const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack, quoteConfig }) => {
   const [formData, setFormData] = useState({
     width: 100,
     height: 100,
-    selectedStyle: TV_WALL_STYLES[0],
-    selectedInstallation: INSTALLATION_OPTIONS[0],
+    selectedStyle: quoteConfig.tvWall.styles[0],
+    selectedInstallation: quoteConfig.general.installationOptions[0],
     userInfo: {
       name: '',
       email: '',
@@ -27,7 +29,7 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack }) => {
       location: PROVINCES[0],
       observations: '',
     },
-    paymentOption: PAYMENT_OPTIONS[0],
+    paymentOption: quoteConfig.general.paymentOptions[0],
     termsAccepted: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -114,17 +116,17 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack }) => {
 
             <QuoteStep title="2.- Elige el estilo que buscas:">
                 <StyleSelector 
-                    styles={TV_WALL_STYLES}
+                    styles={quoteConfig.tvWall.styles}
                     selectedStyle={formData.selectedStyle}
-                    onSelect={(style) => setFormData(p => ({ ...p, selectedStyle: style }))}
+                    onSelect={(style: QuoteOption) => setFormData(p => ({ ...p, selectedStyle: style }))}
                 />
             </QuoteStep>
             
             <QuoteStep title="3.- ¿Qué instalación requieres?">
                 <InstallationSelector
-                    options={INSTALLATION_OPTIONS}
+                    options={quoteConfig.general.installationOptions}
                     selectedValue={formData.selectedInstallation}
-                    onChange={(option) => setFormData(p => ({ ...p, selectedInstallation: option }))}
+                    onChange={(option: InstallationOption) => setFormData(p => ({ ...p, selectedInstallation: option }))}
                 />
             </QuoteStep>
 
@@ -136,7 +138,7 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack }) => {
             </QuoteStep>
             
             <PaymentAndTerms
-                paymentOptions={PAYMENT_OPTIONS}
+                paymentOptions={quoteConfig.general.paymentOptions}
                 selectedOption={formData.paymentOption}
                 onPaymentChange={(option) => setFormData(p => ({ ...p, paymentOption: option }))}
                 termsAccepted={formData.termsAccepted}

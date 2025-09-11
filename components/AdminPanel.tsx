@@ -6,6 +6,10 @@ import AdminSidebar from './AdminSidebar';
 import ProjectsEditor from './ProjectsEditor';
 import PopularCategoriesEditor from './PopularCategoriesEditor';
 import ProductsEditor from './ProductsEditor';
+import ServicesEditor from './ServicesEditor';
+import QuoteEditor from './QuoteEditor';
+import WorkProcessEditor from './WorkProcessEditor';
+import BlogEditor from './BlogEditor';
 import { NavigationData, Project, Product } from '../types';
 import { LogOut, Save, XCircle } from 'lucide-react';
 
@@ -17,6 +21,8 @@ interface AdminPanelProps {
   onLogout: () => void;
 }
 
+type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog';
+
 const AdminPanel: React.FC<AdminPanelProps> = ({ 
   initialNavigationData, 
   initialProjectsData, 
@@ -24,7 +30,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   onSaveChanges, 
   onLogout 
 }) => {
-  const [activeEditor, setActiveEditor] = useState<'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products'>('settings');
+  const [activeEditor, setActiveEditor] = useState<EditorType>('settings');
   
   const [draftNavData, setDraftNavData] = useState<NavigationData>(() => JSON.parse(JSON.stringify(initialNavigationData)));
   const [draftProjectsData, setDraftProjectsData] = useState<Project[]>(() => JSON.parse(JSON.stringify(initialProjectsData)));
@@ -53,6 +59,33 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   || JSON.stringify(draftProductsData) !== JSON.stringify(initialProductsData);
 
   const projectCategories = draftNavData.menuItems.find(item => item.key === 'proyectos')?.subCategories || [];
+
+  const renderEditor = () => {
+    switch(activeEditor) {
+      case 'settings':
+        return <SiteSettingsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
+      case 'menu':
+        return <HeaderEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
+      case 'slider':
+        return <HeroSliderEditor slides={draftNavData.heroSlides} onSlidesChange={(newSlides) => setDraftNavData(prev => ({ ...prev, heroSlides: newSlides }))} />;
+      case 'popularCategories':
+        return <PopularCategoriesEditor categories={draftNavData.popularCategories} onCategoriesChange={(newCategories) => setDraftNavData(prev => ({ ...prev, popularCategories: newCategories }))} menuItems={draftNavData.menuItems} />;
+      case 'services':
+        return <ServicesEditor services={draftNavData.services} onServicesChange={(newServices) => setDraftNavData(prev => ({...prev, services: newServices}))} quoteTypes={draftNavData.quoteConfig.projectTypes} />;
+      case 'workProcess':
+        return <WorkProcessEditor workProcessSection={draftNavData.workProcessSection} onSectionChange={(newSection) => setDraftNavData(prev => ({...prev, workProcessSection: newSection}))} />;
+      case 'blog':
+        return <BlogEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
+      case 'quote':
+        return <QuoteEditor quoteConfig={draftNavData.quoteConfig} onQuoteConfigChange={(newConfig) => setDraftNavData(prev => ({...prev, quoteConfig: newConfig}))} />;
+      case 'projects':
+        return <ProjectsEditor projects={draftProjectsData} onProjectsChange={setDraftProjectsData} projectCategories={projectCategories} />;
+      case 'products':
+        return <ProductsEditor products={draftProductsData} onProductsChange={setDraftProductsData} navigationData={draftNavData} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -90,45 +123,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* Editor Column */}
         <div className="xl:col-span-4 bg-white p-6 rounded-lg shadow-lg flex flex-col max-h-[calc(100vh-120px)]">
             <div className="flex-grow overflow-y-auto pr-2">
-                {activeEditor === 'settings' && (
-                  <SiteSettingsEditor
-                    navigationData={draftNavData}
-                    onNavigationChange={setDraftNavData}
-                  />
-                )}
-                {activeEditor === 'menu' && (
-                  <HeaderEditor
-                    navigationData={draftNavData}
-                    onNavigationChange={setDraftNavData}
-                  />
-                )}
-                 {activeEditor === 'slider' && (
-                  <HeroSliderEditor
-                    slides={draftNavData.heroSlides}
-                    onSlidesChange={(newSlides) => setDraftNavData(prev => ({ ...prev, heroSlides: newSlides }))}
-                  />
-                )}
-                {activeEditor === 'popularCategories' && (
-                  <PopularCategoriesEditor
-                    categories={draftNavData.popularCategories}
-                    onCategoriesChange={(newCategories) => setDraftNavData(prev => ({ ...prev, popularCategories: newCategories }))}
-                    menuItems={draftNavData.menuItems}
-                  />
-                )}
-                 {activeEditor === 'projects' && (
-                  <ProjectsEditor
-                    projects={draftProjectsData}
-                    onProjectsChange={setDraftProjectsData}
-                    projectCategories={projectCategories}
-                  />
-                )}
-                 {activeEditor === 'products' && (
-                  <ProductsEditor
-                    products={draftProductsData}
-                    onProductsChange={setDraftProductsData}
-                    navigationData={draftNavData}
-                  />
-                )}
+                {renderEditor()}
             </div>
         </div>
       </div>

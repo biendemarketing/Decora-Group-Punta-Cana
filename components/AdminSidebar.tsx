@@ -1,7 +1,7 @@
 import React from 'react';
-import { LayoutDashboard, Settings, Image as ImageIcon, Grid, Briefcase, Star, Package } from 'lucide-react';
+import { LayoutDashboard, Settings, Image as ImageIcon, Grid, Briefcase, Star, Package, LayoutList, Calculator, ClipboardList, BookOpen } from 'lucide-react';
 
-type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products';
+type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog';
 
 interface AdminSidebarProps {
   activeEditor: EditorType;
@@ -10,12 +10,16 @@ interface AdminSidebarProps {
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeEditor, onSelectEditor }) => {
   const menuItems = [
-    { id: 'settings', label: 'Logos y Barra Superior', icon: Settings, isEditor: true },
-    { id: 'menu', label: 'Menú Principal', icon: LayoutDashboard, isEditor: true },
-    { id: 'slider', label: 'Slider Principal', icon: ImageIcon, isEditor: true },
-    { id: 'popularCategories', label: 'Categorías Populares', icon: Star, isEditor: true },
-    { id: 'projects', label: 'Proyectos', icon: Briefcase, isEditor: true },
-    { id: 'products', label: 'Productos', icon: Package, isEditor: true },
+    { id: 'settings', label: 'Logos y Barra Superior', icon: Settings },
+    { id: 'menu', label: 'Menú Principal', icon: LayoutDashboard },
+    { id: 'slider', label: 'Slider Principal', icon: ImageIcon },
+    { id: 'popularCategories', label: 'Categorías Populares', icon: Star },
+    { id: 'services', label: 'Servicios', icon: LayoutList },
+    { id: 'workProcess', label: 'Proceso de Trabajo', icon: ClipboardList },
+    { id: 'blog', label: 'Blog', icon: BookOpen },
+    { id: 'quote', label: 'Cotizador', icon: Calculator },
+    { id: 'projects', label: 'Proyectos', icon: Briefcase },
+    { id: 'products', label: 'Productos', icon: Package },
   ];
 
   return (

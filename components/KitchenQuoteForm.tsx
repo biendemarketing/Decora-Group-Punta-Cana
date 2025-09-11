@@ -1,16 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { 
-    KITCHEN_SIZES, 
-    KITCHEN_STYLES, 
-    KITCHEN_COUNTERTOPS, 
-    KITCHEN_SINKS,
-    KITCHEN_FAUCETS,
-    KITCHEN_ACCESSORIES,
-    INSTALLATION_OPTIONS, 
-    PAYMENT_OPTIONS, 
-    PROVINCES 
-} from '../constants';
+import { QuoteConfig, InstallationOption } from '../types';
+import { PROVINCES } from '../constants';
 import QuoteStep from './QuoteStep';
 import UserInfoForm from './UserInfoForm';
 import PaymentAndTerms from './PaymentAndTerms';
@@ -107,21 +98,22 @@ const AccessorySelector = ({ options, selectedOptions, onSelectionChange }: any)
 
 interface KitchenQuoteFormProps {
   onBack: () => void;
+  quoteConfig: QuoteConfig;
 }
 
-const KitchenQuoteForm: React.FC<KitchenQuoteFormProps> = ({ onBack }) => {
+const KitchenQuoteForm: React.FC<KitchenQuoteFormProps> = ({ onBack, quoteConfig }) => {
   const [formData, setFormData] = useState({
-    kitchenSize: KITCHEN_SIZES[0],
-    kitchenStyle: KITCHEN_STYLES[0],
-    kitchenCountertop: KITCHEN_COUNTERTOPS[0],
-    selectedSink: KITCHEN_SINKS[0],
-    selectedFaucet: KITCHEN_FAUCETS[0],
+    kitchenSize: quoteConfig.kitchen.sizes[0],
+    kitchenStyle: quoteConfig.kitchen.styles[0],
+    kitchenCountertop: quoteConfig.kitchen.countertops[0],
+    selectedSink: quoteConfig.kitchen.sinks[0],
+    selectedFaucet: quoteConfig.kitchen.faucets[0],
     selectedAccessories: [],
-    installation: INSTALLATION_OPTIONS[3], // Default to "Sin instalación"
+    installation: quoteConfig.general.installationOptions[3], // Default to "Sin instalación"
     userInfo: {
       name: '', email: '', phone: '', location: PROVINCES[0], observations: '',
     },
-    paymentOption: PAYMENT_OPTIONS[0],
+    paymentOption: quoteConfig.general.paymentOptions[0],
     termsAccepted: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -129,8 +121,8 @@ const KitchenQuoteForm: React.FC<KitchenQuoteFormProps> = ({ onBack }) => {
   const totalPrice = useMemo(() => {
     const { kitchenSize, kitchenStyle, kitchenCountertop, installation, selectedSink, selectedFaucet, selectedAccessories } = formData;
     
-    const baseTotal = (kitchenSize.price * kitchenStyle.multiplier) + 
-                      (kitchenSize.price * kitchenCountertop.multiplier) + 
+    const baseTotal = (kitchenSize.price * (kitchenStyle.multiplier || 1)) + 
+                      (kitchenSize.price * (kitchenCountertop.multiplier || 0)) + 
                       (kitchenSize.price * installation.multiplier);
                       
     const accessoriesTotal = selectedAccessories.reduce((sum: number, acc: { price: number }) => sum + acc.price, 0);
@@ -174,31 +166,31 @@ const KitchenQuoteForm: React.FC<KitchenQuoteFormProps> = ({ onBack }) => {
 
           <form onSubmit={handleSubmit} className="space-y-12">
             <QuoteStep title="1.- Selecciona la cantidad de módulos:" subtitle="¡El tamaño si importa!">
-              <ImageSelector options={KITCHEN_SIZES} selectedOption={formData.kitchenSize} onSelect={(val: any) => setFormData(p => ({...p, kitchenSize: val}))} />
+              <ImageSelector options={quoteConfig.kitchen.sizes} selectedOption={formData.kitchenSize} onSelect={(val: any) => setFormData(p => ({...p, kitchenSize: val}))} />
             </QuoteStep>
 
             <QuoteStep title="2.- ¿Qué estilo buscas?">
-               <ImageSelector options={KITCHEN_STYLES} selectedOption={formData.kitchenStyle} onSelect={(val: any) => setFormData(p => ({...p, kitchenStyle: val}))} gridCols="grid-cols-2 lg:grid-cols-4 gap-4" />
+               <ImageSelector options={quoteConfig.kitchen.styles} selectedOption={formData.kitchenStyle} onSelect={(val: any) => setFormData(p => ({...p, kitchenStyle: val}))} gridCols="grid-cols-2 lg:grid-cols-4 gap-4" />
             </QuoteStep>
             
             <QuoteStep title="3.- ¿Qué tope prefieres?">
-               <ImageSelector options={KITCHEN_COUNTERTOPS} selectedOption={formData.kitchenCountertop} onSelect={(val: any) => setFormData(p => ({...p, kitchenCountertop: val}))} gridCols="grid-cols-2 lg:grid-cols-4 gap-4" />
+               <ImageSelector options={quoteConfig.kitchen.countertops} selectedOption={formData.kitchenCountertop} onSelect={(val: any) => setFormData(p => ({...p, kitchenCountertop: val}))} gridCols="grid-cols-2 lg:grid-cols-4 gap-4" />
             </QuoteStep>
 
             <QuoteStep title="4.- ¿Qué tipo de fregadero te gustaría?">
-                <ImageSelector options={KITCHEN_SINKS} selectedOption={formData.selectedSink} onSelect={(val: any) => setFormData(p => ({...p, selectedSink: val}))} />
+                <ImageSelector options={quoteConfig.kitchen.sinks} selectedOption={formData.selectedSink} onSelect={(val: any) => setFormData(p => ({...p, selectedSink: val}))} />
             </QuoteStep>
             
             <QuoteStep title="5.- Cuéntanos de la mezcladora:">
-                <ImageSelector options={KITCHEN_FAUCETS} selectedOption={formData.selectedFaucet} onSelect={(val: any) => setFormData(p => ({...p, selectedFaucet: val}))} gridCols="grid-cols-2 sm:grid-cols-3 gap-4" />
+                <ImageSelector options={quoteConfig.kitchen.faucets} selectedOption={formData.selectedFaucet} onSelect={(val: any) => setFormData(p => ({...p, selectedFaucet: val}))} gridCols="grid-cols-2 sm:grid-cols-3 gap-4" />
             </QuoteStep>
 
             <QuoteStep title="6.- Optimización y Accesorios:">
-                <AccessorySelector options={KITCHEN_ACCESSORIES} selectedOptions={formData.selectedAccessories} onSelectionChange={(val: any) => setFormData(p => ({...p, selectedAccessories: val}))} />
+                <AccessorySelector options={quoteConfig.kitchen.accessories} selectedOptions={formData.selectedAccessories} onSelectionChange={(val: any) => setFormData(p => ({...p, selectedAccessories: val}))} />
             </QuoteStep>
             
             <QuoteStep title="7.- ¿Qué instalación requieres?">
-                 <InstallationSelector options={INSTALLATION_OPTIONS} selectedValue={formData.installation} onChange={(option) => setFormData(p => ({...p, installation: option}))} />
+                 <InstallationSelector options={quoteConfig.general.installationOptions} selectedValue={formData.installation} onChange={(option: InstallationOption) => setFormData(p => ({...p, installation: option}))} />
             </QuoteStep>
 
             <QuoteStep title="8.- Datos del usuario:">
@@ -206,7 +198,7 @@ const KitchenQuoteForm: React.FC<KitchenQuoteFormProps> = ({ onBack }) => {
             </QuoteStep>
 
             <PaymentAndTerms
-                paymentOptions={PAYMENT_OPTIONS}
+                paymentOptions={quoteConfig.general.paymentOptions}
                 selectedOption={formData.paymentOption}
                 onPaymentChange={(option) => setFormData(p => ({ ...p, paymentOption: option }))}
                 termsAccepted={formData.termsAccepted}

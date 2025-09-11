@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { SubCategory } from '../types';
 import { 
   ArrowLeft, 
@@ -33,6 +33,7 @@ const iconMap: { [key: string]: React.ElementType } = {
 
 const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, onSelectProjectCategory, onViewAllProjects }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
@@ -45,6 +46,29 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
     }
   };
 
+  const startAutoScroll = () => {
+    if (intervalId.current) clearInterval(intervalId.current);
+    intervalId.current = setInterval(() => {
+      if (scrollContainerRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth) {
+          scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          scroll('right');
+        }
+      }
+    }, 5000);
+  };
+
+  const stopAutoScroll = () => {
+    if (intervalId.current) clearInterval(intervalId.current);
+  };
+
+  useEffect(() => {
+    startAutoScroll();
+    return () => stopAutoScroll();
+  }, []);
+
   return (
     <div className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,7 +79,11 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
           </p>
         </div>
         
-        <div className="relative flex items-center">
+        <div 
+          className="relative flex items-center"
+          onMouseEnter={stopAutoScroll}
+          onMouseLeave={startAutoScroll}
+        >
           <button 
             onClick={() => scroll('left')}
             className="absolute -left-4 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors hidden md:block"

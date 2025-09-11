@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationData, TopBarLink, TopBarBenefit } from '../types';
 import ImageUploader from './ImageUploader';
+import IconSelector from './IconSelector';
 
 interface SiteSettingsEditorProps {
   navigationData: NavigationData;
@@ -8,7 +9,6 @@ interface SiteSettingsEditorProps {
 }
 
 const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ navigationData, onNavigationChange }) => {
-  const availableIcons = ['Truck', 'CreditCard', 'ShieldCheck', 'Phone', 'Package', 'Gem', 'Lightbulb', 'Award', 'Heart', 'CheckCircle'];
 
   const handleLogoChange = (type: 'logoUrl' | 'footerLogoUrl', url: string) => {
     onNavigationChange({ ...navigationData, [type]: url });
@@ -86,15 +86,10 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ navigationData,
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600">Icono</label>
-                <select
-                  value={benefit.icon}
-                  onChange={(e) => handleBenefitChange(benefit.id, 'icon', e.target.value)}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-sm p-2 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {availableIcons.map(iconName => (
-                    <option key={iconName} value={iconName}>{iconName}</option>
-                  ))}
-                </select>
+                <IconSelector 
+                    selectedIcon={benefit.icon}
+                    onIconChange={(icon) => handleBenefitChange(benefit.id, 'icon', icon)}
+                />
               </div>
             </div>
           ))}

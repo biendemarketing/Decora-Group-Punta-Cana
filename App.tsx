@@ -593,6 +593,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
 
   const projectsMenuItem = navigationData.menuItems.find(item => item.key === 'proyectos');
+  const instagramImages = projectsMenuItem?.subCategories.map(sub => sub.imageUrl) || [];
 
   return (
     <div className="bg-gray-50">
@@ -614,7 +615,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       
       {(() => {
           switch(view) {
-              case 'blog': return <BlogPage />;
+              case 'blog': return <BlogPage blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />;
               case 'cart': return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;
               case 'wishlist': return <WishlistPage onProductSelect={handleProductSelect} />;
               case 'checkout':
@@ -628,8 +629,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                   />;
               case 'about': return <AboutUsPage />;
               case 'contact': return <ContactPage />;
-              case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} />;
-              case 'quote': return <CustomQuotePage onSelectQuoteType={handleSelectQuoteType} />;
+              case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} quoteConfig={navigationData.quoteConfig} />;
+              case 'quote': return <CustomQuotePage projectTypes={navigationData.quoteConfig.projectTypes} onSelectQuoteType={handleSelectQuoteType} />;
               case 'projectDetail': return <ProjectDetailPage project={selectedProject!} onBack={() => setView('projects')} onGoHome={resetToHome} />;
               case 'projects':
                   return (
@@ -712,10 +713,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                                   </div>
                               </div>
                           </div>
-                          <ServicesSection onSelectQuoteType={handleSelectQuoteType} />
-                          <WorkProcessSection />
-                          <MagazineSection />
-                          <InstagramEmbed />
+                          <ServicesSection services={navigationData.services} onSelectQuoteType={handleSelectQuoteType} />
+                          <WorkProcessSection workProcessSection={navigationData.workProcessSection} />
+                          <MagazineSection magazineSection={navigationData.magazineSection} blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />
+                          <InstagramEmbed images={instagramImages} />
                           <section className="py-16 bg-gray-50">
                               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                   <div className="text-center mb-16"><h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Contáctanos</h2><p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Estamos aquí para hacer realidad tu proyecto. Conversemos sobre tus ideas.</p></div>
@@ -748,14 +749,18 @@ const App: React.FC = () => {
     if (storedNavData) {
       try {
         const parsedData = JSON.parse(storedNavData);
-        if (parsedData && Array.isArray(parsedData.menuItems)) {
+        // Add a check for new blog properties to ensure backward compatibility
+        if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && Array.isArray(parsedData.blogPosts)) {
           setNavigationData(parsedData);
         } else {
-          localStorage.removeItem('navigationData');
+          // If data is old/malformed, reset to initial
+          localStorage.setItem('navigationData', JSON.stringify(INITIAL_NAVIGATION_DATA));
+          setNavigationData(INITIAL_NAVIGATION_DATA);
         }
       } catch (error) {
         console.error("Error parsing navigation data from localStorage", error);
-        localStorage.removeItem('navigationData');
+        localStorage.setItem('navigationData', JSON.stringify(INITIAL_NAVIGATION_DATA));
+        setNavigationData(INITIAL_NAVIGATION_DATA);
       }
     }
     

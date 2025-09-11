@@ -2,14 +2,13 @@ import React, { useState, useRef } from 'react';
 import { HeroSlide, HeroButton } from '../types';
 import { PREDEFINED_LINKS } from '../constants';
 import ImageUploader from './ImageUploader';
+import IconSelector from './IconSelector';
 import { GripVertical, Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface HeroSliderEditorProps {
   slides: HeroSlide[];
   onSlidesChange: (newSlides: HeroSlide[]) => void;
 }
-
-const availableIcons = ['Calculator', 'Eye', 'Wrench', 'Users', 'Phone', 'Default'];
 
 const HeroSliderEditor: React.FC<HeroSliderEditorProps> = ({ slides, onSlidesChange }) => {
   const [openSlideId, setOpenSlideId] = useState<string | null>(slides.length > 0 ? slides[0].id : null);
@@ -141,9 +140,7 @@ const HeroSliderEditor: React.FC<HeroSliderEditorProps> = ({ slides, onSlidesCha
                                 <option value="primary">Primario</option>
                                 <option value="secondary">Secundario</option>
                              </select>
-                             <select value={button.icon} onChange={(e) => handleButtonChange(slide.id, button.id, 'icon', e.target.value)} className="w-full border-gray-300 rounded-md shadow-sm text-sm p-2">
-                                {availableIcons.map(icon => <option key={icon} value={icon}>{icon}</option>)}
-                             </select>
+                            <IconSelector selectedIcon={button.icon} onIconChange={(icon) => handleButtonChange(slide.id, button.id, 'icon', icon)} />
                          </div>
                       </div>
                     ))}

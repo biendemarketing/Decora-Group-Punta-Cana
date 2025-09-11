@@ -115,10 +115,123 @@ export interface PopularCategory {
   link: string; // The category TITLE to navigate to
 }
 
+export interface ServiceItem {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  buttonText: string;
+  quoteType: string;
+}
+
+// --- Quote Config Interfaces ---
+export interface QuoteOption {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl: string;
+}
+
+export interface QuoteStyleOption extends QuoteOption {
+  multiplier?: number;
+}
+
+export interface QuoteType {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  quoteType: string;
+}
+
+export interface InstallationOption {
+  id: string;
+  label: string;
+  price: number;
+  multiplier: number;
+}
+
+export interface ClosetTypeOption {
+  id: string;
+  name: string;
+  value: number; // capacity
+  imageUrl: string;
+}
+
+export interface QuoteConfig {
+  projectTypes: QuoteType[];
+  tvWall: {
+    styles: QuoteOption[];
+  };
+  closet: {
+    types: ClosetTypeOption[];
+    modules: QuoteOption[];
+    accessories: QuoteOption[];
+  };
+  kitchen: {
+    sizes: QuoteOption[];
+    styles: QuoteStyleOption[];
+    countertops: QuoteStyleOption[];
+    sinks: QuoteOption[];
+    faucets: QuoteOption[];
+    accessories: QuoteOption[];
+  };
+  general: {
+    installationOptions: InstallationOption[];
+    paymentOptions: string[];
+  };
+}
+
+export interface WorkProcessStep {
+  id: string;
+  title: string;
+  description: string;
+  icon: string; // key from iconMap
+}
+
+export interface WorkProcessSection {
+  title: string;
+  backgroundImageUrl: string;
+  steps: WorkProcessStep[];
+}
+
+export interface MagazineSection {
+  title: string;
+  subtitle: string;
+}
+
+export interface BlogCategory {
+  id: string;
+  name: string;
+}
+
+export interface BlogTag {
+  id: string;
+  name: string;
+}
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  author: string;
+  date: string; // ISO 8601 format
+  categoryId: string;
+  tagIds: string[];
+}
+
 export interface NavigationData {
   menuItems: MenuItem[];
   heroSlides: HeroSlide[];
   popularCategories: PopularCategory[];
+  services: ServiceItem[];
+  quoteConfig: QuoteConfig;
+  workProcessSection: WorkProcessSection;
+  magazineSection: MagazineSection;
+  blogPosts: BlogPost[];
+  blogCategories: BlogCategory[];
+  blogTags: BlogTag[];
   logoUrl: string;
   footerLogoUrl: string;
   topBarLinks: TopBarLink[];

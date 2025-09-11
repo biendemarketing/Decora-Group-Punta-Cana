@@ -1,6 +1,8 @@
 import React from 'react';
 
+// FIX: Added 'id' to make the interface compatible with InstallationOption from types.ts
 interface Option {
+  id: string;
   label: string;
   price: number;
   multiplier: number;

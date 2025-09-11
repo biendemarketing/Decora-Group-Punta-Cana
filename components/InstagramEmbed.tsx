@@ -1,18 +1,11 @@
 import React from 'react';
 import { CheckCircle, Instagram } from 'lucide-react';
 
-const InstagramEmbed: React.FC = () => {
-  const images = [
-    'https://picsum.photos/id/106/300/300',
-    'https://picsum.photos/id/317/300/300',
-    'https://picsum.photos/id/1012/300/300',
-    'https://picsum.photos/id/249/300/300',
-    'https://picsum.photos/id/10/300/300',
-    'https://picsum.photos/id/180/300/300',
-    'https://picsum.photos/id/1025/300/300',
-    'https://picsum.photos/id/1011/300/300',
-  ];
+interface InstagramEmbedProps {
+  images: string[];
+}
 
+const InstagramEmbed: React.FC<InstagramEmbedProps> = ({ images }) => {
   return (
     <div className="bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

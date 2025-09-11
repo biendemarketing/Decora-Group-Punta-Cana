@@ -1,6 +1,8 @@
 import React from 'react';
 
+// FIX: Added 'id' to make the interface compatible with ClosetTypeOption from types.ts
 interface ClosetType {
+  id: string;
   name: string;
   value: number;
   imageUrl: string;
