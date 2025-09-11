@@ -221,6 +221,22 @@ export interface BlogPost {
   tagIds: string[];
 }
 
+export type CatalogueType = 'pdf' | 'drive' | 'gallery' | 'productCollection';
+
+export interface Catalogue {
+  id: string;
+  title: string;
+  description: string;
+  featuredImage: string;
+  isVisible: boolean;
+  type: CatalogueType;
+  pdfUrl?: string;
+  driveUrl?: string;
+  galleryImages?: string[];
+  productIds?: number[]; // For future use
+}
+
+
 export interface NavigationData {
   menuItems: MenuItem[];
   heroSlides: HeroSlide[];
@@ -232,6 +248,7 @@ export interface NavigationData {
   blogPosts: BlogPost[];
   blogCategories: BlogCategory[];
   blogTags: BlogTag[];
+  catalogues: Catalogue[];
   logoUrl: string;
   footerLogoUrl: string;
   topBarLinks: TopBarLink[];

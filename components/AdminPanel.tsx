@@ -10,6 +10,7 @@ import ServicesEditor from './ServicesEditor';
 import QuoteEditor from './QuoteEditor';
 import WorkProcessEditor from './WorkProcessEditor';
 import BlogEditor from './BlogEditor';
+import CataloguesEditor from './CataloguesEditor';
 import { NavigationData, Project, Product } from '../types';
 import { LogOut, Save, XCircle } from 'lucide-react';
 
@@ -21,7 +22,7 @@ interface AdminPanelProps {
   onLogout: () => void;
 }
 
-type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog';
+type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog' | 'catalogues';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ 
   initialNavigationData, 
@@ -76,6 +77,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         return <WorkProcessEditor workProcessSection={draftNavData.workProcessSection} onSectionChange={(newSection) => setDraftNavData(prev => ({...prev, workProcessSection: newSection}))} />;
       case 'blog':
         return <BlogEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
+      case 'catalogues':
+        return <CataloguesEditor catalogues={draftNavData.catalogues} onCataloguesChange={(newCatalogues) => setDraftNavData(prev => ({ ...prev, catalogues: newCatalogues }))} />;
       case 'quote':
         return <QuoteEditor quoteConfig={draftNavData.quoteConfig} onQuoteConfigChange={(newConfig) => setDraftNavData(prev => ({...prev, quoteConfig: newConfig}))} />;
       case 'projects':

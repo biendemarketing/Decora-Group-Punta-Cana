@@ -194,6 +194,7 @@ const MENU_ITEMS_DATA: Omit<MenuItem, 'id'>[] = [
   { key: 'puertas', title: "Puertas", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1013/600/800', subCategories: PUERTAS_SUB_CATEGORIES_DATA.map(generateSubCategory) },
   { key: 'herrajes', title: "Herrajes y Accesorios", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1080/600/800', subCategories: HERRAJES_SUB_CATEGORIES_DATA.map(generateSubCategory) },
   { key: 'electrodomesticos', title: "Electrodomésticos", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/225/600/800', subCategories: ELECTRODOMESTICOS_SUB_CATEGORIES_DATA.map(generateSubCategory) },
+  { key: 'catalogues', title: "Catálogos", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/367/600/800', subCategories: [] },
   { key: 'blog', title: "Blog", isVisible: true, featuredImageUrl: '', subCategories: [] },
   { key: 'proyectos', title: "Proyectos", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1076/600/800', subCategories: PROYECTOS_SUB_CATEGORIES_DATA.map(generateSubCategory) },
   { key: 'cotizar', title: "Cotizar a medida", isVisible: true, featuredImageUrl: 'https://picsum.photos/id/1076/600/800', subCategories: QUOTE_PROJECT_TYPES_DATA.map(item => generateSubCategory({ ...item, name: item.title })) },
@@ -436,6 +437,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   blogPosts: INITIAL_BLOG_POSTS,
   blogCategories: INITIAL_BLOG_CATEGORIES,
   blogTags: INITIAL_BLOG_TAGS,
+  catalogues: [],
   logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
   footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
   topBarLinks: [

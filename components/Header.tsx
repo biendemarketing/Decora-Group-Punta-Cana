@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown, Package, Gem, Lightbulb, Award, CheckCircle } from 'lucide-react';
-import { NavigationData, SubCategory, TopBarLink, MenuItem } from '../types';
+import { NavigationData, SubCategory, TopBarLink, MenuItem, Catalogue } from '../types';
 import Logo from './Logo';
 import SalaMegaMenu from './SalonMegaMenu';
 import DormitorioMegaMenu from './DormitorioMegaMenu';
@@ -14,6 +14,7 @@ import CotizarMegaMenu from './CotizarMegaMenu';
 import PuertasMegaMenu from './PuertasMegaMenu';
 import HerrajesMegaMenu from './HerrajesMegaMenu';
 import ElectrodomesticosMegaMenu from './ElectrodomesticosMegaMenu';
+import CataloguesMegaMenu from './CataloguesMegaMenu';
 import { useCurrency, useCart, useWishlist } from '../App';
 
 interface HeaderProps {
@@ -28,6 +29,8 @@ interface HeaderProps {
   onViewCart: () => void;
   onViewWishlist: () => void;
   onViewBlogPage: () => void;
+  onViewCataloguesPage: () => void;
+  onViewCatalogueDetail: (catalogue: Catalogue) => void;
   searchQuery: string;
   onSearch: (query: string) => void;
 }
@@ -43,6 +46,7 @@ const megaMenuComponents: { [key: string]: React.FC<any> } = {
   puertas: PuertasMegaMenu,
   herrajes: HerrajesMegaMenu,
   electrodomesticos: ElectrodomesticosMegaMenu,
+  catalogues: CataloguesMegaMenu,
   proyectos: ProyectosMegaMenu,
   cotizar: CotizarMegaMenu,
 };
@@ -65,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({
     navigationData,
     onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, 
     onSelectQuoteType, onViewAboutPage, onViewContactPage, onViewCart, onViewWishlist,
-    onViewBlogPage, searchQuery, onSearch
+    onViewBlogPage, onViewCataloguesPage, onViewCatalogueDetail, searchQuery, onSearch
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
@@ -102,6 +106,9 @@ const Header: React.FC<HeaderProps> = ({
       case 'blog':
         onViewBlogPage();
         break;
+      case 'catalogues':
+        onViewCataloguesPage();
+        break;
       default:
         onSelectCategory(menuItem.title);
         break;
@@ -133,16 +140,23 @@ const Header: React.FC<HeaderProps> = ({
     const menuItem = navigationData.menuItems.find(item => item.key === openMenuKey);
     if (!MegaMenuComponent || !menuItem) return null;
 
-    const props = {
-      subCategories: menuItem.subCategories,
-      featuredImageUrl: menuItem.featuredImageUrl,
-      onSelectCategory: () => { handleNavLinkClick(menuItem); },
-      onSelectProjectCategory: onSelectProjectCategory,
-      onSelectQuoteType: onSelectQuoteType,
-      onClose: closeAllMegaMenus,
-      // CotizarMegaMenu has a different prop name
-      ...(openMenuKey === 'cotizar' && { quoteTypes: menuItem.subCategories }),
+    let props: any = {
+        onClose: closeAllMegaMenus,
     };
+
+    if (openMenuKey === 'catalogues') {
+        props.catalogues = navigationData.catalogues.filter(c => c.isVisible);
+        props.onViewCatalogue = onViewCatalogueDetail;
+    } else {
+        props.subCategories = menuItem.subCategories;
+        props.featuredImageUrl = menuItem.featuredImageUrl;
+        props.onSelectCategory = () => { handleNavLinkClick(menuItem); };
+        props.onSelectProjectCategory = onSelectProjectCategory;
+        props.onSelectQuoteType = onSelectQuoteType;
+        if (openMenuKey === 'cotizar') {
+            props.quoteTypes = menuItem.subCategories;
+        }
+    }
 
     return (
       <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t" onMouseEnter={() => setOpenMenuKey(openMenuKey)}>
@@ -281,7 +295,8 @@ const Header: React.FC<HeaderProps> = ({
                       ${openMenuKey === item.key ? 'text-[#5a1e38]' : ''}
                     `}
                     onMouseEnter={() => {
-                      if (item.subCategories.length > 0) {
+                       // Open mega menu for catalogues or items with subcategories
+                      if (item.key === 'catalogues' || item.subCategories.length > 0) {
                         setOpenMenuKey(item.key);
                       } else {
                         closeAllMegaMenus();
@@ -303,8 +318,9 @@ const Header: React.FC<HeaderProps> = ({
           <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {visibleMenuItems.map((item) => {
               const isSubMenuOpen = openMobileSubMenu === item.key;
+              const hasSubItems = item.subCategories.length > 0 || item.key === 'catalogues';
               
-              if (item.subCategories.length === 0) {
+              if (!hasSubItems) {
                 return (
                   <a key={item.key} href="#" onClick={(e) => { e.preventDefault(); handleNavLinkClick(item); setIsMenuOpen(false); }}
                     className="w-full block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left">

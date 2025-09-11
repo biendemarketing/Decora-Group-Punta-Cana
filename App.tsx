@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory } from './types';
+import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -30,6 +30,8 @@ import WishlistPage from './components/WishlistPage';
 import BlogPage from './components/BlogPage';
 import AdminPanel from './components/AdminPanel';
 import LoginPage from './components/LoginPage';
+import CataloguesPage from './components/CataloguesPage';
+import CatalogueDetailPage from './components/CatalogueDetailPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -172,7 +174,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail';
 
 interface CustomerInfo {
     name: string;
@@ -304,6 +306,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedProjectCategory, setSelectedProjectCategory] = useState<string | null>(null);
   const [selectedQuoteType, setSelectedQuoteType] = useState<string | null>(null);
+  const [selectedCatalogue, setSelectedCatalogue] = useState<Catalogue | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({ name: '', email: '', phone: '', address: '' });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -363,6 +366,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     setSelectedProject(null);
     setSelectedProjectCategory(null);
     setSelectedQuoteType(null);
+    setSelectedCatalogue(null);
     setCurrentPage(1);
     setSearchQuery('');
   }
@@ -411,6 +415,15 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const handleProjectSelect = useCallback((project: Project) => {
     setSelectedProject(project);
     setView('projectDetail');
+  }, []);
+
+  const handleViewCatalogues = useCallback(() => {
+    setView('catalogues');
+  }, []);
+
+  const handleViewCatalogueDetail = useCallback((catalogue: Catalogue) => {
+    setSelectedCatalogue(catalogue);
+    setView('catalogueDetail');
   }, []);
   
   const handleSearch = useCallback((query: string) => {
@@ -493,6 +506,9 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         break;
       case 'blog':
         setView('blog');
+        break;
+      case 'catalogues':
+        setView('catalogues');
         break;
       default:
         resetToHome();
@@ -609,12 +625,16 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
           onViewCart={() => setView('cart')}
           onViewWishlist={() => setView('wishlist')}
           onViewBlogPage={() => setView('blog')}
+          onViewCataloguesPage={handleViewCatalogues}
+          onViewCatalogueDetail={handleViewCatalogueDetail}
           searchQuery={searchQuery}
           onSearch={handleSearch}
       />
       
       {(() => {
           switch(view) {
+              case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} />;
+              case 'catalogues': return <CataloguesPage catalogues={navigationData.catalogues} onCatalogueSelect={handleViewCatalogueDetail} />;
               case 'blog': return <BlogPage blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />;
               case 'cart': return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;
               case 'wishlist': return <WishlistPage onProductSelect={handleProductSelect} />;
@@ -751,6 +771,10 @@ const App: React.FC = () => {
         const parsedData = JSON.parse(storedNavData);
         // Add a check for new blog properties to ensure backward compatibility
         if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && Array.isArray(parsedData.blogPosts)) {
+          // Initialize catalogues if it doesn't exist
+          if (!parsedData.catalogues) {
+            parsedData.catalogues = [];
+          }
           setNavigationData(parsedData);
         } else {
           // If data is old/malformed, reset to initial
