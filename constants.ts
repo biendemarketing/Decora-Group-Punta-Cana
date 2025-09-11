@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, AboutUsPageContent, FAQItem, LegalContent, InstagramFeed, ContactContent, JobVacancy } from './types';
+import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, AboutUsPageContent, FAQItem, LegalContent, InstagramShowcaseData, ContactContent, JobVacancy } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -623,8 +623,23 @@ const INITIAL_CONTACT_CONTENT: ContactContent = {
     mapTitle: 'Nuestra Ubicación'
 };
 
-const INITIAL_INSTAGRAM_FEED: InstagramFeed = {
-    username: 'decoragroup.pc'
+const INITIAL_INSTAGRAM_SHOWCASE_DATA: InstagramShowcaseData = {
+    username: 'decoragroup.pc',
+    isVerified: true,
+    profilePictureUrl: 'https://decoragrouppuntacana.com/icon.png',
+    postsCount: 99,
+    followersCount: '2,783',
+    followingCount: 366,
+    profileName: 'Decora Group',
+    bio: 'Fabrica de modulares de cocina, puertas, closets, baños, para proyectos. Equipamos y decoramos tus espacios interiores. 📍Punta Cana, Rep. Dominicana.',
+    galleryImages: [
+        { id: crypto.randomUUID(), imageUrl: 'https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=400&h=400&auto=format&fit=crop' },
+        { id: crypto.randomUUID(), imageUrl: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=400&h=400&auto=format&fit=crop' },
+        { id: crypto.randomUUID(), imageUrl: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=400&h=400&auto=format&fit=crop' },
+        { id: crypto.randomUUID(), imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=400&h=400&auto=format&fit=crop' },
+        { id: crypto.randomUUID(), imageUrl: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=400&h=400&auto=format&fit=crop' },
+        { id: crypto.randomUUID(), imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=400&h=400&auto=format&fit=crop' },
+    ]
 };
 
 export const INITIAL_NAVIGATION_DATA: NavigationData = {
@@ -810,7 +825,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   aboutUsPage: INITIAL_ABOUT_US_CONTENT,
   faqContent: INITIAL_FAQ_CONTENT,
   legalContent: INITIAL_LEGAL_CONTENT,
-  instagramFeed: INITIAL_INSTAGRAM_FEED,
+  instagramShowcase: INITIAL_INSTAGRAM_SHOWCASE_DATA,
   contactPage: INITIAL_CONTACT_CONTENT,
 };
 

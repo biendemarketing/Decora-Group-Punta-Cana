@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
@@ -8,7 +9,7 @@ import MagazineSection from './components/MagazineSection';
 import FilterSidebar from './components/FilterSidebar';
 import ProductGrid from './components/ProductGrid';
 import Footer from './components/Footer';
-import InstagramEmbed from './components/InstagramEmbed';
+import InstagramShowcase from './components/InstagramEmbed';
 import ProductDetailPage from './components/ProductDetailPage';
 import DesignsCarousel from './components/DesignsCarousel';
 import ProjectGrid from './components/ProjectGrid';
@@ -631,8 +632,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
 
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
 
-  const instagramImages = projectsData.slice(0, 6).map(p => p.imageUrl);
-
   return (
     <div className="bg-gray-50">
       <Header 
@@ -764,11 +763,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                           <ServicesSection services={navigationData.services} onSelectQuoteType={handleSelectQuoteType} />
                           <WorkProcessSection workProcessSection={navigationData.workProcessSection} />
                           <MagazineSection magazineSection={navigationData.magazineSection} blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />
-                          <InstagramEmbed 
-                            images={instagramImages} 
-                            username={navigationData.instagramFeed.username}
-                            profilePictureUrl={navigationData.logoUrl}
-                          />
+                          <InstagramShowcase showcaseData={navigationData.instagramShowcase} />
                           <section className="py-16 bg-gray-50">
                               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                   <div className="text-center mb-16"><h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">{contactFormSection.infoTitle}</h2><p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Estamos aquí para hacer realidad tu proyecto. Conversemos sobre tus ideas.</p></div>

@@ -333,8 +333,21 @@ export interface LegalContent {
   pages: LegalPage[];
 }
 
-export interface InstagramFeed {
+export interface InstagramShowcaseImage {
+    id: string;
+    imageUrl: string;
+}
+
+export interface InstagramShowcaseData {
     username: string;
+    isVerified: boolean;
+    profilePictureUrl: string;
+    postsCount: number;
+    followersCount: string;
+    followingCount: number;
+    profileName: string;
+    bio: string;
+    galleryImages: InstagramShowcaseImage[];
 }
 
 export interface ContactContent {
@@ -376,6 +389,6 @@ export interface NavigationData {
     faqs: FAQItem[];
   };
   legalContent: LegalContent;
-  instagramFeed: InstagramFeed;
+  instagramShowcase: InstagramShowcaseData;
   contactPage: ContactContent;
 }
