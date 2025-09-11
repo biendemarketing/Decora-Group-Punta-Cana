@@ -1,0 +1,23 @@
+{
+  "name": "Decora Group",
+  "short_name": "Decora",
+  "description": "Descubre muebles de diseño y proyectos de interiorismo a medida en Punta Cana. Decora Group te ofrece calidad, estilo y funcionalidad para transformar tu hogar o negocio.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#5a1e38",
+  "icons": [
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FDecora%20PWA_512px.png?alt=media&token=3171c973-aaff-4211-b47b-7bc44b0fd6bd",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FDecora%20PWA_512px.png?alt=media&token=3171c973-aaff-4211-b47b-7bc44b0fd6bd",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

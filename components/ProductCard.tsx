@@ -1,5 +1,6 @@
 
-import React from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import type { Product } from '../types';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useCurrency, useCart, useWishlist } from '../App';
@@ -7,12 +8,37 @@ import { useCurrency, useCart, useWishlist } from '../App';
 interface ProductCardProps {
   product: Product;
   onProductSelect: (product: Product) => void;
+  index: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onProductSelect }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onProductSelect, index }) => {
   const { formatPrice } = useCurrency();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isProductInWishlist } = useWishlist();
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
   
   const isInWishlist = isProductInWishlist(product.id);
 
@@ -33,7 +59,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductSelect }) =
 
   return (
     <div 
-      className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col"
+      ref={cardRef}
+      className={`group relative bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+      style={{ animationDelay: `${index * 100}ms` }}
     >
       <div 
         className="aspect-w-1 aspect-h-1 w-full overflow-hidden cursor-pointer"

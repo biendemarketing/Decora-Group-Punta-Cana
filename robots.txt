@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://decoragrouppuntacana.com/sitemap.xml
+Sitemap: https://decoragrouppuntacana.vercel.app/sitemap.xml

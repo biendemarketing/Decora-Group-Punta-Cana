@@ -10,6 +10,13 @@
     <meta name="keywords" content="muebles, diseño de interiores, punta cana, república dominicana, muebles a medida, cocinas, closets, mobiliario comercial" />
     <link rel="canonical" href="https://decoragrouppuntacana.com/" />
 
+    <!-- PWA Manifest & Theme -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#5a1e38" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Decora Group" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://decoragrouppuntacana.com/" />
@@ -47,6 +54,21 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out forwards;
+      animation-fill-mode: both;
     }
     @media print {
       @page {

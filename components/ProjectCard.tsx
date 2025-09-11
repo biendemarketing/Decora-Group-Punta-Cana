@@ -1,16 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { Project } from '../types';
 import { ArrowRight } from 'lucide-react';
 
 interface ProjectCardProps {
   project: Project;
   onProjectSelect: (project: Project) => void;
+  index: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, onProjectSelect }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, onProjectSelect, index }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div 
-      className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col cursor-pointer"
+      ref={cardRef}
+      className={`group relative bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col cursor-pointer ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
+      style={{ animationDelay: `${index * 100}ms` }}
       onClick={() => onProjectSelect(project)}
     >
       <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden">

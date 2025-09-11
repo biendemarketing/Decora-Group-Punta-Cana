@@ -1,5 +1,5 @@
+
 import React, { useState } from 'react';
-// FIX: Removed 'AboutUsPageContent' and added 'Page' to the import statement.
 import { NavigationData, Page, FAQItem, LegalPage, PageSection, TeamMember, CompanyValue, TimelineEvent, JobVacancy, SectionType, ContactContent } from '../types';
 import { FileText, HelpCircle, Building, Plus, Trash2, GripVertical, Edit, Phone } from 'lucide-react';
 import ImageUploader from './ImageUploader';
@@ -15,7 +15,6 @@ type ActiveTab = 'about' | 'faq' | 'legal' | 'contact';
 const inputClass = "w-full text-sm p-2 border border-gray-300 rounded bg-white text-gray-900 shadow-sm focus:ring-blue-500 focus:border-blue-500";
 const textareaClass = `${inputClass} h-24`;
 
-// A simple but effective visual editor for a list of items
 const ListEditor = ({ items, onUpdate, renderItem, newItem, title, noun }: any) => {
     const handleUpdateItem = (id: string, newContent: any) => {
         onUpdate(items.map((item: any) => item.id === id ? { ...item, ...newContent } : item));
@@ -31,7 +30,6 @@ const ListEditor = ({ items, onUpdate, renderItem, newItem, title, noun }: any) 
         }
     };
     
-    // Drag and drop sorting
     const dragItem = React.useRef<number | null>(null);
     const dragOverItem = React.useRef<number | null>(null);
     const handleSort = () => {
@@ -65,16 +63,48 @@ const ListEditor = ({ items, onUpdate, renderItem, newItem, title, noun }: any) 
     );
 }
 
-// Visual editors for each section of "About Us" page
-// FIX: Renamed 'AboutUsSectionType' to 'SectionType' to match the export from types.ts
 const sectionEditors: { [key in SectionType]?: React.FC<{ section: PageSection, onChange: (newSection: PageSection) => void }> } = {
-    history: ({ section, onChange }) => (
-        <div className="space-y-2">
-            <input type="text" value={section.content.title} onChange={e => onChange({ ...section, content: { ...section.content, title: e.target.value }})} className={inputClass} />
-            <textarea value={section.content.text} onChange={e => onChange({ ...section, content: { ...section.content, text: e.target.value }})} className={textareaClass} />
-            {/* Image gallery editor for history would go here */}
-        </div>
-    ),
+    history: ({ section, onChange }) => {
+        const handleImageChange = (index: number, field: 'url' | 'alt', value: string) => {
+            const newImages = [...section.content.images];
+            newImages[index] = { ...newImages[index], [field]: value };
+            onChange({ ...section, content: { ...section.content, images: newImages }});
+        };
+        
+        return (
+            <div className="space-y-4">
+                <div>
+                    <label className="text-sm font-semibold">Título</label>
+                    <input type="text" value={section.content.title} onChange={e => onChange({ ...section, content: { ...section.content, title: e.target.value }})} className={inputClass} />
+                </div>
+                <div>
+                    <label className="text-sm font-semibold">Texto</label>
+                    <textarea value={section.content.text} onChange={e => onChange({ ...section, content: { ...section.content, text: e.target.value }})} className={textareaClass} />
+                </div>
+                <div>
+                    <h5 className="text-sm font-semibold mb-2">Galería de Imágenes</h5>
+                    <div className="grid grid-cols-2 gap-4">
+                        {(section.content.images || []).map((image: any, index: number) => (
+                            <div key={image.id} className="space-y-2 p-2 border rounded bg-gray-50">
+                                <ImageUploader 
+                                    imageUrl={image.url}
+                                    onImageChange={(url) => handleImageChange(index, 'url', url)}
+                                    isCompact
+                                />
+                                <input 
+                                    type="text"
+                                    value={image.alt}
+                                    onChange={(e) => handleImageChange(index, 'alt', e.target.value)}
+                                    placeholder="Texto alternativo (SEO)"
+                                    className={inputClass}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    },
     timeline: ({ section, onChange }) => (
          <ListEditor 
             title="Eventos de la Línea de Tiempo" noun="Evento"
@@ -194,7 +224,6 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
   const [activeTab, setActiveTab] = useState<ActiveTab>('about');
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
-  // FIX: handleAboutChange now finds and updates the 'about-us' page within the customPages array.
   const handleAboutChange = (updatedAboutPage: Page) => {
     const newCustomPages = navigationData.customPages.map(p => p.slug === 'about-us' ? updatedAboutPage : p);
     onNavigationChange({ ...navigationData, customPages: newCustomPages });
@@ -212,11 +241,8 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
       onNavigationChange({ ...navigationData, contactPage: newContent });
   };
 
-  // FIX: Retrieved the 'about-us' page from the customPages array.
   const aboutUsPage = navigationData.customPages.find(p => p.slug === 'about-us');
 
-  // --- About Us Section Builder ---
-  // FIX: Updated section handlers to use the retrieved 'aboutUsPage' object.
   const handleSectionUpdate = (sectionId: string, updatedSection: PageSection) => {
     if (!aboutUsPage) return;
     const newSections = aboutUsPage.sections.map(s => s.id === sectionId ? updatedSection : s);
@@ -253,7 +279,6 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
         <TabButton id="contact" label="Contacto" icon={Phone} />
       </div>
        <div className="p-4 bg-gray-50 rounded-b-lg border border-t-0">
-         {/* FIX: Use aboutUsPage object and check for its existence. */}
          {activeTab === 'about' && (
             <div className="space-y-4">
                 {aboutUsPage ? aboutUsPage.sections.map((section, index) => {

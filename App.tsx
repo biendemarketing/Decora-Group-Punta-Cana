@@ -1,6 +1,7 @@
 
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page, LegalPage } from './types';
+import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page, LegalPage, BlogPost } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -34,7 +35,6 @@ import LoginPage from './components/LoginPage';
 import CataloguesPage from './components/CataloguesPage';
 import CatalogueDetailPage from './components/CatalogueDetailPage';
 import FAQPage from './components/FAQPage';
-// FIX: Renamed imported component from 'LegalPage' to 'LegalPageComponent' to avoid conflict with the 'LegalPage' type.
 import LegalPageComponent from './components/LegalPage';
 import JobDetailPage from './components/JobDetailPage';
 import JobApplicationPage from './components/JobApplicationPage';
@@ -43,6 +43,7 @@ import HelpPage from './components/HelpPage';
 import LegalDetailPage from './components/LegalDetailPage';
 import AdminHelpPage from './components/AdminHelpPage';
 import DocumentationPage from './components/DocumentationPage';
+import BlogPostDetailPage from './components/BlogPostDetailPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -185,7 +186,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'customPage' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication' | 'printCatalogue' | 'help' | 'legalDetail';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'customPage' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication' | 'printCatalogue' | 'help' | 'legalDetail' | 'blogPostDetail';
 
 interface CustomerInfo {
     name: string;
@@ -328,6 +329,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const [selectedJobVacancy, setSelectedJobVacancy] = useState<JobVacancy | null>(null);
   const [applicationJobTitle, setApplicationJobTitle] = useState<string | null>(null);
   const [activeLegalPageId, setActiveLegalPageId] = useState<string | null>(null);
+  const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(null);
 
   const [filters, setFilters] = useState<Filters>({
     priceRange: { min: MIN_PRICE, max: MAX_PRICE },
@@ -342,7 +344,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   useEffect(() => {
     if (view === 'admin' || view === 'login') return;
     window.scrollTo(0, 0);
-  }, [view, selectedProduct, selectedProject, activeSlug]);
+  }, [view, selectedProduct, selectedProject, activeSlug, selectedBlogPost]);
 
   useEffect(() => {
     let title = "Decora Group - Muebles a Medida y Diseño de Interiores en Punta Cana";
@@ -395,6 +397,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     setSelectedProjectCategory(null);
     setSelectedQuoteType(null);
     setSelectedCatalogue(null);
+    setSelectedBlogPost(null);
     setCurrentPage(1);
     setSearchQuery('');
   }
@@ -424,7 +427,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     setView('category');
     setActiveSlug(null);
     setCurrentPage(1);
-    // Reset all filters and set the new category
     setFilters({
       priceRange: { min: MIN_PRICE, max: MAX_PRICE },
       deliveryTime: [],
@@ -496,9 +498,9 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         if (view === 'printCatalogue') {
             const timer = setTimeout(() => {
                 window.print();
-                setView('catalogueDetail'); // Go back to the detail page after print dialog
-                setCatalogueToPrint(null); // Clean up
-            }, 500); // Delay to allow component to render
+                setView('catalogueDetail');
+                setCatalogueToPrint(null);
+            }, 500);
             return () => clearTimeout(timer);
         }
     }, [view]);
@@ -531,16 +533,22 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   };
 
   const handleNavigate = useCallback((key: string, detail?: string) => {
-    onMenuToggle(false); // Close mobile menu on any navigation
+    onMenuToggle(false);
     
-    // Check for special navigation types like legal pages
     if (key === 'legalDetail' && detail) {
         setActiveLegalPageId(detail);
         setView('legalDetail');
         return;
     }
+
+    const specialRoutes: View[] = ['blog', 'catalogues', 'faq', 'legal', 'help', 'contact', 'quote', 'projects', 'cart', 'wishlist'];
+    if (specialRoutes.includes(key as View)) {
+      if (key === 'projects') setSelectedProjectCategory(null);
+      setView(key as View);
+      setActiveSlug(null);
+      return;
+    }
     
-    // Check for dynamic page slugs first
     const customPage = navigationData.customPages.find(p => p.slug === key);
     if (customPage) {
         setActiveSlug(key);
@@ -548,7 +556,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         return;
     }
 
-    // Check for hardcoded routes
     const menuItem = navigationData.menuItems.find(item => item.key === key);
     if(menuItem) {
       handleSelectCategory(menuItem.title);
@@ -562,53 +569,12 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       case 'products':
         handleSelectCategory("Todos los productos");
         break;
-      case 'projects':
-        setSelectedProjectCategory(null);
-        setView('projects');
-        setActiveSlug(null);
-        break;
-      case 'quote':
-        setView('quote');
-        setActiveSlug(null);
-        break;
-      case 'contact':
-        setView('contact');
-        setActiveSlug(null);
-        break;
-      case 'blog':
-        setView('blog');
-        setActiveSlug(null);
-        break;
-      case 'catalogues':
-        setView('catalogues');
-        setActiveSlug(null);
-        break;
-      case 'faq':
-        setView('faq');
-        setActiveSlug(null);
-        break;
-      case 'legal':
-        setView('legal');
-        setActiveSlug(null);
-        break;
-      case 'help':
-        setView('help');
-        setActiveSlug(null);
-        break;
-      case 'cart':
-        setView('cart');
-        setActiveSlug(null);
-        break;
-      case 'wishlist':
-        setView('wishlist');
-        setActiveSlug(null);
-        break;
       default:
         resetToHome();
         break;
     }
-  }, [handleSelectCategory, navigationData.menuItems, navigationData.customPages, onMenuToggle]);
-
+  }, [handleSelectCategory, navigationData, onMenuToggle]);
+  
   const handleViewJobDetail = useCallback((job: JobVacancy) => {
     setSelectedJobVacancy(job);
     setView('jobDetail');
@@ -619,6 +585,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     setView('jobApplication');
   }, []);
 
+  const handleViewBlogPost = useCallback((post: BlogPost) => {
+    setSelectedBlogPost(post);
+    setView('blogPostDetail');
+  }, []);
 
   const filteredProducts = useMemo(() => {
     const visibleProducts = productsData.filter(p => p.isVisible !== false);
@@ -693,7 +663,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const setTypesForFilter = useMemo(() => [...new Set(productsData.map(p => p.setType).filter(Boolean))] as ('Sólido' | 'Partes separadas')[], [productsData]);
 
 
-  // --- RENDER LOGIC ---
   if (view === 'login') return <LoginPage onLogin={handleLogin} />;
 
   if (view === 'admin') {
@@ -737,20 +706,21 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
           onMenuToggle={onMenuToggle}
       />
       
+      <div key={`${view}-${activeSlug}-${currentPage}-${selectedBlogPost?.id}`} className="animate-fadeIn">
       {(() => {
           const activeLegalPage = navigationData.legalContent.pages.find(p => p.id === activeLegalPageId);
 
           switch(view) {
+              case 'blogPostDetail': return <BlogPostDetailPage post={selectedBlogPost!} onBackToBlog={() => setView('blog')} onGoHome={resetToHome} />;
               case 'legalDetail': return <LegalDetailPage page={activeLegalPage!} onBack={() => setView('home')} />;
               case 'help': return <HelpPage title={navigationData.helpContent.title} subtitle={navigationData.helpContent.subtitle} topics={navigationData.helpContent.userTopics} />;
               case 'jobApplication': return <JobApplicationPage jobTitle={applicationJobTitle!} onBack={() => handleNavigate('about-us')} />;
               case 'jobDetail': return <JobDetailPage job={selectedJobVacancy!} onBack={() => handleNavigate('about-us')} onApply={handleApplyForJob} />;
-              // FIX: Renamed component to 'LegalPageComponent' to avoid naming conflicts.
               case 'legal': return <LegalPageComponent legalContent={navigationData.legalContent} />;
               case 'faq': return <FAQPage faqContent={navigationData.faqContent} />;
               case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} onPrintCatalogue={handlePrintCatalogue} />;
               case 'catalogues': return <CataloguesPage catalogues={navigationData.catalogues} onCatalogueSelect={handleViewCatalogueDetail} />;
-              case 'blog': return <BlogPage blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />;
+              case 'blog': return <BlogPage blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} onViewPost={handleViewBlogPost} />;
               case 'cart': return <CartPage onContinueShopping={() => handleSelectCategory("Todos los productos")} onCheckout={() => setView('checkout')} />;
               case 'wishlist': return <WishlistPage onProductSelect={handleProductSelect} />;
               case 'checkout':
@@ -765,7 +735,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
               case 'customPage':
                   const pageData = navigationData.customPages.find(p => p.slug === activeSlug);
                   if (!pageData) {
-                    // Fallback for not found page
                     return <div>Página no encontrada</div>;
                   }
                   return <GenericPage pageData={pageData} onViewJobDetail={handleViewJobDetail} onApplyForJob={handleApplyForJob} />;
@@ -857,7 +826,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                           </div>
                           <ServicesSection services={navigationData.services} onSelectQuoteType={handleSelectQuoteType} />
                           <WorkProcessSection workProcessSection={navigationData.workProcessSection} />
-                          <MagazineSection magazineSection={navigationData.magazineSection} blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />
+                          <MagazineSection magazineSection={navigationData.magazineSection} blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} onViewPost={handleViewBlogPost} />
                           <InstagramShowcase showcaseData={navigationData.instagramShowcase} />
                           <section className="py-16 bg-gray-50">
                               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -875,6 +844,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                   );
           }
       })()}
+      </div>
       <Footer 
         content={navigationData.footerContent}
         footerLogoUrl={navigationData.footerLogoUrl}
@@ -898,13 +868,11 @@ const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   useEffect(() => {
-    // Prevent body scroll when mobile menu is open
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-    // Cleanup function to restore scroll on component unmount
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -918,10 +886,9 @@ const App: React.FC = () => {
         if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && parsedData.footerContent) {
           if (!parsedData.catalogues) parsedData.catalogues = [];
           if (!parsedData.customPages) parsedData.customPages = [];
-          if (!parsedData.helpContent || !parsedData.helpContent.userTopics) { // Check for new structure
+          if (!parsedData.helpContent || !parsedData.helpContent.userTopics) {
             parsedData.helpContent = INITIAL_NAVIGATION_DATA.helpContent;
           }
-          // FIX: Removed check for 'documentationContent' property as it does not exist on type 'NavigationData'.
           setNavigationData(parsedData);
         } else {
           localStorage.setItem('navigationData', JSON.stringify(INITIAL_NAVIGATION_DATA));

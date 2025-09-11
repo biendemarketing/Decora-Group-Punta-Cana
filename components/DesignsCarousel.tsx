@@ -37,8 +37,30 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
   const startPosRef = useRef(0);
   const currentTranslateRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   
   const [clonedCount, setClonedCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
 
   // Memoize the slides to prevent re-renders
   const slides = useMemo(() => projectCategories, [projectCategories]);
@@ -169,7 +191,7 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
   };
 
   return (
-    <div className="bg-gray-50 py-16">
+    <div ref={sectionRef} className={`bg-gray-50 py-16 transition-opacity duration-1000 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Explora Nuestros Diseños</h2>

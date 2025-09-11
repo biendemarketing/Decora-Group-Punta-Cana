@@ -916,7 +916,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   ],
   exchangeRate: 58.50,
   contactPhoneNumber: "(849) 456-1963",
-  contactPhoneLink: "https://wa.me/18494561963",
+  contactPhoneLink: "https://wa.me/18494561963?text=vi%20tu%20pagina%20web%20y%20necesito%20mas%20informacionde%20tus%20productos%20y%20servicios",
   // New CMS Data
   footerContent: INITIAL_FOOTER_CONTENT,
   faqContent: INITIAL_FAQ_CONTENT,
