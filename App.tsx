@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
@@ -32,6 +33,8 @@ import AdminPanel from './components/AdminPanel';
 import LoginPage from './components/LoginPage';
 import CataloguesPage from './components/CataloguesPage';
 import CatalogueDetailPage from './components/CatalogueDetailPage';
+import FAQPage from './components/FAQPage';
+import LegalPage from './components/LegalPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -174,7 +177,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal';
 
 interface CustomerInfo {
     name: string;
@@ -510,6 +513,12 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       case 'catalogues':
         setView('catalogues');
         break;
+      case 'faq':
+        setView('faq');
+        break;
+      case 'legal':
+        setView('legal');
+        break;
       default:
         resetToHome();
         break;
@@ -608,8 +617,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
 
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
 
-  const projectsMenuItem = navigationData.menuItems.find(item => item.key === 'proyectos');
-  const instagramImages = projectsMenuItem?.subCategories.map(sub => sub.imageUrl) || [];
+  const instagramImages = projectsData.slice(0, 6).map(p => p.imageUrl);
 
   return (
     <div className="bg-gray-50">
@@ -627,12 +635,15 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
           onViewBlogPage={() => setView('blog')}
           onViewCataloguesPage={handleViewCatalogues}
           onViewCatalogueDetail={handleViewCatalogueDetail}
+          onNavigate={handleNavigate}
           searchQuery={searchQuery}
           onSearch={handleSearch}
       />
       
       {(() => {
           switch(view) {
+              case 'legal': return <LegalPage legalContent={navigationData.legalContent} />;
+              case 'faq': return <FAQPage faqContent={navigationData.faqContent} />;
               case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} />;
               case 'catalogues': return <CataloguesPage catalogues={navigationData.catalogues} onCatalogueSelect={handleViewCatalogueDetail} />;
               case 'blog': return <BlogPage blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />;
@@ -647,8 +658,9 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                       onGoBackToCart={() => setView('cart')}
                       onContinueShopping={() => handleSelectCategory("Todos los productos")}
                   />;
-              case 'about': return <AboutUsPage />;
-              case 'contact': return <ContactPage />;
+              case 'about': return <AboutUsPage content={navigationData.aboutUsPage} />;
+              // FIX: Pass the 'content' prop to ContactPage to fix the error.
+              case 'contact': return <ContactPage content={navigationData.contactPage} />;
               case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} quoteConfig={navigationData.quoteConfig} />;
               case 'quote': return <CustomQuotePage projectTypes={navigationData.quoteConfig.projectTypes} onSelectQuoteType={handleSelectQuoteType} />;
               case 'projectDetail': return <ProjectDetailPage project={selectedProject!} onBack={() => setView('projects')} onGoHome={resetToHome} />;
@@ -698,11 +710,12 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                   );
               case 'home':
               default:
+                  const contactFormSection = navigationData.contactPage;
                   return (
                       <main>
                           <Hero heroSlides={navigationData.heroSlides} onNavigate={handleNavigate} />
                           <DesignsCarousel 
-                            projectCategories={projectsMenuItem?.subCategories || []}
+                            projectCategories={navigationData.menuItems.find(item => item.key === 'proyectos')?.subCategories || []}
                             onSelectProjectCategory={handleSelectProjectCategory} 
                             onViewAllProjects={() => { setSelectedProjectCategory(null); setView('projects'); }} 
                           />
@@ -736,13 +749,20 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                           <ServicesSection services={navigationData.services} onSelectQuoteType={handleSelectQuoteType} />
                           <WorkProcessSection workProcessSection={navigationData.workProcessSection} />
                           <MagazineSection magazineSection={navigationData.magazineSection} blogPosts={navigationData.blogPosts} blogCategories={navigationData.blogCategories} />
-                          <InstagramEmbed images={instagramImages} />
+                          <InstagramEmbed 
+                            images={instagramImages} 
+                            username={navigationData.instagramFeed.username}
+                            profilePictureUrl={navigationData.logoUrl}
+                          />
                           <section className="py-16 bg-gray-50">
                               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                  <div className="text-center mb-16"><h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Contáctanos</h2><p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Estamos aquí para hacer realidad tu proyecto. Conversemos sobre tus ideas.</p></div>
+                                  <div className="text-center mb-16"><h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">{contactFormSection.infoTitle}</h2><p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">Estamos aquí para hacer realidad tu proyecto. Conversemos sobre tus ideas.</p></div>
                                   <div className="bg-white shadow-xl rounded-2xl overflow-hidden"><div className="grid grid-cols-1 lg:grid-cols-2">
-                                  <div className="p-8 sm:p-10 lg:p-12 space-y-10"><ContactInfo /><LocationMap /></div>
-                                  <div className="p-8 sm:p-10 lg:p-12 bg-gray-50"><ContactForm /></div>
+                                  <div className="p-8 sm:p-10 lg:p-12 space-y-10">
+                                    <ContactInfo content={contactFormSection} />
+                                    <LocationMap title={contactFormSection.mapTitle} />
+                                  </div>
+                                  <div className="p-8 sm:p-10 lg:p-12 bg-gray-50"><ContactForm content={contactFormSection} /></div>
                                   </div></div>
                               </div>
                           </section>
@@ -751,6 +771,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
           }
       })()}
       <Footer 
+        content={navigationData.footerContent}
+        // FIX: Pass the footerLogoUrl from navigationData to the Footer component.
         footerLogoUrl={navigationData.footerLogoUrl}
         onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')} 
       />
@@ -770,7 +792,7 @@ const App: React.FC = () => {
       try {
         const parsedData = JSON.parse(storedNavData);
         // Add a check for new blog properties to ensure backward compatibility
-        if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && Array.isArray(parsedData.blogPosts)) {
+        if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && parsedData.footerContent) {
           // Initialize catalogues if it doesn't exist
           if (!parsedData.catalogues) {
             parsedData.catalogues = [];

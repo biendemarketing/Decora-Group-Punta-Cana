@@ -1,6 +1,7 @@
 import React from 'react';
 import { Facebook, Instagram, Youtube, ArrowUp } from 'lucide-react';
 import FooterLogo from './FooterLogo';
+import { FooterContent } from '../types';
 
 const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg 
@@ -14,19 +15,21 @@ const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
     </svg>
 );
 
+// FIX: Added footerLogoUrl to props to resolve missing property error.
 interface FooterProps {
   onViewAdminPage: () => void;
+  content: FooterContent;
   footerLogoUrl: string;
 }
 
-const Footer: React.FC<FooterProps> = ({ onViewAdminPage, footerLogoUrl }) => {
-  const servicesLinks = [
-    "Cocinas Personalizadas", "Closets y Walk-in", "Baños Modernos", 
-    "Muebles a Medida", "Mobiliario de Oficina", "Proyectos Comerciales"
-  ];
-  const quickLinks = ["Inicio", "Quiénes Somos", "Galería", "Blog", "Contacto"];
-  const legalLinks = ["Política de Privacidad", "Términos y Condiciones", "Aviso Legal", "Política de Cookies"];
+const socialIconMap = {
+    Facebook: Facebook,
+    Instagram: Instagram,
+    Youtube: Youtube,
+    WhatsApp: WhatsAppIcon
+};
 
+const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl }) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -42,53 +45,49 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, footerLogoUrl }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Logo and Socials Column */}
             <div className="space-y-6">
+              {/* FIX: Use the passed footerLogoUrl prop instead of trying to access a non-existent property on `content`. */}
               <FooterLogo src={footerLogoUrl} />
               <p className="text-sm text-gray-400">
-                Transformamos espacios con diseños únicos y funcionales, creando ambientes que reflejan tu estilo de vida.
+                {content.description}
               </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white"><span className="sr-only">Facebook</span><Facebook className="h-6 w-6" /></a>
-                <a href="#" className="text-gray-400 hover:text-white"><span className="sr-only">Instagram</span><Instagram className="h-6 w-6" /></a>
-                <a href="#" className="text-gray-400 hover:text-white"><span className="sr-only">YouTube</span><Youtube className="h-6 w-6" /></a>
-                <a href="#" className="text-gray-400 hover:text-white"><span className="sr-only">WhatsApp</span><WhatsAppIcon className="h-6 w-6" /></a>
+                {content.socialLinks.map(social => {
+                    const Icon = socialIconMap[social.platform];
+                    return (
+                        <a key={social.id} href={social.url} className="text-gray-400 hover:text-white"><span className="sr-only">{social.platform}</span><Icon className="h-6 w-6" /></a>
+                    )
+                })}
               </div>
             </div>
-
-            {/* Services Column */}
-            <div>
-              <h3 className="text-base font-semibold text-white tracking-wider">Servicios</h3>
-              <ul role="list" className="mt-4 space-y-3">
-                {servicesLinks.map(item => <li key={item}><a href="#" className="text-sm text-gray-400 hover:text-white">{item}</a></li>)}
-              </ul>
-            </div>
-
-            {/* Quick Links Column */}
-            <div>
-              <h3 className="text-base font-semibold text-white tracking-wider">Enlaces Rápidos</h3>
-              <ul role="list" className="mt-4 space-y-3">
-                {quickLinks.map(item => <li key={item}><a href="#" className="text-sm text-gray-400 hover:text-white">{item}</a></li>)}
-              </ul>
-            </div>
+            
+            {content.linkColumns.map(column => (
+                <div key={column.id}>
+                    <h3 className="text-base font-semibold text-white tracking-wider">{column.title}</h3>
+                    <ul role="list" className="mt-4 space-y-3">
+                        {column.links.map(link => <li key={link.id}><a href={link.url} className="text-sm text-gray-400 hover:text-white">{link.text}</a></li>)}
+                    </ul>
+                </div>
+            ))}
 
             {/* Contact Column */}
             <div>
               <h3 className="text-base font-semibold text-white tracking-wider">Contacto</h3>
                <div className="mt-4 space-y-3 text-sm text-gray-400">
-                  <p>Punta Cana, Rep. Dominicana</p>
-                  <p>(849) 456-1963</p>
-                  <p>info@decoragroup.pc</p>
+                  <p>{content.contactInfo.address}</p>
+                  <p>{content.contactInfo.phone}</p>
+                  <p>{content.contactInfo.email}</p>
                </div>
             </div>
           </div>
           
           <div className="mt-12 border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between">
             <p className="text-sm text-gray-500 text-center sm:text-left">
-              &copy; {new Date().getFullYear()} Decora Group. Todos los derechos reservados.
+              {content.copyrightText}
               <button onClick={onViewAdminPage} className="ml-4 text-xs text-gray-600 hover:text-gray-400">Panel de Administración</button>
             </p>
             <div className="flex space-x-4 mt-4 sm:mt-0">
-              {legalLinks.map(item => (
-                <a href="#" key={item} className="text-xs text-gray-500 hover:text-gray-300">{item}</a>
+              {content.legalLinks.map(link => (
+                <a href={link.url} key={link.id} className="text-xs text-gray-500 hover:text-gray-300">{link.text}</a>
               ))}
             </div>
           </div>

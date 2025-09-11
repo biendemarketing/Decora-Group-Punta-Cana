@@ -1,17 +1,23 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { ContactContent } from '../types';
 
-const ContactInfo: React.FC = () => {
+// FIX: Added props to the component to make it dynamic and fix type errors.
+interface ContactInfoProps {
+  content: ContactContent;
+}
+
+const ContactInfo: React.FC<ContactInfoProps> = ({ content }) => {
   const contactDetails = [
-    { icon: Phone, title: 'Teléfono', value: '(849) 456-1963' },
-    { icon: Mail, title: 'Email', value: 'decoragrouppc@gmail.com' },
-    { icon: MapPin, title: 'Ubicación', value: 'CANATOWN Plaza & Centro de Logística, Av. Barceló, local 101, Veron, Punta Cana 23000' },
-    { icon: Clock, title: 'Horarios', value: 'Lunes - Viernes: 9:00 AM - 6:00 PM | Sábados: 9:00 AM - 4:00 PM | Domingos: Cerrado' }
+    { icon: Phone, title: 'Teléfono', value: content.phone },
+    { icon: Mail, title: 'Email', value: content.email },
+    { icon: MapPin, title: 'Ubicación', value: content.address },
+    { icon: Clock, title: 'Horarios', value: content.hours }
   ];
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900">Información de Contacto</h2>
+      <h2 className="text-2xl font-bold text-gray-900">{content.infoTitle}</h2>
       <div className="mt-6 space-y-4">
         {contactDetails.map((item, index) => (
           <div key={index} className="flex items-start">

@@ -31,6 +31,7 @@ interface HeaderProps {
   onViewBlogPage: () => void;
   onViewCataloguesPage: () => void;
   onViewCatalogueDetail: (catalogue: Catalogue) => void;
+  onNavigate: (key: string) => void;
   searchQuery: string;
   onSearch: (query: string) => void;
 }
@@ -68,8 +69,8 @@ const benefitIconMap: { [key: string]: React.ElementType } = {
 const Header: React.FC<HeaderProps> = ({ 
     navigationData,
     onSelectCategory, onSelectProjectCategory, onGoHome, onViewQuotePage, 
-    onSelectQuoteType, onViewAboutPage, onViewContactPage, onViewCart, onViewWishlist,
-    onViewBlogPage, onViewCataloguesPage, onViewCatalogueDetail, searchQuery, onSearch
+    onSelectQuoteType, onViewCart, onViewWishlist,
+    onViewBlogPage, onViewCataloguesPage, onViewCatalogueDetail, onNavigate, searchQuery, onSearch
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
@@ -85,10 +86,10 @@ const Header: React.FC<HeaderProps> = ({
   const { wishlistCount } = useWishlist();
   
   const linkActions: { [key: string]: () => void } = {
-    about: onViewAboutPage,
-    faq: () => {}, // Placeholder for FAQ page
-    legal: () => {}, // Placeholder for Legal page
-    contact: onViewContactPage,
+    about: () => onNavigate('about'),
+    faq: () => onNavigate('faq'),
+    legal: () => onNavigate('legal'),
+    contact: () => onNavigate('contact'),
   };
 
   const closeAllMegaMenus = () => {

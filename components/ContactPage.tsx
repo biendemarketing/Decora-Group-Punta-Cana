@@ -2,8 +2,14 @@ import React from 'react';
 import ContactInfo from './ContactInfo';
 import LocationMap from './LocationMap';
 import ContactForm from './ContactForm';
+import { ContactContent } from '../types';
 
-const ContactPage: React.FC = () => {
+// FIX: Added props to the component to make it dynamic and fix type errors.
+interface ContactPageProps {
+  content: ContactContent;
+}
+
+const ContactPage: React.FC<ContactPageProps> = ({ content }) => {
   return (
     <main className="bg-gray-50">
       <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
@@ -17,12 +23,13 @@ const ContactPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left Column: Info & Map */}
             <div className="p-8 sm:p-10 lg:p-12 space-y-10">
-              <ContactInfo />
-              <LocationMap />
+              {/* FIX: Pass content prop to child components. */}
+              <ContactInfo content={content} />
+              <LocationMap title={content.mapTitle} />
             </div>
             {/* Right Column: Form */}
             <div className="p-8 sm:p-10 lg:p-12 bg-gray-50">
-              <ContactForm />
+              <ContactForm content={content} />
             </div>
           </div>
         </div>

@@ -11,6 +11,9 @@ import QuoteEditor from './QuoteEditor';
 import WorkProcessEditor from './WorkProcessEditor';
 import BlogEditor from './BlogEditor';
 import CataloguesEditor from './CataloguesEditor';
+import ContentPagesEditor from './ContentPagesEditor';
+import FooterEditor from './FooterEditor';
+import IntegrationsEditor from './IntegrationsEditor';
 import { NavigationData, Project, Product } from '../types';
 import { LogOut, Save, XCircle } from 'lucide-react';
 
@@ -22,7 +25,7 @@ interface AdminPanelProps {
   onLogout: () => void;
 }
 
-type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog' | 'catalogues';
+type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' | 'integrations';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ 
   initialNavigationData, 
@@ -85,6 +88,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         return <ProjectsEditor projects={draftProjectsData} onProjectsChange={setDraftProjectsData} projectCategories={projectCategories} />;
       case 'products':
         return <ProductsEditor products={draftProductsData} onProductsChange={setDraftProductsData} navigationData={draftNavData} />;
+      case 'pages':
+        return <ContentPagesEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
+      case 'footer':
+        return <FooterEditor footerContent={draftNavData.footerContent} onFooterChange={(newFooter) => setDraftNavData(prev => ({...prev, footerContent: newFooter}))} />;
+      case 'integrations':
+        return <IntegrationsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       default:
         return null;
     }

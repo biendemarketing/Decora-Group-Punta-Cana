@@ -236,6 +236,115 @@ export interface Catalogue {
   productIds?: number[]; // For future use
 }
 
+// --- Content Management Interfaces ---
+
+export interface SocialLink {
+  id: string;
+  platform: 'Facebook' | 'Instagram' | 'Youtube' | 'WhatsApp';
+  url: string;
+}
+
+export interface FooterLink {
+  id: string;
+  text: string;
+  url: string;
+}
+
+export interface FooterLinkColumn {
+  id: string;
+  title: string;
+  links: FooterLink[];
+}
+
+export interface FooterContent {
+  description: string;
+  socialLinks: SocialLink[];
+  linkColumns: FooterLinkColumn[];
+  contactInfo: {
+    address: string;
+    phone: string;
+    email: string;
+  };
+  copyrightText: string;
+  legalLinks: FooterLink[];
+}
+
+export interface TimelineEvent {
+  id: string;
+  year: number;
+  description: string;
+}
+
+export interface CompanyValue {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  imageUrl: string;
+}
+
+export interface JobVacancy {
+  id: string;
+  title: string;
+}
+
+export interface AboutUsPageContent {
+  historySection: {
+    title: string;
+    text: string;
+    images: { id: string, url: string, alt: string }[];
+  };
+  timeline: TimelineEvent[];
+  missionVision: {
+    mission: { title: string, text: string };
+    vision: { title: string, text: string };
+  };
+  values: CompanyValue[];
+  team: TeamMember[];
+  hiring: {
+    title: string;
+    text: string;
+    vacancies: JobVacancy[];
+    closingText: string;
+  };
+}
+
+export interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface LegalPage {
+  id: string;
+  title: string;
+  content: string;
+}
+
+export interface LegalContent {
+  pages: LegalPage[];
+}
+
+export interface InstagramFeed {
+    username: string;
+}
+
+export interface ContactContent {
+    formTitle: string;
+    formSubtitle: string;
+    infoTitle: string;
+    phone: string;
+    email: string;
+    address: string;
+    hours: string;
+    mapTitle: string;
+}
 
 export interface NavigationData {
   menuItems: MenuItem[];
@@ -256,4 +365,15 @@ export interface NavigationData {
   exchangeRate: number;
   contactPhoneNumber: string;
   contactPhoneLink: string;
+  // New CMS fields
+  footerContent: FooterContent;
+  aboutUsPage: AboutUsPageContent;
+  faqContent: {
+    title: string;
+    subtitle: string;
+    faqs: FAQItem[];
+  };
+  legalContent: LegalContent;
+  instagramFeed: InstagramFeed;
+  contactPage: ContactContent;
 }

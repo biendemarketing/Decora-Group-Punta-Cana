@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { User, Building, Send } from 'lucide-react';
 import { PROJECT_TYPES_CONTACT, DOMINICAN_REPUBLIC_LOCATIONS } from '../constants';
+import { ContactContent } from '../types';
 
-const ContactForm: React.FC = () => {
+// FIX: Added props to the component to make it dynamic and fix type errors.
+interface ContactFormProps {
+  content: ContactContent;
+}
+
+const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
   const [personType, setPersonType] = useState<'individual' | 'company'>('individual');
   const [selectedProvince, setSelectedProvince] = useState<string>('');
   const [municipalities, setMunicipalities] = useState<string[]>([]);
@@ -20,8 +26,8 @@ const ContactForm: React.FC = () => {
   return (
     <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Envíanos un Mensaje</h2>
-        <p className="mt-1 text-sm text-gray-600">Completa el formulario y nos pondremos en contacto contigo.</p>
+        <h2 className="text-2xl font-bold text-gray-900">{content.formTitle}</h2>
+        <p className="mt-1 text-sm text-gray-600">{content.formSubtitle}</p>
       </div>
       
       <form className="space-y-6">

@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue } from './types';
+import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, AboutUsPageContent, FAQItem, LegalContent, InstagramFeed, ContactContent } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -344,6 +344,131 @@ const INITIAL_CATALOGUES: Catalogue[] = [
   }
 ];
 
+// --- New CMS Content ---
+
+const INITIAL_FOOTER_CONTENT: FooterContent = {
+  description: "Transformamos espacios con diseños únicos y funcionales, creando ambientes que reflejan tu estilo de vida.",
+  socialLinks: [
+    { id: 'fb', platform: 'Facebook', url: '#' },
+    { id: 'ig', platform: 'Instagram', url: '#' },
+    { id: 'yt', platform: 'Youtube', url: '#' },
+    { id: 'wa', platform: 'WhatsApp', url: '#' }
+  ],
+  linkColumns: [
+    {
+      id: 'col1', title: "Servicios", links: [
+        { id: 'l1', text: "Cocinas Personalizadas", url: "#" },
+        { id: 'l2', text: "Closets y Walk-in", url: "#" },
+        { id: 'l3', text: "Baños Modernos", url: "#" },
+        { id: 'l4', text: "Muebles a Medida", url: "#" },
+        { id: 'l5', text: "Mobiliario de Oficina", url: "#" },
+        { id: 'l6', text: "Proyectos Comerciales", url: "#" }
+      ]
+    },
+    {
+      id: 'col2', title: "Enlaces Rápidos", links: [
+        { id: 'l7', text: "Inicio", url: "#" },
+        { id: 'l8', text: "Quiénes Somos", url: "#" },
+        { id: 'l9', text: "Galería", url: "#" },
+        { id: 'l10', text: "Blog", url: "#" },
+        { id: 'l11', text: "Contacto", url: "#" }
+      ]
+    }
+  ],
+  contactInfo: {
+    address: "Punta Cana, Rep. Dominicana",
+    phone: "(849) 456-1963",
+    email: "info@decoragroup.pc"
+  },
+  copyrightText: `© ${new Date().getFullYear()} Decora Group. Todos los derechos reservados.`,
+  legalLinks: [
+    { id: 'legal1', text: "Política de Privacidad", url: "#" },
+    { id: 'legal2', text: "Términos y Condiciones", url: "#" },
+    { id: 'legal3', text: "Aviso Legal", url: "#" },
+    { id: 'legal4', text: "Política de Cookies", url: "#" }
+  ]
+};
+
+const INITIAL_ABOUT_US_CONTENT: AboutUsPageContent = {
+    historySection: {
+        title: 'Nuestra Historia',
+        text: 'Desde nuestros humildes comienzos hasta convertirnos en un referente del diseño y la fabricación de muebles en Punta Cana, nuestra pasión por la artesanía y la calidad ha sido el motor de nuestro crecimiento. Creemos en la creación de espacios que no solo son hermosos, sino también funcionales y duraderos.',
+        images: [
+          { id: 'img1', url: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600', alt: 'Artesano trabajando en un taller de carpintería' },
+          { id: 'img2', url: 'https://images.unsplash.com/photo-1556761175-b413da4b248a?q=80&w=600', alt: 'Bocetos y planos de diseño de muebles sobre una mesa' },
+          { id: 'img3', url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
+          { id: 'img4', url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
+        ],
+    },
+    timeline: [
+        { id: 't1', year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },
+        { id: 't2', year: 2019, description: "Inauguramos nuestro primer taller de fabricación, combinando tecnología y artesanía." },
+        { id: 't3', year: 2021, description: "Expandimos nuestros servicios para incluir proyectos comerciales y de hotelería." },
+        { id: 't4', year: 2023, description: "Lanzamos nuestra plataforma digital para ofrecer una experiencia de cotización innovadora." },
+    ],
+    missionVision: {
+        mission: { title: 'Misión', text: 'Crear muebles y espacios que inspiren la vida cotidiana, combinando diseño innovador, funcionalidad excepcional y artesanía de la más alta calidad para superar las expectativas de nuestros clientes.' },
+        vision: { title: 'Visión', text: 'Ser la empresa líder en diseño y fabricación de mobiliario a medida en el Caribe, reconocida por nuestra excelencia, sostenibilidad y por transformar las ideas de nuestros clientes en realidades tangibles y duraderas.' }
+    },
+    values: [
+        { id: 'v1', icon: "Check", title: "Calidad y Excelencia", description: "Nos comprometemos a utilizar los mejores materiales y la artesanía más fina para entregar productos que superan los más altos estándares." },
+        { id: 'v2', icon: "Heart", title: "Pasión por el Diseño", description: "El diseño está en el corazón de todo lo que hacemos. Creamos piezas que son funcionales, hermosas y que inspiran la vida cotidiana." },
+        { id: 'v3', icon: "Scale", title: "Integridad y Transparencia", description: "Operamos con honestidad y claridad en cada interacción, construyendo relaciones de confianza con nuestros clientes, socios y equipo." },
+        { id: 'v4', icon: "Leaf", title: "Sostenibilidad", description: "Estamos dedicados a prácticas responsables, utilizando materiales sostenibles y procesos que minimizan nuestro impacto en el medio ambiente." },
+    ],
+    team: [
+        { id: 'tm1', name: "Juan Pérez", role: "CEO y Fundador", imageUrl: "https://i.pravatar.cc/150?img=1" },
+        { id: 'tm2', name: "María González", role: "Directora de Diseño", imageUrl: "https://i.pravatar.cc/150?img=2" },
+        { id: 'tm3', name: "Carlos Rodríguez", role: "Jefe de Producción", imageUrl: "https://i.pravatar.cc/150?img=3" },
+        { id: 'tm4', name: "Ana Martínez", role: "Gerente de Proyectos", imageUrl: "https://i.pravatar.cc/150?img=4" },
+    ],
+    hiring: {
+        title: '¿Necesitas Empleo? ¡Estamos Contratando!',
+        text: 'Únete a nuestro equipo de apasionados por el diseño y la artesanía. Buscamos talento para seguir creciendo juntos.',
+        vacancies: [
+            { id: 'job1', title: "Diseñador de Interiores Senior" },
+            { id: 'job2', title: "Ebanista / Carpintero Experto" },
+            { id: 'job3', title: "Gerente de Proyectos de Construcción" },
+            { id: 'job4', title: "Asistente Administrativo" },
+        ],
+        closingText: '¿No ves una posición para ti? Siempre estamos buscando personas con talento. \n Envíanos tu currículum a nuestro correo electrónico.'
+    }
+};
+
+const INITIAL_FAQ_CONTENT: { title: string; subtitle: string; faqs: FAQItem[] } = {
+    title: 'Preguntas Frecuentes',
+    subtitle: 'Encuentra respuestas a las dudas más comunes sobre nuestros productos, servicios y procesos.',
+    faqs: [
+        { id: 'faq1', question: '¿Cuál es el tiempo de entrega de los muebles?', answer: 'El tiempo de entrega varía según el producto y la personalización. Generalmente, oscila entre 15 y 45 días laborables. Puedes ver el tiempo estimado en la página de cada producto.' },
+        { id: 'faq2', question: '¿Ofrecen servicio de diseño de interiores completo?', answer: 'Sí, ofrecemos un servicio integral de diseño de interiores, desde la conceptualización hasta la ejecución y el amueblamiento final. Nuestro equipo de diseñadores trabajará contigo para crear el espacio de tus sueños.' },
+        { id: 'faq3', question: '¿Qué garantía tienen sus productos?', answer: 'Todos nuestros muebles tienen una garantía de 365 días que cubre defectos de fabricación. La calidad y durabilidad son nuestra prioridad.' },
+        { id: 'faq4', question: '¿Puedo personalizar los muebles?', answer: '¡Por supuesto! La personalización es nuestra especialidad. Puedes elegir materiales, acabados, colores y dimensiones en la mayoría de nuestros productos. Contacta a nuestro equipo para discutir tus ideas.' }
+    ]
+};
+
+const INITIAL_LEGAL_CONTENT: LegalContent = {
+    pages: [
+        { id: 'legal1', title: 'Política de Privacidad', content: 'Aquí va el texto completo de la política de privacidad...' },
+        { id: 'legal2', title: 'Términos y Condiciones', content: 'Aquí va el texto completo de los términos y condiciones de uso del sitio web...' },
+        { id: 'legal3', title: 'Aviso Legal', content: 'Información legal de la empresa, RNC, etc...' }
+    ]
+};
+
+const INITIAL_CONTACT_CONTENT: ContactContent = {
+    formTitle: 'Envíanos un Mensaje',
+    formSubtitle: 'Completa el formulario y nos pondremos en contacto contigo.',
+    infoTitle: 'Información de Contacto',
+    phone: '(849) 456-1963',
+    email: 'decoragrouppc@gmail.com',
+    address: 'CANATOWN Plaza & Centro de Logística, Av. Barceló, local 101, Veron, Punta Cana 23000',
+    hours: 'Lunes - Viernes: 9:00 AM - 6:00 PM | Sábados: 9:00 AM - 4:00 PM | Domingos: Cerrado',
+    mapTitle: 'Nuestra Ubicación'
+};
+
+const INITIAL_INSTAGRAM_FEED: InstagramFeed = {
+    username: 'decoragroup.pc'
+};
+
 export const INITIAL_NAVIGATION_DATA: NavigationData = {
   menuItems: MENU_ITEMS_DATA.map(item => ({ ...item, id: crypto.randomUUID() })),
   heroSlides: HERO_SLIDES_DATA.map(slide => ({ ...slide, id: crypto.randomUUID() })),
@@ -522,6 +647,13 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   exchangeRate: 58.50,
   contactPhoneNumber: "(849) 456-1963",
   contactPhoneLink: "https://wa.me/18494561963",
+  // New CMS Data
+  footerContent: INITIAL_FOOTER_CONTENT,
+  aboutUsPage: INITIAL_ABOUT_US_CONTENT,
+  faqContent: INITIAL_FAQ_CONTENT,
+  legalContent: INITIAL_LEGAL_CONTENT,
+  instagramFeed: INITIAL_INSTAGRAM_FEED,
+  contactPage: INITIAL_CONTACT_CONTENT,
 };
 
 export const PREDEFINED_LINKS = [
@@ -1095,20 +1227,6 @@ export const STORES = [
     "Muebles Omar", "La Curacao", "Tiendas Corripio", "Plaza Lama"
 ];
 
-export const TIMELINE_DATA = [
-  { year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },
-  { year: 2019, description: "Inauguramos nuestro primer taller de fabricación, combinando tecnología y artesanía." },
-  { year: 2021, description: "Expandimos nuestros servicios para incluir proyectos comerciales y de hotelería." },
-  { year: 2023, description: "Lanzamos nuestra plataforma digital para ofrecer una experiencia de cotización innovadora." },
-];
-
-export const COMPANY_VALUES = [
-  { icon: "Check", title: "Calidad y Excelencia", description: "Nos comprometemos a utilizar los mejores materiales y la artesanía más fina para entregar productos que superan los más altos estándares." },
-  { icon: "Heart", title: "Pasión por el Diseño", description: "El diseño está en el corazón de todo lo que hacemos. Creamos piezas que son funcionales, hermosas y que inspiran la vida cotidiana." },
-  { icon: "Scale", title: "Integridad y Transparencia", description: "Operamos con honestidad y claridad en cada interacción, construyendo relaciones de confianza con nuestros clientes, socios y equipo." },
-  { icon: "Leaf", title: "Sostenibilidad", description: "Estamos dedicados a prácticas responsables, utilizando materiales sostenibles y procesos que minimizan nuestro impacto en el medio ambiente." },
-];
-
 export const CLIENT_LOGOS = [
   { url: 'https://tailwindui.com/img/logos/158x48/transistor-logo-gray-400.svg', alt: 'Transistor' },
   { url: 'https://tailwindui.com/img/logos/158x48/reform-logo-gray-400.svg', alt: 'Reform' },
@@ -1131,20 +1249,6 @@ export const WHY_CHOOSE_US_POINTS = [
     { icon: "Handshake", title: "Compromiso con el Cliente", description: "Tu satisfacción es nuestra prioridad. Te acompañamos en cada paso del proceso, desde el diseño hasta la instalación." },
     { icon: "TrendingUp", title: "Innovación Constante", description: "Estamos siempre a la vanguardia de las últimas tendencias y tecnologías para ofrecerte lo mejor del mercado." },
     { icon: "Users", title: "Equipo Profesional", description: "Contamos con un equipo multidisciplinar de diseñadores, arquitectos y técnicos para garantizar resultados excepcionales." },
-];
-
-export const TEAM_MEMBERS = [
-    { name: "Juan Pérez", role: "CEO y Fundador", imageUrl: "https://i.pravatar.cc/150?img=1" },
-    { name: "María González", role: "Directora de Diseño", imageUrl: "https://i.pravatar.cc/150?img=2" },
-    { name: "Carlos Rodríguez", role: "Jefe de Producción", imageUrl: "https://i.pravatar.cc/150?img=3" },
-    { name: "Ana Martínez", role: "Gerente de Proyectos", imageUrl: "https://i.pravatar.cc/150?img=4" },
-];
-
-export const JOB_VACANCIES = [
-  { title: "Diseñador de Interiores Senior" },
-  { title: "Ebanista / Carpintero Experto" },
-  { title: "Gerente de Proyectos de Construcción" },
-  { title: "Asistente Administrativo" },
 ];
 
 export const PROJECT_TYPES_CONTACT = [
@@ -1190,10 +1294,3 @@ export const DOMINICAN_REPUBLIC_LOCATIONS = {
   "Santo Domingo": ["Santo Domingo Este", "Boca Chica", "Los Alcarrizos", "Pedro Brand", "San Antonio de Guerra", "Santo Domingo Norte", "Santo Domingo Oeste"],
   "Valverde": ["Mao", "Esperanza", "Laguna Salada"]
 };
-
-export const OUR_HISTORY_IMAGES = [
-  { url: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600', alt: 'Artesano trabajando en un taller de carpintería' },
-  { url: 'https://images.unsplash.com/photo-1556761175-b413da4b248a?q=80&w=600', alt: 'Bocetos y planos de diseño de muebles sobre una mesa' },
-  { url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
-  { url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
-];

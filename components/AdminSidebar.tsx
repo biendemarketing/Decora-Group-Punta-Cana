@@ -1,7 +1,7 @@
 import React from 'react';
-import { LayoutDashboard, Settings, Image as ImageIcon, Grid, Briefcase, Star, Package, LayoutList, Calculator, ClipboardList, BookOpen, BookCopy } from 'lucide-react';
+import { LayoutDashboard, Settings, Image as ImageIcon, Grid, Briefcase, Star, Package, LayoutList, Calculator, ClipboardList, BookOpen, BookCopy, FileText, Anchor, Link2 } from 'lucide-react';
 
-type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog' | 'catalogues';
+type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' | 'integrations';
 
 interface AdminSidebarProps {
   activeEditor: EditorType;
@@ -10,7 +10,8 @@ interface AdminSidebarProps {
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeEditor, onSelectEditor }) => {
   const menuItems = [
-    { id: 'settings', label: 'Logos y Barra Superior', icon: Settings },
+    { id: 'settings', label: 'Ajustes del Sitio', icon: Settings },
+    { id: 'pages', label: 'Páginas', icon: FileText },
     { id: 'menu', label: 'Menú Principal', icon: LayoutDashboard },
     { id: 'slider', label: 'Slider Principal', icon: ImageIcon },
     { id: 'popularCategories', label: 'Categorías Populares', icon: Star },
@@ -21,6 +22,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeEditor, onSelectEdito
     { id: 'projects', label: 'Proyectos', icon: Briefcase },
     { id: 'catalogues', label: 'Catálogos', icon: BookCopy },
     { id: 'products', label: 'Productos', icon: Package },
+    { id: 'footer', label: 'Pie de Página', icon: Anchor },
+    { id: 'integrations', label: 'Integraciones', icon: Link2 },
   ];
 
   return (
