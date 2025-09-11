@@ -1,7 +1,7 @@
 import React from 'react';
-import { LayoutDashboard, Settings, Image as ImageIcon, Grid, Briefcase, Star } from 'lucide-react';
+import { LayoutDashboard, Settings, Image as ImageIcon, Grid, Briefcase, Star, Package } from 'lucide-react';
 
-type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories';
+type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products';
 
 interface AdminSidebarProps {
   activeEditor: EditorType;
@@ -15,6 +15,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeEditor, onSelectEdito
     { id: 'slider', label: 'Slider Principal', icon: ImageIcon, isEditor: true },
     { id: 'popularCategories', label: 'Categorías Populares', icon: Star, isEditor: true },
     { id: 'projects', label: 'Proyectos', icon: Briefcase, isEditor: true },
+    { id: 'products', label: 'Productos', icon: Package, isEditor: true },
   ];
 
   return (

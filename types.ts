@@ -17,6 +17,7 @@ export interface Product {
   ledLighting?: boolean;
   materials: string[];
   colors: string[];
+  finish?: string[];
   dimensions?: {
     width: number;
     height: number;
@@ -31,6 +32,10 @@ export interface Product {
     text: string;
     details?: string;
   }[];
+  // Admin-controllable fields
+  isVisible?: boolean;
+  isAvailable?: boolean;
+  hidePrice?: boolean;
 }
 
 export interface CartItem extends Product {

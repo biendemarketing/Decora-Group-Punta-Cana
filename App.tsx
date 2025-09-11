@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory } from './types';
-import { ALL_PRODUCTS, INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA } from './constants';
+import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import CategoryGrid from './components/CategoryGrid';
@@ -214,10 +214,87 @@ const updateSEO = (title: string, description: string, structuredData?: object) 
 interface AppContentProps {
   navigationData: NavigationData;
   projectsData: Project[];
-  onSaveChanges: (data: { navigation: NavigationData, projects: Project[] }) => void;
+  productsData: Product[];
+  onSaveChanges: (data: { navigation: NavigationData, projects: Project[], products: Product[] }) => void;
 }
 
-const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, onSaveChanges }) => {
+export const processProducts = (products: any[]): Product[] => {
+  
+    const parseDeliveryTime = (timeString?: string): number => {
+      if (!timeString) return 99;
+      const match = timeString.match(/(\d+)/);
+      return match ? parseInt(match[1], 10) : 99;
+    };
+
+    const mapProductToCategory = (p: any): { category: string; subcategory?: string } => {
+        const lowerName = p.name.toLowerCase();
+        const lowerHint = p.hint.toLowerCase();
+        const combinedText = `${lowerName} ${lowerHint}`;
+
+        if (combinedText.includes('tirador')) return { category: 'Herrajes y Accesorios', subcategory: 'Tiradores' };
+        if (combinedText.includes('bisagra')) return { category: 'Herrajes y Accesorios', subcategory: 'Bisagras' };
+        if (combinedText.includes('lavamanos')) return { category: 'Herrajes y Accesorios', subcategory: 'Lavamanos' };
+        if (combinedText.includes('fregadero')) return { category: 'Herrajes y Accesorios', subcategory: 'Fregaderos' };
+        if (combinedText.includes('estufa')) return { category: 'Electrodomésticos', subcategory: 'Estufas' };
+        if (combinedText.includes('nevera')) return { category: 'Electrodomésticos', subcategory: 'Neveras' };
+        
+        if (p.category === 'Puertas') return { category: 'Puertas' };
+        if (combinedText.includes('mueble tv')) return { category: 'Sala', subcategory: 'Muebles TV' };
+        if (combinedText.includes('mesa de centro')) return { category: 'Sala', subcategory: 'Mesas de centro' };
+        if (combinedText.includes('gavetero')) return { category: 'Dormitorio', subcategory: 'Gaveteros' };
+        if (p.category === 'Salón' || p.category === 'Sala') return { category: 'Sala' };
+
+        return { category: 'Muebles' };
+    };
+
+  return products.map((p: any) => {
+    const { category, subcategory } = mapProductToCategory(p);
+    const specs: { [key: string]: string } = {
+        'Entrega': p.deliveryTime || 'No especificado',
+        'Ancho': p.dimensions ? `${p.dimensions.width} cm` : 'N/A',
+        'Alto': p.dimensions ? `${p.dimensions.height} cm` : 'N/A',
+        'Fondo': p.dimensions ? `${p.dimensions.depth} cm` : 'N/A',
+        'Materiales': (p.materials && p.materials.length > 0) ? p.materials.join(', ') : 'No especificado',
+        'Colores': (p.colors && p.colors.length > 0) ? p.colors.join(', ') : 'No especificado',
+        'Código del artículo': String(p.id),
+      };
+      
+      if (p.finish && p.finish.length > 0) {
+        specs['Acabado'] = p.finish.join(', ');
+      }
+
+    return {
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      oldPrice: p.oldPrice,
+      imageUrl: p.images[0].replace('?w=300&h=225&p=fw', '?w=400&h=300&p=fw'),
+      category: category,
+      subcategory: subcategory,
+      description: p.description,
+      materials: p.materials || ["Aglomerado laminado"],
+      colors: p.colors || ["Marrón"],
+      finish: p.finish || [],
+      dimensions: p.dimensions,
+      images: p.images.map((img: string) => img.startsWith('http') ? img : `https://decoragrouppuntacana.com/${img}`),
+      sku: String(p.id),
+      rating: p.rating,
+      reviews: p.reviews,
+      reviewsCount: p.reviews,
+      hint: p.hint,
+      deliveryTime: parseDeliveryTime(p.deliveryTime),
+      setType: p.setType,
+      ledLighting: p.ledLighting,
+      specs: specs,
+      additionalInfo: p.ledLighting ? [{ icon: 'Led', text: 'Iluminación LED' }] : [],
+      isVisible: p.isVisible !== false,
+      isAvailable: p.isAvailable !== false,
+      hidePrice: p.hidePrice === true,
+    };
+  });
+};
+
+const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, productsData, onSaveChanges }) => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
   
@@ -424,8 +501,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
   }, [handleSelectCategory, navigationData.menuItems]);
 
   const filteredProducts = useMemo(() => {
+    const visibleProducts = productsData.filter(p => p.isVisible !== false);
+    
     const baseProducts = searchQuery
-      ? ALL_PRODUCTS.filter(product => {
+      ? visibleProducts.filter(product => {
           const term = searchQuery.toLowerCase();
           return (
             product.name.toLowerCase().includes(term) ||
@@ -435,7 +514,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
             product.hint.toLowerCase().includes(term)
           );
         })
-      : ALL_PRODUCTS;
+      : visibleProducts;
 
     return baseProducts.filter(product => {
       const { category, priceRange, materials, colors, deliveryTime, setType, ledLighting } = filters;
@@ -462,7 +541,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
       }
       return true;
     });
-  }, [filters, searchQuery]);
+  }, [filters, searchQuery, productsData]);
 
   const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -488,6 +567,11 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
     }
     return 'Todos Nuestros Productos';
   };
+  
+  const materialsForFilter = useMemo(() => [...new Set(productsData.flatMap(p => p.materials))].sort(), [productsData]);
+  const colorsForFilter = useMemo(() => [...new Set(productsData.flatMap(p => p.colors))].sort(), [productsData]);
+  const setTypesForFilter = useMemo(() => [...new Set(productsData.map(p => p.setType).filter(Boolean))] as ('Sólido' | 'Partes separadas')[], [productsData]);
+
 
   // --- RENDER LOGIC ---
   if (view === 'login') return <LoginPage onLogin={handleLogin} />;
@@ -497,7 +581,13 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
       setView('login');
       return <LoginPage onLogin={handleLogin} />;
     }
-    return <AdminPanel initialNavigationData={navigationData} initialProjectsData={projectsData} onSaveChanges={onSaveChanges} onLogout={handleLogout} />;
+    return <AdminPanel 
+             initialNavigationData={navigationData} 
+             initialProjectsData={projectsData} 
+             initialProductsData={productsData}
+             onSaveChanges={onSaveChanges} 
+             onLogout={handleLogout} 
+           />;
   }
 
   if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
@@ -555,7 +645,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
                       </main>
                   );
               case 'productDetail':
-                  return <ProductDetailPage product={selectedProduct!} onBack={() => setView('category')} onCategorySelect={handleSelectCategory} />;
+                  return <ProductDetailPage product={selectedProduct!} onBack={() => setView('category')} onCategorySelect={handleSelectCategory} products={productsData} />;
               case 'category':
                    return (
                       <main>
@@ -565,7 +655,17 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
                             {getCategoryPageTitle()}
                           </h1>
                           <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                              <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>
+                              <aside className="lg:col-span-1">
+                                <FilterSidebar 
+                                  filters={filters} 
+                                  onFilterChange={handleFilterChange} 
+                                  onResetFilters={resetFilters}
+                                  materials={materialsForFilter}
+                                  colors={colorsForFilter}
+                                  setTypes={setTypesForFilter}
+                                  colorMap={COLOR_MAP}
+                                />
+                              </aside>
                               <div className="lg:col-span-3 mt-8 lg:mt-0">
                               <ProductGrid products={paginatedProducts} onProductSelect={handleProductSelect} />
                               {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
@@ -594,7 +694,17 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
                                   <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-4">Descubre Nuestra Selección</h2>
                                   <p className="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-12">Explora nuestra selección de muebles de alta calidad. Usa los filtros para encontrar la pieza ideal para ti.</p>
                                   <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                                      <aside className="lg:col-span-1"><FilterSidebar filters={filters} onFilterChange={handleFilterChange} onResetFilters={resetFilters} /></aside>
+                                      <aside className="lg:col-span-1">
+                                         <FilterSidebar 
+                                            filters={filters} 
+                                            onFilterChange={handleFilterChange} 
+                                            onResetFilters={resetFilters}
+                                            materials={materialsForFilter}
+                                            colors={colorsForFilter}
+                                            setTypes={setTypesForFilter}
+                                            colorMap={COLOR_MAP}
+                                          />
+                                      </aside>
                                       <div className="lg:col-span-3 mt-8 lg:mt-0">
                                           <ProductGrid products={filteredProducts.slice(0, 30)} onProductSelect={handleProductSelect} />
                                           <div className="text-center mt-12"><button onClick={() => handleSelectCategory("Todos los productos")} className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#5a1e38] hover:bg-[#4d182e]">Ver más productos</button></div>
@@ -627,10 +737,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, o
   );
 };
 
-
 const App: React.FC = () => {
   const [navigationData, setNavigationData] = useState<NavigationData>(INITIAL_NAVIGATION_DATA);
   const [projectsData, setProjectsData] = useState<Project[]>(INITIAL_PROJECTS);
+  const [productsData, setProductsData] = useState<Product[]>([]);
   const [currency, setCurrency] = useState<Currency>('USD');
 
   useEffect(() => {
@@ -663,13 +773,32 @@ const App: React.FC = () => {
             localStorage.removeItem('projectsData');
         }
     }
+
+    const storedProductsData = localStorage.getItem('productsData');
+    if (storedProductsData) {
+        try {
+            const parsedData = JSON.parse(storedProductsData);
+            if (Array.isArray(parsedData)) {
+                setProductsData(parsedData);
+            } else {
+                 localStorage.removeItem('productsData');
+            }
+        } catch (error) {
+            console.error("Error parsing products data from localStorage", error);
+            localStorage.removeItem('productsData');
+        }
+    } else {
+        setProductsData(processProducts(rawProducts));
+    }
   }, []);
 
-  const handleSaveChanges = (data: { navigation: NavigationData, projects: Project[] }) => {
+  const handleSaveChanges = (data: { navigation: NavigationData, projects: Project[], products: Product[] }) => {
     setNavigationData(data.navigation);
     setProjectsData(data.projects);
+    setProductsData(data.products);
     localStorage.setItem('navigationData', JSON.stringify(data.navigation));
     localStorage.setItem('projectsData', JSON.stringify(data.projects));
+    localStorage.setItem('productsData', JSON.stringify(data.products));
     alert("Cambios guardados exitosamente!");
   };
   
@@ -696,6 +825,7 @@ const App: React.FC = () => {
           <AppContent 
             navigationData={navigationData} 
             projectsData={projectsData}
+            productsData={productsData}
             onSaveChanges={handleSaveChanges} 
           />
         </WishlistProvider>

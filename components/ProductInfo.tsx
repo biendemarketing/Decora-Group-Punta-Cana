@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import type { Product } from '../types';
-import { Star, Truck, ShieldCheck, CheckCircle, Package, Minus, Plus, Heart } from 'lucide-react';
+import { Star, Truck, ShieldCheck, CheckCircle, Package, Minus, Plus, Heart, XCircle } from 'lucide-react';
 import { useCurrency, useCart, useWishlist } from '../App';
 
 interface ProductInfoProps {
@@ -24,6 +24,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   ];
 
   const handleAddToCart = () => {
+    if (!product.isAvailable) return;
     addToCart(product, quantity);
     // Optionally show a confirmation message
   };
@@ -61,7 +62,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       </div>
       
       {/* Price */}
-      <p className="text-4xl font-extrabold text-gray-900">{formatPrice(product.price)}</p>
+      {!product.hidePrice && (
+        <div className="flex items-baseline gap-4">
+          <p className="text-4xl font-extrabold text-gray-900">{formatPrice(product.price)}</p>
+          {product.oldPrice && product.oldPrice > product.price && (
+            <p className="text-2xl font-medium text-gray-400 line-through">{formatPrice(product.oldPrice)}</p>
+          )}
+        </div>
+      )}
       
       {/* Benefits */}
       <div className="border-t border-b border-gray-200 py-4">
@@ -91,15 +99,16 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       {/* Quantity and Add to Cart */}
       <div className="flex items-stretch space-x-4 pt-4">
          <div className="flex items-center border border-gray-300 rounded-md">
-            <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="p-3 text-gray-500 hover:text-gray-800"><Minus className="h-4 w-4" /></button>
+            <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="p-3 text-gray-500 hover:text-gray-800 disabled:opacity-50" disabled={!product.isAvailable}><Minus className="h-4 w-4" /></button>
             <input type="text" value={quantity} readOnly className="w-12 text-center border-l border-r border-gray-300 focus:outline-none" />
-            <button onClick={() => setQuantity(prev => prev + 1)} className="p-3 text-gray-500 hover:text-gray-800"><Plus className="h-4 w-4" /></button>
+            <button onClick={() => setQuantity(prev => prev + 1)} className="p-3 text-gray-500 hover:text-gray-800 disabled:opacity-50" disabled={!product.isAvailable}><Plus className="h-4 w-4" /></button>
          </div>
          <button 
             onClick={handleAddToCart}
-            className="flex-1 bg-[#5a1e38] text-white font-semibold py-3 px-6 rounded-md hover:bg-[#4d182e] transition-colors"
+            disabled={!product.isAvailable}
+            className="flex-1 bg-[#5a1e38] text-white font-semibold py-3 px-6 rounded-md hover:bg-[#4d182e] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
          >
-            Añadir al carrito
+            {product.isAvailable ? 'Añadir al carrito' : <> <XCircle className="h-5 w-5"/> Agotado </>}
          </button>
          <button
             onClick={handleWishlistToggle}

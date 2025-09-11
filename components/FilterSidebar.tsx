@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Filters } from '../types';
-import { MATERIALS, COLORS, MAX_PRICE, MIN_PRICE, DELIVERY_TIMES, SET_TYPES, COLOR_MAP, CATEGORIES } from '../constants';
+import { MAX_PRICE, MIN_PRICE, CATEGORIES } from '../constants';
 import { ChevronUp } from 'lucide-react';
 import { useCurrency } from '../App';
 
@@ -8,6 +8,10 @@ interface FilterSidebarProps {
   filters: Filters;
   onFilterChange: (newFilters: Partial<Filters>) => void;
   onResetFilters: () => void;
+  materials: string[];
+  colors: string[];
+  setTypes: string[];
+  colorMap: { [key: string]: string };
 }
 
 // Refactored to lift state up
@@ -34,8 +38,23 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, children
   );
 };
 
+const DELIVERY_TIMES = [
+  { label: 'Hasta 5 días laborales', value: '5' },
+  { label: 'Hasta 10 días laborales', value: '10' },
+  { label: 'Hasta 15 días laborales', value: '15' },
+  { label: 'Más 15 días laborales', value: '15+' },
+];
 
-const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, onResetFilters }) => {
+
+const FilterSidebar: React.FC<FilterSidebarProps> = ({ 
+  filters, 
+  onFilterChange, 
+  onResetFilters,
+  materials,
+  colors,
+  setTypes,
+  colorMap
+}) => {
   const { currency, setCurrency } = useCurrency();
   const [localMinPrice, setLocalMinPrice] = useState(filters.priceRange.min.toString());
   const [localMaxPrice, setLocalMaxPrice] = useState(filters.priceRange.max.toString());
@@ -213,7 +232,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, 
 
         <CollapsibleSection title="Tipo de juego" isOpen={!!openSections['Tipo de juego']} onToggle={() => toggleSection('Tipo de juego')}>
              <div className="space-y-2">
-            {SET_TYPES.map(item => (
+            {setTypes.map(item => (
                 <label key={item} className="flex items-center cursor-pointer">
                     <input type="checkbox" checked={filters.setType.includes(item)} onChange={() => handleCheckboxChange('setType', item)} className="h-4 w-4 rounded border-gray-300 text-[#5a1e38] focus:ring-[#5a1e38] bg-white" />
                     <span className="ml-2 text-sm text-gray-600">{item}</span>
@@ -237,7 +256,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, 
 
         <CollapsibleSection title="Material" isOpen={!!openSections['Material']} onToggle={() => toggleSection('Material')}>
             <div className="space-y-2">
-            {MATERIALS.map(item => (
+            {materials.map(item => (
                 <label key={item} className="flex items-center cursor-pointer">
                     <input type="checkbox" checked={filters.materials.includes(item)} onChange={() => handleCheckboxChange('materials', item)} className="h-4 w-4 rounded border-gray-300 text-[#5a1e38] focus:ring-[#5a1e38] bg-white" />
                     <span className="ml-2 text-sm text-gray-600">{item}</span>
@@ -248,10 +267,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, 
         
         <CollapsibleSection title="Color" isOpen={!!openSections['Color']} onToggle={() => toggleSection('Color')}>
              <div className="grid grid-cols-5 gap-2">
-                {COLORS.map(color => (
+                {colors.map(color => (
                     <button key={color} onClick={() => handleCheckboxChange('colors', color)}
                     className={`w-8 h-8 rounded-full border-2 transition-all ${filters.colors.includes(color) ? 'border-[#5a1e38] scale-110' : 'border-gray-200'}`}
-                    style={{ backgroundColor: COLOR_MAP[color] || '#ccc' }}
+                    style={{ backgroundColor: colorMap[color] || '#ccc' }}
                     aria-label={`Filter by color ${color}`}
                     >
                         {color === 'Blanco' && <span className="block w-full h-full rounded-full border border-gray-300"></span>}

@@ -378,7 +378,7 @@ export const INITIAL_PROJECTS: Project[] = [
   }
 ];
 
-const rawProducts = [
+export const rawProducts = [
   {
     id: 1752700000061,
     category: "Muebles",
@@ -417,6 +417,7 @@ const rawProducts = [
     name: "Gavetero Livluo 103",
     description: "Un gavetero elegante y funcional para tu hogar.",
     price: 375,
+    oldPrice: 420,
     rating: 4,
     reviews: 15,
     images: ["https://img.muebles.es/detailed/3795/comoda-livluo-103_3795993.jpg?w=300&h=225&p=fw"],
@@ -784,88 +785,11 @@ const rawProducts = [
   },
 ];
 
-const parseDeliveryTime = (timeString?: string): number => {
-  if (!timeString) return 99; // Default for items without delivery time
-  const match = timeString.match(/(\d+)/);
-  return match ? parseInt(match[1], 10) : 99;
-};
-
-const mapProductToCategory = (p: any): { category: string; subcategory?: string } => {
-    const lowerName = p.name.toLowerCase();
-    const lowerHint = p.hint.toLowerCase();
-    const combinedText = `${lowerName} ${lowerHint}`;
-
-    // New Categories
-    if (combinedText.includes('tirador')) return { category: 'Herrajes y Accesorios', subcategory: 'Tiradores' };
-    if (combinedText.includes('bisagra')) return { category: 'Herrajes y Accesorios', subcategory: 'Bisagras' };
-    if (combinedText.includes('lavamanos')) return { category: 'Herrajes y Accesorios', subcategory: 'Lavamanos' };
-    if (combinedText.includes('fregadero')) return { category: 'Herrajes y Accesorios', subcategory: 'Fregaderos' };
-    if (combinedText.includes('estufa')) return { category: 'Electrodomésticos', subcategory: 'Estufas' };
-    if (combinedText.includes('nevera')) return { category: 'Electrodomésticos', subcategory: 'Neveras' };
-    
-    // Existing Categories
-    if (p.category === 'Puertas') return { category: 'Puertas' };
-    if (combinedText.includes('mueble tv')) return { category: 'Sala', subcategory: 'Muebles TV' };
-    if (combinedText.includes('mesa de centro')) return { category: 'Sala', subcategory: 'Mesas de centro' };
-    if (combinedText.includes('gavetero')) return { category: 'Dormitorio', subcategory: 'Gaveteros' };
-    if (p.category === 'Salón' || p.category === 'Sala') return { category: 'Sala' };
-
-    return { category: 'Muebles' }; // Default fallback
-};
-
-export const ALL_PRODUCTS: Product[] = rawProducts.map((p: any) => {
-  const { category, subcategory } = mapProductToCategory(p);
-  return {
-    id: p.id,
-    name: p.name,
-    price: p.price,
-    imageUrl: p.images[0].replace('?w=300&h=225&p=fw', '?w=400&h=300&p=fw'),
-    category: category,
-    subcategory: subcategory,
-    description: p.description,
-    materials: p.materials || ["Aglomerado laminado"],
-    colors: p.colors || ["Marrón"],
-    dimensions: p.dimensions,
-    images: p.images.map((img: string) => img.startsWith('http') ? img : `https://decoragrouppuntacana.com/${img}`),
-    sku: String(p.id),
-    rating: p.rating,
-    reviews: p.reviews,
-    reviewsCount: p.reviews,
-    hint: p.hint,
-    deliveryTime: parseDeliveryTime(p.deliveryTime),
-    setType: p.setType,
-    ledLighting: p.ledLighting,
-    specs: {
-      'Entrega': p.deliveryTime || 'No especificado',
-      'Ancho': p.dimensions ? `${p.dimensions.width} cm` : 'N/A',
-      'Alto': p.dimensions ? `${p.dimensions.height} cm` : 'N/A',
-      'Fondo': p.dimensions ? `${p.dimensions.depth} cm` : 'N/A',
-      'Materiales': (p.materials && p.materials.length > 0) ? p.materials.join(', ') : 'No especificado',
-      'Colores': (p.colors && p.colors.length > 0) ? p.colors.join(', ') : 'No especificado',
-      'Código del artículo': String(p.id),
-    },
-    additionalInfo: p.ledLighting ? [{ icon: 'Led', text: 'Iluminación LED' }] : [],
-  };
-});
-
 const NON_PRODUCT_CATEGORIES = ['blog', 'proyectos', 'cotizar'];
 export const CATEGORIES = MENU_ITEMS_DATA
   .filter(item => !NON_PRODUCT_CATEGORIES.includes(item.key))
   .map(item => item.title)
   .sort();
-
-export const PRODUCT_DETAIL_DATA: Product = ALL_PRODUCTS[0];
-
-export const MATERIALS = [...new Set(ALL_PRODUCTS.flatMap(p => p.materials))].sort();
-export const COLORS = [...new Set(ALL_PRODUCTS.flatMap(p => p.colors))].sort();
-export const SET_TYPES = [...new Set(ALL_PRODUCTS.map(p => p.setType).filter(Boolean))] as ('Sólido' | 'Partes separadas')[];
-
-export const DELIVERY_TIMES = [
-  { label: 'Hasta 5 días laborales', value: '5' },
-  { label: 'Hasta 10 días laborales', value: '10' },
-  { label: 'Hasta 15 días laborales', value: '15' },
-  { label: 'Más 15 días laborales', value: '15+' },
-];
 
 export const COLOR_MAP: { [key: string]: string } = {
   'Blanco': '#FFFFFF',
@@ -887,6 +811,8 @@ export const MIN_PRICE = 0;
 export const PROVINCES = [
     "Santo Domingo", "Distrito Nacional", "La Altagracia", "Puerto Rico", "Azua", "Bahoruco", "Barahona", "Dajabón", "Duarte", "El Seibo", "Elías Piña", "Espaillat", "Hato Mayor", "Independencia", "La Romana", "La Vega", "María Trinidad Sánchez", "Monseñor Nouel", "Montecristi", "Monte Plata", "Pedernales", "Peravia", "Puerto Plata", "Hermanas Mirabal", "Samaná", "San Cristóbal", "San Juan", "San Pedro de Macorís", "Sánchez Ramírez", "Santiago", "Santiago Rodríguez", "Valverde"
 ];
+
+export const ALL_FINISHES = ['Brillo', 'Mate', 'Corrugado', 'Texturizado', 'Supermate'];
 
 
 // FIX: Export STORES constant to fix import error in PartnerLogos.tsx.

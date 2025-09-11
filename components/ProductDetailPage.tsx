@@ -2,7 +2,6 @@
 import React from 'react';
 import type { Product } from '../types';
 import { ChevronRight } from 'lucide-react';
-import { ALL_PRODUCTS } from '../constants';
 import ProductImageGallery from './ProductImageGallery';
 import ProductInfo from './ProductInfo';
 import ProductDetailsTable from './ProductDetailsTable';
@@ -13,11 +12,11 @@ interface ProductDetailPageProps {
   product: Product;
   onBack: () => void;
   onCategorySelect: (category: string) => void;
+  products: Product[];
 }
 
-const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack, onCategorySelect }) => {
-  // FIX: Changed filter from `p.style === product.style` to `p.category === product.category` as the `style` property does not exist on the Product type.
-  const similarProducts = ALL_PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, onBack, onCategorySelect, products }) => {
+  const similarProducts = products.filter(p => p.category === product.category && p.id !== product.id && p.isVisible).slice(0, 4);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
