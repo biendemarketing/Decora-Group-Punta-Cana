@@ -16,6 +16,8 @@ const QuoteTemplate: React.FC<QuoteTemplateProps> = ({ customerInfo }) => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const itbis = subtotal * 0.18;
+  const total = subtotal + itbis;
   const quoteDate = new Date().toLocaleDateString('es-DO', {
     year: 'numeric', month: 'long', day: 'numeric'
   });
@@ -94,18 +96,18 @@ const QuoteTemplate: React.FC<QuoteTemplateProps> = ({ customerInfo }) => {
 
       {/* Totals Section */}
       <section className="flex justify-end mt-6">
-        <div className="w-1/3">
+        <div className="w-full max-w-xs">
           <div className="flex justify-between py-2">
             <span>Subtotal:</span>
             <span>{formatPrice(subtotal)}</span>
           </div>
           <div className="flex justify-between py-2">
-            <span>ITBIS (0%):</span>
-            <span>{formatPrice(0)}</span>
+            <span>ITBIS (18%):</span>
+            <span>{formatPrice(itbis)}</span>
           </div>
           <div className="flex justify-between py-2 text-lg font-bold text-gray-900 border-t-2 border-gray-800 mt-2">
             <span>TOTAL:</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>{formatPrice(total)}</span>
           </div>
         </div>
       </section>

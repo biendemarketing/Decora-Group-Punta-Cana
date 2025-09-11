@@ -7,7 +7,6 @@ interface PaymentAndTermsProps {
     termsAccepted: boolean;
     onTermsChange: (accepted: boolean) => void;
     onShowTerms: () => void;
-    onSubmit: () => void;
 }
 
 const PaymentAndTerms: React.FC<PaymentAndTermsProps> = ({
@@ -17,7 +16,6 @@ const PaymentAndTerms: React.FC<PaymentAndTermsProps> = ({
     termsAccepted,
     onTermsChange,
     onShowTerms,
-    onSubmit
 }) => {
   return (
     <div className="border-t border-gray-200 pt-8 space-y-8">
@@ -40,7 +38,7 @@ const PaymentAndTerms: React.FC<PaymentAndTermsProps> = ({
         </div>
       </div>
       
-      <div className="border-t border-gray-200 pt-6 space-y-4">
+      <div className="pt-6 space-y-4">
         <button type="button" onClick={onShowTerms} className="text-sm font-medium text-[#621330] hover:underline">
           Ver términos y condiciones
         </button>
@@ -61,16 +59,6 @@ const PaymentAndTerms: React.FC<PaymentAndTermsProps> = ({
                 </label>
             </div>
         </div>
-      </div>
-      
-      <div className="flex justify-end pt-6">
-        <button
-          type="submit"
-          className="bg-[#621330] text-white font-bold py-3 px-10 rounded-lg shadow-md hover:bg-[#4a0e24] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-          disabled={!termsAccepted}
-        >
-          Cotizar
-        </button>
       </div>
     </div>
   );

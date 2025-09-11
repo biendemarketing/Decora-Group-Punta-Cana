@@ -378,7 +378,7 @@ const INITIAL_FOOTER_CONTENT: FooterContent = {
   contactInfo: {
     address: "Punta Cana, Rep. Dominicana",
     phone: "(849) 456-1963",
-    email: "info@decoragroup.pc"
+    email: "decoragrouppc@gmail.com"
   },
   copyrightText: `© ${new Date().getFullYear()} Decora Group. Todos los derechos reservados.`,
   legalLinks: [
@@ -746,7 +746,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
       ],
       paymentOptions: [
         '70% con la orden, 30% contra entrega.',
-        'Pago de contacto al poner la orden (- 10%)',
+        'Pago de contado al poner la orden (- 10%)',
         'Pago Mensual por 6 meses + 10%.',
       ]
     }

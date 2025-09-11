@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { NavigationData, AboutUsPageContent, FAQItem, LegalPage, PageSection, TeamMember, CompanyValue, TimelineEvent, JobVacancy, AboutUsSectionType } from '../types';
-import { FileText, HelpCircle, Building, Plus, Trash2, GripVertical, Edit } from 'lucide-react';
+import { NavigationData, AboutUsPageContent, FAQItem, LegalPage, PageSection, TeamMember, CompanyValue, TimelineEvent, JobVacancy, AboutUsSectionType, ContactContent } from '../types';
+import { FileText, HelpCircle, Building, Plus, Trash2, GripVertical, Edit, Phone } from 'lucide-react';
 import ImageUploader from './ImageUploader';
 import IconSelector from './IconSelector';
 
@@ -9,7 +9,7 @@ interface ContentPagesEditorProps {
   onNavigationChange: (newData: NavigationData) => void;
 }
 
-type ActiveTab = 'about' | 'faq' | 'legal';
+type ActiveTab = 'about' | 'faq' | 'legal' | 'contact';
 
 const inputClass = "w-full text-sm p-2 border border-gray-300 rounded bg-white text-gray-900 shadow-sm focus:ring-blue-500 focus:border-blue-500";
 const textareaClass = `${inputClass} h-24`;
@@ -135,21 +135,58 @@ const sectionEditors: { [key in AboutUsSectionType]?: React.FC<{ section: PageSe
         <div className="space-y-4">
              <input type="text" placeholder="Título Principal" value={section.content.title} onChange={e => onChange({ ...section, content: { ...section.content, title: e.target.value }})} className={inputClass} />
              <textarea placeholder="Texto introductorio" value={section.content.text} onChange={e => onChange({ ...section, content: { ...section.content, text: e.target.value }})} className={textareaClass} />
-             <ListEditor
-                title="Vacantes de Empleo" noun="Vacante"
-                items={section.content.vacancies}
-                onUpdate={(newVacancies: JobVacancy[]) => onChange({ ...section, content: { ...section.content, vacancies: newVacancies } })}
-                newItem={{ title: '' }}
-                renderItem={(item: JobVacancy, update: any) => (
-                    <input type="text" value={item.title} onChange={e => update({ title: e.target.value })} className={inputClass} placeholder="Título de la vacante"/>
-                )}
-            />
+             <p className="text-xs text-gray-500">La gestión detallada de las vacantes se realiza en la sección "Vacantes" del menú principal.</p>
              <textarea placeholder="Texto de cierre" value={section.content.closingText} onChange={e => onChange({ ...section, content: { ...section.content, closingText: e.target.value }})} className={textareaClass} />
         </div>
     )
 };
 
-// ... More section editors can be added here ...
+const ContactEditor: React.FC<{ content: ContactContent, onChange: (newContent: ContactContent) => void }> = ({ content, onChange }) => {
+    const handleChange = (field: keyof ContactContent, value: string) => {
+        onChange({ ...content, [field]: value });
+    };
+
+    return (
+        <div className="space-y-4">
+            <h4 className="text-md font-semibold text-gray-800">Contenido Página de Contacto</h4>
+            <div className="p-3 border rounded-md bg-white shadow-sm space-y-3">
+                 <div>
+                    <label className="text-sm font-medium text-gray-700">Título del Formulario</label>
+                    <input type="text" value={content.formTitle} onChange={e => handleChange('formTitle', e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                    <label className="text-sm font-medium text-gray-700">Subtítulo del Formulario</label>
+                    <input type="text" value={content.formSubtitle} onChange={e => handleChange('formSubtitle', e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                    <label className="text-sm font-medium text-gray-700">Título de Información</label>
+                    <input type="text" value={content.infoTitle} onChange={e => handleChange('infoTitle', e.target.value)} className={inputClass} />
+                </div>
+                 <div>
+                    <label className="text-sm font-medium text-gray-700">Teléfono</label>
+                    <input type="text" value={content.phone} onChange={e => handleChange('phone', e.target.value)} className={inputClass} />
+                </div>
+                 <div>
+                    <label className="text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" value={content.email} onChange={e => handleChange('email', e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                    <label className="text-sm font-medium text-gray-700">Dirección</label>
+                    <textarea value={content.address} onChange={e => handleChange('address', e.target.value)} className={textareaClass} />
+                </div>
+                <div>
+                    <label className="text-sm font-medium text-gray-700">Horarios</label>
+                    <textarea value={content.hours} onChange={e => handleChange('hours', e.target.value)} className={textareaClass} />
+                </div>
+                 <div>
+                    <label className="text-sm font-medium text-gray-700">Título del Mapa</label>
+                    <input type="text" value={content.mapTitle} onChange={e => handleChange('mapTitle', e.target.value)} className={inputClass} />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData, onNavigationChange }) => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('about');
@@ -165,6 +202,10 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
 
   const handleLegalChange = (newPages: LegalPage[]) => {
       onNavigationChange({ ...navigationData, legalContent: { pages: newPages } });
+  };
+
+  const handleContactChange = (newContent: ContactContent) => {
+      onNavigationChange({ ...navigationData, contactPage: newContent });
   };
 
   // --- About Us Section Builder ---
@@ -198,6 +239,7 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
         <TabButton id="about" label="Nosotros" icon={Building} />
         <TabButton id="faq" label="FAQ" icon={HelpCircle} />
         <TabButton id="legal" label="Legal" icon={FileText} />
+        <TabButton id="contact" label="Contacto" icon={Phone} />
       </div>
        <div className="p-4 bg-gray-50 rounded-b-lg border border-t-0">
          {activeTab === 'about' && (
@@ -247,6 +289,9 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
                 </div>
             )}
         />}
+        {activeTab === 'contact' && (
+            <ContactEditor content={navigationData.contactPage} onChange={handleContactChange} />
+        )}
        </div>
     </div>
   );
