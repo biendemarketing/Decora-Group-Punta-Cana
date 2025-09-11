@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown, Package, Gem, Lightbulb, Award, CheckCircle } from 'lucide-react';
-import { NavigationData, SubCategory, TopBarLink, MenuItem, Catalogue } from '../types';
+import { NavigationData, SubCategory, TopBarLink, MenuItem, Catalogue, Page } from '../types';
 import Logo from './Logo';
 import SalaMegaMenu from './SalonMegaMenu';
 import DormitorioMegaMenu from './DormitorioMegaMenu';
@@ -24,8 +24,6 @@ interface HeaderProps {
   onGoHome: () => void;
   onViewQuotePage: () => void;
   onSelectQuoteType: (type: string) => void;
-  onViewAboutPage: () => void;
-  onViewContactPage: () => void;
   onViewCart: () => void;
   onViewWishlist: () => void;
   onViewBlogPage: () => void;
@@ -85,12 +83,15 @@ const Header: React.FC<HeaderProps> = ({
   const { itemCount } = useCart();
   const { wishlistCount } = useWishlist();
   
-  const linkActions: { [key: string]: () => void } = {
-    about: () => onNavigate('about'),
-    faq: () => onNavigate('faq'),
-    legal: () => onNavigate('legal'),
-    contact: () => onNavigate('contact'),
-  };
+  const customPageLinks = (navigationData.customPages || [])
+    .filter(p => p.slug !== 'about-us') // 'about-us' is handled by the hardcoded 'Nosotros' link
+    .map(p => ({
+        id: p.slug,
+        text: p.title,
+    }));
+
+  const allTopBarLinks = [...navigationData.topBarLinks, ...customPageLinks];
+
 
   const closeAllMegaMenus = () => {
     setOpenMenuKey(null);
@@ -99,16 +100,16 @@ const Header: React.FC<HeaderProps> = ({
   const handleNavLinkClick = (menuItem: MenuItem) => {
     switch (menuItem.key) {
       case 'proyectos':
-        onSelectProjectCategory(''); // Show all projects
+        onNavigate('projects');
         break;
       case 'cotizar':
         onViewQuotePage();
         break;
       case 'blog':
-        onViewBlogPage();
+        onNavigate('blog');
         break;
       case 'catalogues':
-        onViewCataloguesPage();
+        onNavigate('catalogues');
         break;
       default:
         onSelectCategory(menuItem.title);
@@ -134,6 +135,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const visibleMenuItems = navigationData.menuItems.filter(item => item.isVisible);
+  const visibleCustomPages = (navigationData.customPages || []).filter(p => p.isVisibleInHeader);
 
   const renderMegaMenu = () => {
     if (!openMenuKey) return null;
@@ -183,10 +185,10 @@ const Header: React.FC<HeaderProps> = ({
             })}
           </div>
           <div className="flex items-center space-x-3">
-             {navigationData.topBarLinks.map((link, index) => (
+             {allTopBarLinks.map((link, index) => (
                 <React.Fragment key={link.id}>
-                    <button onClick={linkActions[link.id]} className="hover:text-[#5a1e38]">{link.text}</button>
-                    {index < navigationData.topBarLinks.length -1 && <span className="text-gray-300">|</span>}
+                    <button onClick={() => onNavigate(link.id)} className="hover:text-[#5a1e38]">{link.text}</button>
+                    {index < allTopBarLinks.length -1 && <span className="text-gray-300">|</span>}
                 </React.Fragment>
              ))}
              <span className="text-gray-300">|</span>
@@ -307,6 +309,21 @@ const Header: React.FC<HeaderProps> = ({
                     {item.title}
                   </a>
                 ))}
+                 {visibleCustomPages.map((page) => (
+                    <a 
+                        key={page.id} 
+                        href="#"
+                        onClick={(e) => { 
+                            e.preventDefault(); 
+                            onNavigate(page.slug);
+                            closeAllMegaMenus();
+                        }}
+                        className="flex-shrink-0 text-gray-700 hover:text-[#5a1e38] font-medium transition-colors duration-200 text-sm tracking-wide"
+                        onMouseEnter={closeAllMegaMenus}
+                    >
+                        {page.title}
+                    </a>
+                ))}
               </div>
             </div>
         </div>
@@ -351,6 +368,12 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
               );
             })}
+             {visibleCustomPages.map((page) => (
+                <a key={page.id} href="#" onClick={(e) => { e.preventDefault(); onNavigate(page.slug); setIsMenuOpen(false); }}
+                    className="w-full block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#5a1e38] hover:bg-gray-50 text-left">
+                    {page.title}
+                </a>
+             ))}
           </nav>
         </div>
       )}

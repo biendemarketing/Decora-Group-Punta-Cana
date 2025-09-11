@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, AboutUsPageContent, FAQItem, LegalContent, InstagramShowcaseData, ContactContent, JobVacancy } from './types';
+import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, FAQItem, LegalContent, InstagramShowcaseData, ContactContent, JobVacancy, Page } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -12,7 +12,7 @@ const generateSubCategory = (item: { name: string; imageUrl: string; title?: str
 export const GOOGLE_FONTS = ['Poppins', 'Roboto', 'Montserrat', 'Lato', 'Playfair Display'];
 
 export const CATALOGUE_COVER_TEMPLATES = [
-    { id: 'minimalist_light', name: 'Minimalista Claro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZzh0PSI0MCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxNSIgeT0iNzUiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1IiBmaWxsPSIjY2NjIiByeD0iMiIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMiIGZpbGw9IiNkZGQiIHJ4PSIyIi8+PC9zdmc+', imageSlots: 1 },
+    { id: 'minimalist_light', name: 'Minimalista Claro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxNSIgeT0iNzUiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1IiBmaWxsPSIjY2NjIiByeD0iMiIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMiIGZpbGw9IiNkZGQiIHJ4PSIyIi8+PC9zdmc+', imageSlots: 1 },
     { id: 'elegant_dark', name: 'Elegante Oscuro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiMyZDNlNGUiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0iIzQwNDA0MCIgcng9IjIiLz48cmVjdCB4PSIxNSIgeT0iNzUiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1IiBmaWxsPSIjY2NjIiByeD0iMiIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMiIGZpbGw9IiNkZGQiIHJ4PSIyIi8+PC9zdmc+', imageSlots: 1 },
     { id: 'modern_grid', name: 'Mosaico Moderno', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MiIgeT0iMTAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iNDIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MiIgeT0iNDIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iODIiIHdpZHRoPSI2MiIgaGVpZ2h0PSI4IiBmaWxsPSIjY2NjIiByeD0iMiIvPjwvc3ZnPg==', imageSlots: 4 },
     { id: 'corporate_dark', name: 'Corporativo Oscuro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiMyZDNlNGUiLz48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSIyNSIgZmlsbD0iIzQwNDA0MCIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iNDUiIHdpZHRoPSIyNSIgaGVpZ2h0PSI1MCIgZmlsbD0iIzQwNDA0MCIgcng9IjIiLz48cmVjdCB4PSI0MCIgeT0iNDUiIHdpZHRoPSIzMCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzYxNjE2MSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iMTAwIiB3aWR0aD0iNjAiIGhlaWdodD0iMiIgZmlsbD0iI2NjYyIvPjwvc3ZnPg==', imageSlots: 1 },
@@ -246,7 +246,7 @@ const HERO_SLIDES_DATA: Omit<NavigationData['heroSlides'][0], 'id'>[] = [
     title: "Estilo Que Inspira",
     subtitle: "Descubre colecciones que definen tu hogar.",
     buttons: [
-      { id: crypto.randomUUID(), text: "Sobre Nosotros", link: 'about', style: 'secondary', icon: 'Users' },
+      { id: crypto.randomUUID(), text: "Sobre Nosotros", link: 'about-us', style: 'secondary', icon: 'Users' },
       { id: crypto.randomUUID(), text: "Contáctanos", link: 'contact', style: 'primary', icon: 'Phone' },
     ],
   },
@@ -390,11 +390,11 @@ const INITIAL_FOOTER_CONTENT: FooterContent = {
     },
     {
       id: 'col2', title: "Enlaces Rápidos", links: [
-        { id: 'l7', text: "Inicio", url: "#", linkType: 'url' },
-        { id: 'l8', text: "Quiénes Somos", url: "#", linkType: 'url' },
-        { id: 'l9', text: "Galería", url: "#", linkType: 'url' },
-        { id: 'l10', text: "Blog", url: "#", linkType: 'url' },
-        { id: 'l11', text: "Contacto", url: "#", linkType: 'url' }
+        { id: 'l7', text: "Inicio", url: "home", linkType: 'page' },
+        { id: 'l8', text: "Quiénes Somos", url: "about-us", linkType: 'page' },
+        { id: 'l9', text: "Proyectos", url: "projects", linkType: 'page' },
+        { id: 'l10', text: "Blog", url: "blog", linkType: 'page' },
+        { id: 'l11', text: "Contacto", url: "contact", linkType: 'page' }
       ]
     }
   ],
@@ -467,83 +467,90 @@ const INITIAL_VACANCIES: JobVacancy[] = [
     },
 ];
 
-const INITIAL_ABOUT_US_CONTENT: AboutUsPageContent = {
-  sections: [
-    {
-      id: crypto.randomUUID(),
-      type: 'history',
-      content: {
-        title: 'Nuestra Historia',
-        text: 'Desde nuestros humildes comienzos hasta convertirnos en un referente del diseño y la fabricación de muebles en Punta Cana, nuestra pasión por la artesanía y la calidad ha sido el motor de nuestro crecimiento. Creemos en la creación de espacios que no solo son hermosos, sino también funcionales y duraderos.',
-        images: [
-          { id: 'img1', url: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600', alt: 'Artesano trabajando en un taller de carpintería' },
-          { id: 'img2', url: 'https://images.unsplash.com/photo-1556761175-b413da4b248a?q=80&w=600', alt: 'Bocetos y planos de diseño de muebles sobre una mesa' },
-          { id: 'img3', url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
-          { id: 'img4', url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
-        ],
+const INITIAL_CUSTOM_PAGES: Page[] = [
+  {
+    id: 'about-us-page',
+    title: 'Quiénes Somos',
+    slug: 'about-us',
+    isVisibleInHeader: false, // It's in the top bar, not main nav
+    isVisibleInFooter: true,
+    sections: [
+      {
+        id: crypto.randomUUID(),
+        type: 'history',
+        content: {
+          title: 'Nuestra Historia',
+          text: 'Desde nuestros humildes comienzos hasta convertirnos en un referente del diseño y la fabricación de muebles en Punta Cana, nuestra pasión por la artesanía y la calidad ha sido el motor de nuestro crecimiento. Creemos en la creación de espacios que no solo son hermosos, sino también funcionales y duraderos.',
+          images: [
+            { id: 'img1', url: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600', alt: 'Artesano trabajando en un taller de carpintería' },
+            { id: 'img2', url: 'https://images.unsplash.com/photo-1556761175-b413da4b248a?q=80&w=600', alt: 'Bocetos y planos de diseño de muebles sobre una mesa' },
+            { id: 'img3', url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
+            { id: 'img4', url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
+          ],
+        }
+      },
+      {
+        id: crypto.randomUUID(),
+        type: 'timeline',
+        content: {
+          title: 'Nuestra Trayectoria',
+          events: [
+            { id: 't1', year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },
+            { id: 't2', year: 2019, description: "Inauguramos nuestro primer taller de fabricación, combinando tecnología y artesanía." },
+            { id: 't3', year: 2021, description: "Expandimos nuestros servicios para incluir proyectos comerciales y de hotelería." },
+            { id: 't4', year: 2023, description: "Lanzamos nuestra plataforma digital para ofrecer una experiencia de cotización innovadora." },
+          ]
+        }
+      },
+      {
+        id: crypto.randomUUID(),
+        type: 'missionVision',
+        content: {
+          mission: { title: 'Misión', text: 'Crear muebles y espacios que inspiren la vida cotidiana, combinando diseño innovador, funcionalidad excepcional y artesanía de la más alta calidad para superar las expectativas de nuestros clientes.' },
+          vision: { title: 'Visión', text: 'Ser la empresa líder en diseño y fabricación de mobiliario a medida en el Caribe, reconocida por nuestra excelencia, sostenibilidad y por transformar las ideas de nuestros clientes en realidades tangibles y duraderas.' }
+        }
+      },
+      {
+        id: crypto.randomUUID(),
+        type: 'values',
+        content: {
+          title: 'Nuestros Valores',
+          subtitle: 'Los principios que guían cada uno de nuestros proyectos y decisiones.',
+          values: [
+            { id: 'v1', icon: "Check", title: "Calidad y Excelencia", description: "Nos comprometemos a utilizar los mejores materiales y la artesanía más fina para entregar productos que superan los más altos estándares." },
+            { id: 'v2', icon: "Heart", title: "Pasión por el Diseño", description: "El diseño está en el corazón de todo lo que hacemos. Creamos piezas que son funcionales, hermosas y que inspiran la vida cotidiana." },
+            { id: 'v3', icon: "Scale", title: "Integridad y Transparencia", description: "Operamos con honestidad y claridad en cada interacción, construyendo relaciones de confianza con nuestros clientes, socios y equipo." },
+            { id: 'v4', icon: "Leaf", title: "Sostenibilidad", description: "Estamos dedicados a prácticas responsables, utilizando materiales sostenibles y procesos que minimizan nuestro impacto en el medio ambiente." },
+          ]
+        }
+      },
+      {
+        id: crypto.randomUUID(),
+        type: 'team',
+        content: {
+          title: 'Conoce a Nuestro Equipo',
+          subtitle: 'El talento y la dedicación detrás de cada proyecto exitoso.',
+          members: [
+            { id: 'tm1', name: "Juan Pérez", role: "CEO y Fundador", imageUrl: "https://i.pravatar.cc/150?img=1" },
+            { id: 'tm2', name: "María González", role: "Directora de Diseño", imageUrl: "https://i.pravatar.cc/150?img=2" },
+            { id: 'tm3', name: "Carlos Rodríguez", role: "Jefe de Producción", imageUrl: "https://i.pravatar.cc/150?img=3" },
+            { id: 'tm4', name: "Ana Martínez", role: "Gerente de Proyectos", imageUrl: "https://i.pravatar.cc/150?img=4" },
+          ]
+        }
+      },
+      {
+        id: crypto.randomUUID(),
+        type: 'hiring',
+        content: {
+          title: '¿Necesitas Empleo? ¡Estamos Contratando!',
+          text: 'Únete a nuestro equipo de apasionados por el diseño y la artesanía. Buscamos talento para seguir creciendo juntos.',
+          vacancies: INITIAL_VACANCIES,
+          closingText: '¿No ves una posición para ti? Siempre estamos buscando personas con talento. \n Envíanos tu currículum a nuestro correo electrónico.'
+        }
       }
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'timeline',
-      content: {
-        title: 'Nuestra Trayectoria',
-        events: [
-          { id: 't1', year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },
-          { id: 't2', year: 2019, description: "Inauguramos nuestro primer taller de fabricación, combinando tecnología y artesanía." },
-          { id: 't3', year: 2021, description: "Expandimos nuestros servicios para incluir proyectos comerciales y de hotelería." },
-          { id: 't4', year: 2023, description: "Lanzamos nuestra plataforma digital para ofrecer una experiencia de cotización innovadora." },
-        ]
-      }
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'missionVision',
-      content: {
-        mission: { title: 'Misión', text: 'Crear muebles y espacios que inspiren la vida cotidiana, combinando diseño innovador, funcionalidad excepcional y artesanía de la más alta calidad para superar las expectativas de nuestros clientes.' },
-        vision: { title: 'Visión', text: 'Ser la empresa líder en diseño y fabricación de mobiliario a medida en el Caribe, reconocida por nuestra excelencia, sostenibilidad y por transformar las ideas de nuestros clientes en realidades tangibles y duraderas.' }
-      }
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'values',
-      content: {
-        title: 'Nuestros Valores',
-        subtitle: 'Los principios que guían cada uno de nuestros proyectos y decisiones.',
-        values: [
-          { id: 'v1', icon: "Check", title: "Calidad y Excelencia", description: "Nos comprometemos a utilizar los mejores materiales y la artesanía más fina para entregar productos que superan los más altos estándares." },
-          { id: 'v2', icon: "Heart", title: "Pasión por el Diseño", description: "El diseño está en el corazón de todo lo que hacemos. Creamos piezas que son funcionales, hermosas y que inspiran la vida cotidiana." },
-          { id: 'v3', icon: "Scale", title: "Integridad y Transparencia", description: "Operamos con honestidad y claridad en cada interacción, construyendo relaciones de confianza con nuestros clientes, socios y equipo." },
-          { id: 'v4', icon: "Leaf", title: "Sostenibilidad", description: "Estamos dedicados a prácticas responsables, utilizando materiales sostenibles y procesos que minimizan nuestro impacto en el medio ambiente." },
-        ]
-      }
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'team',
-      content: {
-        title: 'Conoce a Nuestro Equipo',
-        subtitle: 'El talento y la dedicación detrás de cada proyecto exitoso.',
-        members: [
-          { id: 'tm1', name: "Juan Pérez", role: "CEO y Fundador", imageUrl: "https://i.pravatar.cc/150?img=1" },
-          { id: 'tm2', name: "María González", role: "Directora de Diseño", imageUrl: "https://i.pravatar.cc/150?img=2" },
-          { id: 'tm3', name: "Carlos Rodríguez", role: "Jefe de Producción", imageUrl: "https://i.pravatar.cc/150?img=3" },
-          { id: 'tm4', name: "Ana Martínez", role: "Gerente de Proyectos", imageUrl: "https://i.pravatar.cc/150?img=4" },
-        ]
-      }
-    },
-    {
-      id: crypto.randomUUID(),
-      type: 'hiring',
-      content: {
-        title: '¿Necesitas Empleo? ¡Estamos Contratando!',
-        text: 'Únete a nuestro equipo de apasionados por el diseño y la artesanía. Buscamos talento para seguir creciendo juntos.',
-        vacancies: INITIAL_VACANCIES,
-        closingText: '¿No ves una posición para ti? Siempre estamos buscando personas con talento. \n Envíanos tu currículum a nuestro correo electrónico.'
-      }
-    }
-  ]
-};
+    ]
+  }
+];
 
 const INITIAL_FAQ_CONTENT: { title: string; subtitle: string; faqs: FAQItem[] } = {
     title: 'Preguntas Frecuentes',
@@ -830,7 +837,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
   footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
   topBarLinks: [
-    { id: 'about', text: 'Nosotros' },
+    { id: 'about-us', text: 'Nosotros' },
     { id: 'faq', text: 'FAQ' },
     { id: 'legal', text: 'Aviso Legal y Términos y Condiciones' },
     { id: 'contact', text: 'Contacto' },
@@ -845,18 +852,18 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   contactPhoneLink: "https://wa.me/18494561963",
   // New CMS Data
   footerContent: INITIAL_FOOTER_CONTENT,
-  aboutUsPage: INITIAL_ABOUT_US_CONTENT,
   faqContent: INITIAL_FAQ_CONTENT,
   legalContent: INITIAL_LEGAL_CONTENT,
   instagramShowcase: INITIAL_INSTAGRAM_SHOWCASE_DATA,
   contactPage: INITIAL_CONTACT_CONTENT,
+  customPages: INITIAL_CUSTOM_PAGES,
 };
 
 export const PREDEFINED_LINKS = [
     { key: 'products', label: 'Ver todos los productos' },
     { key: 'projects', label: 'Ver todos los proyectos' },
     { key: 'quote', label: 'Ir a Cotizar a Medida' },
-    { key: 'about', label: 'Ir a Sobre Nosotros' },
+    { key: 'about-us', label: 'Ir a Sobre Nosotros' },
     { key: 'contact', label: 'Ir a Contacto' },
     { key: 'blog', label: 'Ir al Blog' },
 ];

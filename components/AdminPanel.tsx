@@ -15,6 +15,10 @@ import ContentPagesEditor from './ContentPagesEditor';
 import FooterEditor from './FooterEditor';
 import IntegrationsEditor from './IntegrationsEditor';
 import VacanciesEditor from './VacanciesEditor';
+import Dashboard from './Dashboard';
+import Analytics from './Analytics';
+import MediaLibrary from './MediaLibrary';
+import AuditLog from './AuditLog';
 import { NavigationData, Project, Product } from '../types';
 import { LogOut, Save, XCircle } from 'lucide-react';
 
@@ -26,17 +30,21 @@ interface AdminPanelProps {
   onLogout: () => void;
 }
 
-type EditorType = 'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' | 'services' | 'quote' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' | 'integrations' | 'vacancies';
+type EditorType =
+    'dashboard' | 'analytics' | 'media' | 'audit' |
+    'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' |
+    'services' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' |
+    'integrations' | 'vacancies' | 'quote';
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ 
-  initialNavigationData, 
-  initialProjectsData, 
-  initialProductsData, 
-  onSaveChanges, 
-  onLogout 
+const AdminPanel: React.FC<AdminPanelProps> = ({
+  initialNavigationData,
+  initialProjectsData,
+  initialProductsData,
+  onSaveChanges,
+  onLogout
 }) => {
-  const [activeEditor, setActiveEditor] = useState<EditorType>('settings');
-  
+  const [activeEditor, setActiveEditor] = useState<EditorType>('dashboard');
+
   const [draftNavData, setDraftNavData] = useState<NavigationData>(() => JSON.parse(JSON.stringify(initialNavigationData)));
   const [draftProjectsData, setDraftProjectsData] = useState<Project[]>(() => JSON.parse(JSON.stringify(initialProjectsData)));
   const [draftProductsData, setDraftProductsData] = useState<Product[]>(() => JSON.parse(JSON.stringify(initialProductsData)));
@@ -58,8 +66,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const handleSaveChanges = () => {
     onSaveChanges({ navigation: draftNavData, projects: draftProjectsData, products: draftProductsData });
   };
-  
-  const hasChanges = JSON.stringify(draftNavData) !== JSON.stringify(initialNavigationData) 
+
+  const hasChanges = JSON.stringify(draftNavData) !== JSON.stringify(initialNavigationData)
                   || JSON.stringify(draftProjectsData) !== JSON.stringify(initialProjectsData)
                   || JSON.stringify(draftProductsData) !== JSON.stringify(initialProductsData);
 
@@ -67,6 +75,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   const renderEditor = () => {
     switch(activeEditor) {
+      case 'dashboard':
+        return <Dashboard navigationData={draftNavData} projectsData={draftProjectsData} productsData={draftProductsData} />;
+      case 'analytics':
+        return <Analytics />;
+      case 'media':
+        return <MediaLibrary navigationData={draftNavData} projectsData={draftProjectsData} productsData={draftProductsData} />;
+      case 'audit':
+        return <AuditLog />;
       case 'settings':
         return <SiteSettingsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       case 'menu':
@@ -82,8 +98,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       case 'blog':
         return <BlogEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       case 'catalogues':
-        return <CataloguesEditor 
-                    catalogues={draftNavData.catalogues} 
+        return <CataloguesEditor
+                    catalogues={draftNavData.catalogues}
                     onCataloguesChange={(newCatalogues) => setDraftNavData(prev => ({ ...prev, catalogues: newCatalogues }))}
                     navigationData={draftNavData}
                     productsData={draftProductsData}
@@ -103,7 +119,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       case 'integrations':
         return <IntegrationsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       default:
-        return null;
+        return <Dashboard navigationData={draftNavData} projectsData={draftProjectsData} productsData={draftProductsData} />;
     }
   };
 
@@ -133,14 +149,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       </header>
       
       <div className="flex-grow grid grid-cols-1 xl:grid-cols-5 gap-8 p-8">
-        {/* Sidebar Column */}
         <div className="xl:col-span-1">
            <div className="bg-white p-4 rounded-lg shadow-lg sticky top-24">
              <AdminSidebar activeEditor={activeEditor} onSelectEditor={setActiveEditor} />
            </div>
         </div>
         
-        {/* Editor Column */}
         <div className="xl:col-span-4 bg-white p-6 rounded-lg shadow-lg flex flex-col max-h-[calc(100vh-120px)]">
             <div className="flex-grow overflow-y-auto pr-2">
                 {renderEditor()}

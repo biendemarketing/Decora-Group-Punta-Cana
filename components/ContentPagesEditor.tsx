@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { NavigationData, AboutUsPageContent, FAQItem, LegalPage, PageSection, TeamMember, CompanyValue, TimelineEvent, JobVacancy, AboutUsSectionType, ContactContent } from '../types';
+// FIX: Removed 'AboutUsPageContent' and added 'Page' to the import statement.
+import { NavigationData, Page, FAQItem, LegalPage, PageSection, TeamMember, CompanyValue, TimelineEvent, JobVacancy, SectionType, ContactContent } from '../types';
 import { FileText, HelpCircle, Building, Plus, Trash2, GripVertical, Edit, Phone } from 'lucide-react';
 import ImageUploader from './ImageUploader';
 import IconSelector from './IconSelector';
@@ -65,7 +66,8 @@ const ListEditor = ({ items, onUpdate, renderItem, newItem, title, noun }: any) 
 }
 
 // Visual editors for each section of "About Us" page
-const sectionEditors: { [key in AboutUsSectionType]?: React.FC<{ section: PageSection, onChange: (newSection: PageSection) => void }> } = {
+// FIX: Renamed 'AboutUsSectionType' to 'SectionType' to match the export from types.ts
+const sectionEditors: { [key in SectionType]?: React.FC<{ section: PageSection, onChange: (newSection: PageSection) => void }> } = {
     history: ({ section, onChange }) => (
         <div className="space-y-2">
             <input type="text" value={section.content.title} onChange={e => onChange({ ...section, content: { ...section.content, title: e.target.value }})} className={inputClass} />
@@ -192,8 +194,10 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
   const [activeTab, setActiveTab] = useState<ActiveTab>('about');
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
-  const handleAboutChange = (newContent: AboutUsPageContent) => {
-    onNavigationChange({ ...navigationData, aboutUsPage: newContent });
+  // FIX: handleAboutChange now finds and updates the 'about-us' page within the customPages array.
+  const handleAboutChange = (updatedAboutPage: Page) => {
+    const newCustomPages = navigationData.customPages.map(p => p.slug === 'about-us' ? updatedAboutPage : p);
+    onNavigationChange({ ...navigationData, customPages: newCustomPages });
   };
   
   const handleFaqChange = (newFaqs: FAQItem[]) => {
@@ -208,22 +212,29 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
       onNavigationChange({ ...navigationData, contactPage: newContent });
   };
 
+  // FIX: Retrieved the 'about-us' page from the customPages array.
+  const aboutUsPage = navigationData.customPages.find(p => p.slug === 'about-us');
+
   // --- About Us Section Builder ---
+  // FIX: Updated section handlers to use the retrieved 'aboutUsPage' object.
   const handleSectionUpdate = (sectionId: string, updatedSection: PageSection) => {
-    const newSections = navigationData.aboutUsPage.sections.map(s => s.id === sectionId ? updatedSection : s);
-    handleAboutChange({ sections: newSections });
+    if (!aboutUsPage) return;
+    const newSections = aboutUsPage.sections.map(s => s.id === sectionId ? updatedSection : s);
+    handleAboutChange({ ...aboutUsPage, sections: newSections });
   };
   const handleSectionDelete = (sectionId: string) => {
      if (window.confirm("¿Seguro que quieres eliminar esta sección?")) {
-        const newSections = navigationData.aboutUsPage.sections.filter(s => s.id !== sectionId);
-        handleAboutChange({ sections: newSections });
+        if (!aboutUsPage) return;
+        const newSections = aboutUsPage.sections.filter(s => s.id !== sectionId);
+        handleAboutChange({ ...aboutUsPage, sections: newSections });
      }
   };
    const handleSectionSort = (dragIndex: number, hoverIndex: number) => {
-        const newSections = [...navigationData.aboutUsPage.sections];
+        if (!aboutUsPage) return;
+        const newSections = [...aboutUsPage.sections];
         const draggedItem = newSections.splice(dragIndex, 1)[0];
         newSections.splice(hoverIndex, 0, draggedItem);
-        handleAboutChange({ sections: newSections });
+        handleAboutChange({ ...aboutUsPage, sections: newSections });
    };
 
   const TabButton = ({ id, label, icon: Icon }: { id: ActiveTab, label: string, icon: React.ElementType }) => (
@@ -242,9 +253,10 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
         <TabButton id="contact" label="Contacto" icon={Phone} />
       </div>
        <div className="p-4 bg-gray-50 rounded-b-lg border border-t-0">
+         {/* FIX: Use aboutUsPage object and check for its existence. */}
          {activeTab === 'about' && (
             <div className="space-y-4">
-                {navigationData.aboutUsPage.sections.map((section, index) => {
+                {aboutUsPage ? aboutUsPage.sections.map((section, index) => {
                     const EditorComponent = sectionEditors[section.type];
                     return (
                         <div key={section.id} className="p-3 border rounded-md bg-white shadow-sm">
@@ -262,7 +274,7 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
                             )}
                         </div>
                     );
-                })}
+                }) : <p>Página "Nosotros" no encontrada.</p>}
             </div>
          )}
          {activeTab === 'faq' && <ListEditor 

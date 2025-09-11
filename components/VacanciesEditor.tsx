@@ -12,15 +12,25 @@ const VacanciesEditor: React.FC<VacanciesEditorProps> = ({ navigationData, onNav
   const [editingVacancy, setEditingVacancy] = useState<JobVacancy | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const hiringSectionIndex = navigationData.aboutUsPage.sections.findIndex(s => s.type === 'hiring');
+  // FIX: Find 'about-us' page from customPages array.
+  const aboutUsPage = navigationData.customPages.find(p => p.slug === 'about-us');
+
+  // FIX: Add check to ensure the aboutUsPage was found.
+  if (!aboutUsPage) {
+    return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: La página "Nosotros" (slug: 'about-us') no fue encontrada.</div>;
+  }
+
+  // FIX: Find hiring section within the found aboutUsPage.
+  const hiringSectionIndex = aboutUsPage.sections.findIndex(s => s.type === 'hiring');
   if (hiringSectionIndex === -1) {
     return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: No se encontró la sección 'hiring' en la configuración de la página "Nosotros".</div>;
   }
-  const hiringSection = navigationData.aboutUsPage.sections[hiringSectionIndex];
+  const hiringSection = aboutUsPage.sections[hiringSectionIndex];
   const vacancies = hiringSection.content.vacancies || [];
 
+  // FIX: Correctly update vacancies within the nested customPages structure.
   const updateVacancies = (newVacancies: JobVacancy[]) => {
-    const newSections = [...navigationData.aboutUsPage.sections];
+    const newSections = [...aboutUsPage.sections];
     newSections[hiringSectionIndex] = {
       ...hiringSection,
       content: {
@@ -28,12 +38,19 @@ const VacanciesEditor: React.FC<VacanciesEditorProps> = ({ navigationData, onNav
         vacancies: newVacancies,
       },
     };
+    
+    const updatedAboutUsPage = {
+        ...aboutUsPage,
+        sections: newSections,
+    };
+
+    const newCustomPages = navigationData.customPages.map(p =>
+        p.id === aboutUsPage.id ? updatedAboutUsPage : p
+    );
+
     onNavigationChange({
       ...navigationData,
-      aboutUsPage: {
-        ...navigationData.aboutUsPage,
-        sections: newSections,
-      },
+      customPages: newCustomPages,
     });
   };
 

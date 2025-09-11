@@ -1,6 +1,7 @@
 
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy } from './types';
+import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -19,7 +20,7 @@ import ServicesSection from './components/ServicesSection';
 import WorkProcessSection from './components/WorkProcessSection';
 import QuoteFormPage from './components/QuoteFormPage';
 import Pagination from './components/Pagination';
-import AboutUsPage from './components/AboutUsPage';
+import GenericPage from './components/AboutUsPage';
 import ContactPage from './components/ContactPage';
 import ContactInfo from './components/ContactInfo';
 import LocationMap from './components/LocationMap';
@@ -180,7 +181,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication' | 'printCatalogue';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'customPage' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication' | 'printCatalogue';
 
 interface CustomerInfo {
     name: string;
@@ -307,6 +308,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const { formatPrice } = useCurrency();
   
   const [view, setView] = useState<View>('home');
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -333,7 +335,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   useEffect(() => {
     if (view === 'admin' || view === 'login') return;
     window.scrollTo(0, 0);
-  }, [view, selectedProduct, selectedProject]);
+  }, [view, selectedProduct, selectedProject, activeSlug]);
 
   useEffect(() => {
     let title = "Decora Group - Muebles a Medida y Diseño de Interiores en Punta Cana";
@@ -357,9 +359,18 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                  description = `Explora toda nuestra colección de productos. Encuentra diseños de alta calidad para tu hogar en Decora Group.`;
             }
             break;
+        case 'customPage':
+            const currentPageData = navigationData.customPages.find(p => p.slug === activeSlug);
+            if (currentPageData) {
+                title = `${currentPageData.title} | Decora Group`;
+                const firstTextBlock = currentPageData.sections.find(s => s.type === 'textBlock');
+                if (firstTextBlock) {
+                    description = firstTextBlock.content.text.substring(0, 160).replace(/<[^>]*>?/gm, '');
+                }
+            }
     }
     updateSEO(title, description, structuredData);
-  }, [view, selectedProduct, filters, selectedProject, selectedProjectCategory, selectedQuoteType]);
+  }, [view, selectedProduct, filters, selectedProject, selectedProjectCategory, selectedQuoteType, activeSlug, navigationData.customPages]);
 
   const resetFilters = useCallback(() => {
     setFilters({
@@ -370,6 +381,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
 
   const resetToHome = () => {
     setView('home');
+    setActiveSlug(null);
     resetFilters();
     setSelectedProduct(null);
     setSelectedProject(null);
@@ -403,6 +415,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const handleSelectCategory = useCallback((category: string) => {
     setSearchQuery('');
     setView('category');
+    setActiveSlug(null);
     setCurrentPage(1);
     // Reset all filters and set the new category
     setFilters({
@@ -419,6 +432,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const handleSelectProjectCategory = useCallback((category: string) => {
     setSelectedProjectCategory(category);
     setView('projects');
+    setActiveSlug(null);
   }, []);
 
   const handleProjectSelect = useCallback((project: Project) => {
@@ -428,6 +442,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
 
   const handleViewCatalogues = useCallback(() => {
     setView('catalogues');
+    setActiveSlug(null);
   }, []);
 
   const handleViewCatalogueDetail = useCallback((catalogue: Catalogue) => {
@@ -439,6 +454,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     setSearchQuery(query);
     handleFilterChange({ category: [] }); // Search across all categories
     setView('category');
+    setActiveSlug(null);
     setCurrentPage(1);
   }, [handleFilterChange]);
 
@@ -451,6 +467,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     } else {
       setSelectedQuoteType(type);
       setView('quoteForm');
+      setActiveSlug(null);
     }
   }, []);
 
@@ -507,6 +524,15 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   };
 
   const handleNavigate = useCallback((key: string) => {
+    // Check for dynamic page slugs first
+    const customPage = navigationData.customPages.find(p => p.slug === key);
+    if (customPage) {
+        setActiveSlug(key);
+        setView('customPage');
+        return;
+    }
+
+    // Check for hardcoded routes
     const menuItem = navigationData.menuItems.find(item => item.key === key);
     if(menuItem) {
       handleSelectCategory(menuItem.title);
@@ -514,39 +540,46 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     }
 
     switch (key) {
+      case 'home':
+        resetToHome();
+        break;
       case 'products':
         handleSelectCategory("Todos los productos");
         break;
       case 'projects':
         setSelectedProjectCategory(null);
         setView('projects');
+        setActiveSlug(null);
         break;
       case 'quote':
         setView('quote');
-        break;
-      case 'about':
-        setView('about');
+        setActiveSlug(null);
         break;
       case 'contact':
         setView('contact');
+        setActiveSlug(null);
         break;
       case 'blog':
         setView('blog');
+        setActiveSlug(null);
         break;
       case 'catalogues':
         setView('catalogues');
+        setActiveSlug(null);
         break;
       case 'faq':
         setView('faq');
+        setActiveSlug(null);
         break;
       case 'legal':
         setView('legal');
+        setActiveSlug(null);
         break;
       default:
         resetToHome();
         break;
     }
-  }, [handleSelectCategory, navigationData.menuItems]);
+  }, [handleSelectCategory, navigationData.menuItems, navigationData.customPages]);
 
   const handleViewJobDetail = useCallback((job: JobVacancy) => {
     setSelectedJobVacancy(job);
@@ -664,8 +697,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
           onGoHome={resetToHome} 
           onViewQuotePage={() => setView('quote')}
           onSelectQuoteType={handleSelectQuoteType}
-          onViewAboutPage={() => setView('about')}
-          onViewContactPage={() => setView('contact')}
           onViewCart={() => setView('cart')}
           onViewWishlist={() => setView('wishlist')}
           onViewBlogPage={() => setView('blog')}
@@ -678,8 +709,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       
       {(() => {
           switch(view) {
-              case 'jobApplication': return <JobApplicationPage jobTitle={applicationJobTitle!} onBack={() => setView('about')} />;
-              case 'jobDetail': return <JobDetailPage job={selectedJobVacancy!} onBack={() => setView('about')} onApply={handleApplyForJob} />;
+              case 'jobApplication': return <JobApplicationPage jobTitle={applicationJobTitle!} onBack={() => handleNavigate('about-us')} />;
+              case 'jobDetail': return <JobDetailPage job={selectedJobVacancy!} onBack={() => handleNavigate('about-us')} onApply={handleApplyForJob} />;
               case 'legal': return <LegalPage legalContent={navigationData.legalContent} />;
               case 'faq': return <FAQPage faqContent={navigationData.faqContent} />;
               case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} onPrintCatalogue={handlePrintCatalogue} />;
@@ -696,7 +727,13 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                       onGoBackToCart={() => setView('cart')}
                       onContinueShopping={() => handleSelectCategory("Todos los productos")}
                   />;
-              case 'about': return <AboutUsPage content={navigationData.aboutUsPage} onViewJobDetail={handleViewJobDetail} onApplyForJob={handleApplyForJob} />;
+              case 'customPage':
+                  const pageData = navigationData.customPages.find(p => p.slug === activeSlug);
+                  if (!pageData) {
+                    // Fallback for not found page
+                    return <div>Página no encontrada</div>;
+                  }
+                  return <GenericPage page={pageData} onViewJobDetail={handleViewJobDetail} onApplyForJob={handleApplyForJob} />;
               case 'contact': return <ContactPage content={navigationData.contactPage} />;
               case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} quoteConfig={navigationData.quoteConfig} />;
               case 'quote': return <CustomQuotePage projectTypes={navigationData.quoteConfig.projectTypes} onSelectQuoteType={handleSelectQuoteType} />;
@@ -808,6 +845,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         footerLogoUrl={navigationData.footerLogoUrl}
         onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')} 
         onSelectProjectCategory={handleSelectProjectCategory}
+        onNavigate={handleNavigate}
       />
     </div>
   );
@@ -824,15 +862,11 @@ const App: React.FC = () => {
     if (storedNavData) {
       try {
         const parsedData = JSON.parse(storedNavData);
-        // Add a check for new blog properties to ensure backward compatibility
         if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && parsedData.footerContent) {
-          // Initialize catalogues if it doesn't exist
-          if (!parsedData.catalogues) {
-            parsedData.catalogues = [];
-          }
+          if (!parsedData.catalogues) parsedData.catalogues = [];
+          if (!parsedData.customPages) parsedData.customPages = [];
           setNavigationData(parsedData);
         } else {
-          // If data is old/malformed, reset to initial
           localStorage.setItem('navigationData', JSON.stringify(INITIAL_NAVIGATION_DATA));
           setNavigationData(INITIAL_NAVIGATION_DATA);
         }

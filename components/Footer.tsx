@@ -1,7 +1,7 @@
 import React from 'react';
 import { Facebook, Instagram, Youtube, ArrowUp } from 'lucide-react';
 import FooterLogo from './FooterLogo';
-import { FooterContent } from '../types';
+import { FooterContent, FooterLink } from '../types';
 
 const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg 
@@ -20,6 +20,7 @@ interface FooterProps {
   content: FooterContent;
   footerLogoUrl: string;
   onSelectProjectCategory: (category: string) => void;
+  onNavigate: (key: string) => void;
 }
 
 const socialIconMap = {
@@ -29,7 +30,7 @@ const socialIconMap = {
     WhatsApp: WhatsAppIcon
 };
 
-const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl, onSelectProjectCategory }) => {
+const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl, onSelectProjectCategory, onNavigate }) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -37,15 +38,24 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
     });
   };
   
-  const renderLink = (link: any) => {
-    if (link.linkType === 'project-category') {
-      return (
-        <button onClick={() => onSelectProjectCategory(link.url)} className="text-sm text-gray-400 hover:text-white text-left">
-            {link.text}
-        </button>
-      );
+  const renderLink = (link: FooterLink) => {
+    switch(link.linkType) {
+        case 'project-category':
+          return (
+            <button onClick={() => onSelectProjectCategory(link.url)} className="text-sm text-gray-400 hover:text-white text-left">
+                {link.text}
+            </button>
+          );
+        case 'page':
+            return (
+                <button onClick={() => onNavigate(link.url)} className="text-sm text-gray-400 hover:text-white text-left">
+                    {link.text}
+                </button>
+            );
+        case 'url':
+        default:
+            return <a href={link.url} className="text-sm text-gray-400 hover:text-white">{link.text}</a>;
     }
-    return <a href={link.url} className="text-sm text-gray-400 hover:text-white">{link.text}</a>;
   };
 
   return (

@@ -303,7 +303,7 @@ export interface FooterLink {
   id: string;
   text: string;
   url: string;
-  linkType?: 'url' | 'project-category';
+  linkType?: 'url' | 'project-category' | 'page';
 }
 
 export interface FooterLinkColumn {
@@ -358,19 +358,37 @@ export interface JobVacancy {
 }
 
 
-// --- New About Us Section Builder Types ---
-export type AboutUsSectionType = 'history' | 'timeline' | 'missionVision' | 'values' | 'team' | 'hiring' | 'clients' | 'whyChooseUs';
+// --- New Global Section Builder Types ---
+export type SectionType = 
+  | 'history' 
+  | 'timeline' 
+  | 'missionVision' 
+  | 'values' 
+  | 'team' 
+  | 'hiring' 
+  | 'clients' 
+  | 'whyChooseUs' 
+  | 'textBlock' 
+  | 'gallery'
+  | 'hero'
+  | 'cta'
+  | 'featureGrid'
+  | 'testimonials';
 
 export interface PageSection {
     id: string;
-    type: AboutUsSectionType;
+    type: SectionType;
     content: any;
 }
 
-export interface AboutUsPageContent {
+export interface Page {
+  id: string;
+  title: string;
+  slug: string;
+  isVisibleInHeader: boolean;
+  isVisibleInFooter: boolean;
   sections: PageSection[];
 }
-
 
 export interface FAQItem {
   id: string;
@@ -437,7 +455,6 @@ export interface NavigationData {
   contactPhoneLink: string;
   // New CMS fields
   footerContent: FooterContent;
-  aboutUsPage: AboutUsPageContent;
   faqContent: {
     title: string;
     subtitle: string;
@@ -446,4 +463,5 @@ export interface NavigationData {
   legalContent: LegalContent;
   instagramShowcase: InstagramShowcaseData;
   contactPage: ContactContent;
+  customPages: Page[];
 }
