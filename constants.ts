@@ -618,7 +618,7 @@ const INITIAL_CONTACT_CONTENT: ContactContent = {
     infoTitle: 'Información de Contacto',
     phone: '(849) 456-1963',
     email: 'decoragrouppc@gmail.com',
-    address: 'CANATOWN Plaza & Centro de Logística, Av. Barceló, local 101, Veron, Punta Cana 23000',
+    address: 'Av. Barceló, CANATOWN, Punta Cana 23000',
     hours: 'Lunes - Viernes: 9:00 AM - 6:00 PM | Sábados: 9:00 AM - 4:00 PM | Domingos: Cerrado',
     mapTitle: 'Nuestra Ubicación'
 };

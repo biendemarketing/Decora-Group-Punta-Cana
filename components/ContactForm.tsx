@@ -20,7 +20,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
     }
   }, [selectedProvince]);
 
-  const inputClasses = "mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#5a1e38] focus:border-[#5a1e38] sm:text-sm";
+  const inputClasses = "mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#5a1e38] focus:border-[#5a1e38] sm:text-sm text-gray-900";
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200">

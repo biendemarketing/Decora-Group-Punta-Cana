@@ -38,7 +38,7 @@ const InstagramShowcase: React.FC<InstagramShowcaseProps> = ({ showcaseData }) =
                 </div>
                 <div className="w-full">
                   <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
-                    <h3 className="text-2xl font-bold">{username}</h3>
+                    <h3 className="text-2xl font-bold text-gray-900">{username}</h3>
                     {isVerified && <BadgeCheck className="w-6 h-6 text-white fill-blue-500" />}
                   </div>
                   <div className="flex items-center justify-center sm:justify-start gap-6 text-sm text-gray-500 mb-4">
