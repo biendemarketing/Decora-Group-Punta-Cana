@@ -421,6 +421,15 @@ export interface HelpContent {
     adminTopics: HelpTopic[];
 }
 
+export type FileType = 'image' | 'video' | 'audio' | 'document' | 'other';
+
+export interface MediaItem {
+    id: string;
+    url: string;
+    nombre: string;
+    origen: string;
+    tipo: FileType;
+}
 
 export interface InstagramShowcaseImage {
     id: string;
