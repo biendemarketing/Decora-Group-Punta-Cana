@@ -12,13 +12,14 @@ interface WorkProcessEditorProps {
 const WorkProcessEditor: React.FC<WorkProcessEditorProps> = ({ workProcessSection, onSectionChange }) => {
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
+  const steps = workProcessSection.steps || [];
 
   const handleFieldChange = (field: keyof WorkProcessSection, value: any) => {
     onSectionChange({ ...workProcessSection, [field]: value });
   };
 
   const handleStepChange = (id: string, field: keyof WorkProcessStep, value: string) => {
-    const newSteps = workProcessSection.steps.map(step =>
+    const newSteps = steps.map(step =>
       step.id === id ? { ...step, [field]: value } : step
     );
     handleFieldChange('steps', newSteps);
@@ -31,18 +32,18 @@ const WorkProcessEditor: React.FC<WorkProcessEditorProps> = ({ workProcessSectio
       description: 'Descripción del nuevo paso.',
       icon: 'FileText',
     };
-    handleFieldChange('steps', [...workProcessSection.steps, newStep]);
+    handleFieldChange('steps', [...steps, newStep]);
   };
 
   const handleDeleteStep = (id: string) => {
     if (window.confirm("¿Seguro que quieres eliminar este paso?")) {
-      handleFieldChange('steps', workProcessSection.steps.filter(s => s.id !== id));
+      handleFieldChange('steps', steps.filter(s => s.id !== id));
     }
   };
 
   const handleSort = () => {
     if (dragItem.current === null || dragOverItem.current === null) return;
-    const newSteps = [...workProcessSection.steps];
+    const newSteps = [...steps];
     const draggedItemContent = newSteps.splice(dragItem.current, 1)[0];
     newSteps.splice(dragOverItem.current, 0, draggedItemContent);
     dragItem.current = null;
@@ -66,7 +67,7 @@ const WorkProcessEditor: React.FC<WorkProcessEditorProps> = ({ workProcessSectio
 
       <div className="space-y-3">
         <h4 className="text-md font-semibold text-gray-700">Pasos del Proceso</h4>
-        {workProcessSection.steps.map((step, index) => (
+        {steps.map((step, index) => (
           <div key={step.id} draggable onDragStart={() => dragItem.current = index} onDragEnter={() => dragOverItem.current = index} onDragEnd={handleSort} onDragOver={(e) => e.preventDefault()}
             className="p-3 border rounded-md bg-gray-50 space-y-3 cursor-grab"
           >

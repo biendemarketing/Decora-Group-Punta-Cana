@@ -15,7 +15,8 @@ const CataloguePreview: React.FC<CataloguePreviewProps> = ({ catalogue, products
   const config = catalogue.config!;
 
   const selectedTemplate = CATALOGUE_PAGE_TEMPLATES.find(t => t.id === config.pageTemplateId) || CATALOGUE_PAGE_TEMPLATES[0];
-  const productsPerPage = selectedTemplate.productsPerPage;
+  // Fix: Used productsPerPage from the catalogue config instead of the template object.
+  const productsPerPage = config.productsPerPage;
 
   const productsByCategory: { [key: string]: Product[] } = {};
   navigationData.menuItems.forEach(menuItem => {

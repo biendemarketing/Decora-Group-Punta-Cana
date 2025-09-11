@@ -221,12 +221,12 @@ export interface BlogPost {
   tagIds: string[];
 }
 
-export type CataloguePageLayoutId = 'grid' | 'list' | 'collage';
+export type CataloguePageLayoutId = 'grid' | 'list' | 'collage' | 'list-2-col';
 
 export interface CatalogueCoverConfig {
     type: 'template' | 'custom';
     templateId?: string;
-    customImageUrls: string[]; // Support for multiple images
+    customImageUrls: string[]; 
     title: string;
     subtitle: string;
     showTitle: boolean;
@@ -234,9 +234,11 @@ export interface CatalogueCoverConfig {
     showLogo: boolean;
     logoPosition: 'top-left' | 'top-center' | 'middle-center' | 'bottom-left' | 'bottom-center';
     logoSize: 'small' | 'medium' | 'large';
+    showFooter: boolean;
 }
 
 export interface CatalogueBackCoverConfig {
+    templateId: string;
     showLogo: boolean;
     showCompanyName: boolean;
     showAddress: boolean;
@@ -247,6 +249,15 @@ export interface CatalogueBackCoverConfig {
     customText: string;
 }
 
+export interface ProductDisplayConfig {
+    showDescription: boolean;
+    showSku: boolean;
+    showColors: boolean;
+    showDimensions: boolean;
+    showMaterials: boolean;
+    showFinish: boolean;
+    showLed: boolean;
+}
 
 export interface CatalogueConfig {
     cover: CatalogueCoverConfig;
@@ -254,9 +265,13 @@ export interface CatalogueConfig {
     pageTemplateId: CataloguePageLayoutId;
     includedCategoryIds: string[];
     includedSubCategoryIds: string[];
-    layout: CataloguePageLayoutId; // Kept for compatibility, but pageTemplateId is now the source of truth
+    layout: CataloguePageLayoutId; 
     hidePrices: boolean;
     showPageNumbers: boolean;
+    fontFamily: string;
+    accentColor: string;
+    productsPerPage: number;
+    productDisplay: ProductDisplayConfig;
 }
 
 

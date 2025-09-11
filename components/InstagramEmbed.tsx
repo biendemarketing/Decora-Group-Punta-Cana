@@ -7,6 +7,10 @@ interface InstagramShowcaseProps {
 }
 
 const InstagramShowcase: React.FC<InstagramShowcaseProps> = ({ showcaseData }) => {
+  if (!showcaseData) {
+    return null; // Or a placeholder loading component
+  }
+
   const { 
     username, 
     isVerified, 
@@ -64,7 +68,7 @@ const InstagramShowcase: React.FC<InstagramShowcaseProps> = ({ showcaseData }) =
             {/* Right Column: Image Grid */}
             <div className="hidden lg:block">
               <div className="grid grid-cols-3 gap-4">
-                {galleryImages.slice(0, 6).map((image) => (
+                {(galleryImages || []).slice(0, 6).map((image) => (
                   <a key={image.id} href={instagramProfileUrl} target="_blank" rel="noopener noreferrer" className="block group">
                     <div className="aspect-square relative overflow-hidden rounded-xl">
                       <img

@@ -14,7 +14,11 @@ interface WorkProcessSectionProps {
 }
 
 const WorkProcessSection: React.FC<WorkProcessSectionProps> = ({ workProcessSection }) => {
-  const { title, backgroundImageUrl, steps } = workProcessSection;
+  if (!workProcessSection) {
+    return null; // Return nothing if the whole section data is missing
+  }
+
+  const { title, backgroundImageUrl, steps = [] } = workProcessSection;
 
   return (
     <section 

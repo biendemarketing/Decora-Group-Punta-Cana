@@ -18,12 +18,13 @@ const IntegrationsEditor: React.FC<IntegrationsEditorProps> = ({ navigationData,
     };
 
     const handleGalleryImageChange = (index: number, url: string) => {
-        const newImages = [...showcaseData.galleryImages];
+        const newImages = [...(showcaseData.galleryImages || [])];
         newImages[index] = { ...newImages[index], imageUrl: url };
         handleShowcaseChange('galleryImages', newImages);
     };
     
     const inputClass = "w-full text-sm p-2 border border-gray-300 rounded bg-white text-gray-900 shadow-sm focus:ring-blue-500 focus:border-blue-500";
+    const galleryImages = showcaseData.galleryImages || [];
 
     return (
         <div className="space-y-6">
@@ -84,14 +85,14 @@ const IntegrationsEditor: React.FC<IntegrationsEditorProps> = ({ navigationData,
                 <div>
                     <h5 className="text-sm font-medium text-gray-600 mb-2">Imágenes de la Galería (6 imágenes)</h5>
                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                        {showcaseData.galleryImages.slice(0, 6).map((image, index) => (
+                        {galleryImages.slice(0, 6).map((image, index) => (
                              <div key={image.id}>
                                 <label className="text-xs text-gray-500 block mb-1">Imagen {index + 1}</label>
                                 <ImageUploader imageUrl={image.imageUrl} onImageChange={url => handleGalleryImageChange(index, url)} isCompact />
                             </div>
                         ))}
                     </div>
-                     {showcaseData.galleryImages.length < 6 && <p className="text-xs text-red-500 mt-2">Faltan imágenes en la galería. Debe haber 6.</p>}
+                     {galleryImages.length < 6 && <p className="text-xs text-red-500 mt-2">Faltan imágenes en la galería. Debe haber 6.</p>}
                 </div>
             </div>
         </div>

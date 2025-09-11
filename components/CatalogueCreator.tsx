@@ -14,6 +14,7 @@ interface CatalogueCreatorProps {
   productsData: Product[];
 }
 
+// Fix: Added missing properties to the default config to match the CatalogueConfig interface.
 const getDefaultConfig = (navigationData: NavigationData): CatalogueConfig => ({
   cover: {
     type: 'template',
@@ -26,8 +27,10 @@ const getDefaultConfig = (navigationData: NavigationData): CatalogueConfig => ({
     showLogo: true,
     logoPosition: 'top-left',
     logoSize: 'medium',
+    showFooter: true,
   },
   backCover: {
+    templateId: 'classic',
     showLogo: true,
     showCompanyName: true,
     showAddress: true,
@@ -43,6 +46,18 @@ const getDefaultConfig = (navigationData: NavigationData): CatalogueConfig => ({
   layout: 'grid',
   hidePrices: false,
   showPageNumbers: true,
+  fontFamily: 'Poppins',
+  accentColor: '#5a1e38',
+  productsPerPage: 4,
+  productDisplay: {
+    showDescription: true,
+    showSku: false,
+    showColors: true,
+    showDimensions: true,
+    showMaterials: true,
+    showFinish: true,
+    showLed: true,
+  },
 });
 
 const CoverPreview = ({ config, logoUrl }: { config: CatalogueConfig['cover'], logoUrl: string }) => {
