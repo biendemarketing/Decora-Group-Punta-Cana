@@ -248,6 +248,7 @@ export interface FooterLink {
   id: string;
   text: string;
   url: string;
+  linkType?: 'url' | 'project-category';
 }
 
 export interface FooterLinkColumn {
@@ -294,26 +295,19 @@ export interface JobVacancy {
   title: string;
 }
 
-export interface AboutUsPageContent {
-  historySection: {
-    title: string;
-    text: string;
-    images: { id: string, url: string, alt: string }[];
-  };
-  timeline: TimelineEvent[];
-  missionVision: {
-    mission: { title: string, text: string };
-    vision: { title: string, text: string };
-  };
-  values: CompanyValue[];
-  team: TeamMember[];
-  hiring: {
-    title: string;
-    text: string;
-    vacancies: JobVacancy[];
-    closingText: string;
-  };
+// --- New About Us Section Builder Types ---
+export type AboutUsSectionType = 'history' | 'timeline' | 'missionVision' | 'values' | 'team' | 'hiring' | 'clients' | 'whyChooseUs';
+
+export interface PageSection {
+    id: string;
+    type: AboutUsSectionType;
+    content: any;
 }
+
+export interface AboutUsPageContent {
+  sections: PageSection[];
+}
+
 
 export interface FAQItem {
   id: string;

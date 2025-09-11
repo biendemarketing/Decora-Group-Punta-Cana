@@ -15,11 +15,11 @@ const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
     </svg>
 );
 
-// FIX: Added footerLogoUrl to props to resolve missing property error.
 interface FooterProps {
   onViewAdminPage: () => void;
   content: FooterContent;
   footerLogoUrl: string;
+  onSelectProjectCategory: (category: string) => void;
 }
 
 const socialIconMap = {
@@ -29,12 +29,23 @@ const socialIconMap = {
     WhatsApp: WhatsAppIcon
 };
 
-const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl }) => {
+const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl, onSelectProjectCategory }) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+  };
+  
+  const renderLink = (link: any) => {
+    if (link.linkType === 'project-category') {
+      return (
+        <button onClick={() => onSelectProjectCategory(link.url)} className="text-sm text-gray-400 hover:text-white text-left">
+            {link.text}
+        </button>
+      );
+    }
+    return <a href={link.url} className="text-sm text-gray-400 hover:text-white">{link.text}</a>;
   };
 
   return (
@@ -45,7 +56,6 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Logo and Socials Column */}
             <div className="space-y-6">
-              {/* FIX: Use the passed footerLogoUrl prop instead of trying to access a non-existent property on `content`. */}
               <FooterLogo src={footerLogoUrl} />
               <p className="text-sm text-gray-400">
                 {content.description}
@@ -64,7 +74,7 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
                 <div key={column.id}>
                     <h3 className="text-base font-semibold text-white tracking-wider">{column.title}</h3>
                     <ul role="list" className="mt-4 space-y-3">
-                        {column.links.map(link => <li key={link.id}><a href={link.url} className="text-sm text-gray-400 hover:text-white">{link.text}</a></li>)}
+                        {column.links.map(link => <li key={link.id}>{renderLink(link)}</li>)}
                     </ul>
                 </div>
             ))}

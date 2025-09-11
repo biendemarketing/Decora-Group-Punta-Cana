@@ -1,9 +1,15 @@
 import React from 'react';
-import { AboutUsPageContent } from '../types';
+import { JobVacancy } from '../types';
 import JobListing from './JobListing';
 
+// FIX: Corrected the prop type. The content is a specific object for hiring info, not a property on AboutUsPageContent.
 interface HiringCTAProps {
-  content: AboutUsPageContent['hiring'];
+  content: {
+    title: string;
+    text: string;
+    vacancies: JobVacancy[];
+    closingText: string;
+  };
 }
 
 const HiringCTA: React.FC<HiringCTAProps> = ({ content }) => {

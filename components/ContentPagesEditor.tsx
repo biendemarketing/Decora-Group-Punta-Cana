@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { NavigationData, AboutUsPageContent, FAQItem, LegalPage } from '../types';
-import { FileText, HelpCircle, Building } from 'lucide-react';
-// Import sub-editors if they were complex, or define inline for simplicity
-// For now, let's define them inline.
+import { NavigationData, AboutUsPageContent, FAQItem, LegalPage, PageSection, TeamMember, CompanyValue, TimelineEvent, JobVacancy, AboutUsSectionType } from '../types';
+import { FileText, HelpCircle, Building, Plus, Trash2, GripVertical, Edit } from 'lucide-react';
+import ImageUploader from './ImageUploader';
+import IconSelector from './IconSelector';
 
 interface ContentPagesEditorProps {
   navigationData: NavigationData;
@@ -11,64 +11,149 @@ interface ContentPagesEditorProps {
 
 type ActiveTab = 'about' | 'faq' | 'legal';
 
-// Placeholder for a more complex sub-editor component
-const AboutUsEditor: React.FC<{ content: AboutUsPageContent, onChange: (newContent: AboutUsPageContent) => void }> = ({ content, onChange }) => (
-    <div className="p-4 border rounded-md bg-gray-100 text-sm">
-        <h4 className="font-semibold mb-2">Editor Página "Nosotros"</h4>
-        <p>Aquí iría el editor detallado para la página "Nosotros", con campos para la historia, misión, visión, equipo, etc.</p>
-        <textarea 
-            className="w-full h-40 p-2 mt-2 border rounded" 
-            value={JSON.stringify(content, null, 2)} 
-            onChange={(e) => {
-                try {
-                    onChange(JSON.parse(e.target.value))
-                } catch(err) {
-                    console.error("Invalid JSON")
-                }
-            }}
-        />
-    </div>
-);
+const inputClass = "w-full text-sm p-2 border border-gray-300 rounded bg-white text-gray-900 shadow-sm focus:ring-blue-500 focus:border-blue-500";
+const textareaClass = `${inputClass} h-24`;
 
-const FAQEditor: React.FC<{ faqs: FAQItem[], onChange: (newFaqs: FAQItem[]) => void }> = ({ faqs, onChange }) => (
-     <div className="p-4 border rounded-md bg-gray-100 text-sm">
-        <h4 className="font-semibold mb-2">Editor de Preguntas Frecuentes (FAQ)</h4>
-        <p>Aquí iría el editor para añadir, eliminar y reordenar las preguntas y respuestas.</p>
-         <textarea 
-            className="w-full h-40 p-2 mt-2 border rounded" 
-            value={JSON.stringify(faqs, null, 2)} 
-            onChange={(e) => {
-                try {
-                    onChange(JSON.parse(e.target.value))
-                } catch(err) {
-                    console.error("Invalid JSON")
-                }
-            }}
-        />
-    </div>
-);
+// A simple but effective visual editor for a list of items
+const ListEditor = ({ items, onUpdate, renderItem, newItem, title, noun }: any) => {
+    const handleUpdateItem = (id: string, newContent: any) => {
+        onUpdate(items.map((item: any) => item.id === id ? { ...item, ...newContent } : item));
+    };
 
-const LegalEditor: React.FC<{ pages: LegalPage[], onChange: (newPages: LegalPage[]) => void }> = ({ pages, onChange }) => (
-     <div className="p-4 border rounded-md bg-gray-100 text-sm">
-        <h4 className="font-semibold mb-2">Editor de Páginas Legales</h4>
-        <p>Aquí iría el editor para el contenido de las páginas de Aviso Legal, Términos, etc.</p>
-         <textarea 
-            className="w-full h-40 p-2 mt-2 border rounded" 
-            value={JSON.stringify(pages, null, 2)} 
-            onChange={(e) => {
-                try {
-                    onChange(JSON.parse(e.target.value))
-                } catch(err) {
-                    console.error("Invalid JSON")
-                }
-            }}
-        />
-    </div>
-);
+    const handleAddItem = () => {
+        onUpdate([...items, { ...newItem, id: crypto.randomUUID() }]);
+    };
 
+    const handleDeleteItem = (id: string) => {
+        if (window.confirm(`¿Seguro que quieres eliminar este elemento?`)) {
+            onUpdate(items.filter((item: any) => item.id !== id));
+        }
+    };
+    
+    // Drag and drop sorting
+    const dragItem = React.useRef<number | null>(null);
+    const dragOverItem = React.useRef<number | null>(null);
+    const handleSort = () => {
+        if (dragItem.current === null || dragOverItem.current === null) return;
+        const newItems = [...items];
+        const draggedItemContent = newItems.splice(dragItem.current, 1)[0];
+        newItems.splice(dragOverItem.current, 0, draggedItemContent);
+        dragItem.current = null;
+        dragOverItem.current = null;
+        onUpdate(newItems);
+    };
+
+    return (
+        <div className="space-y-3">
+            <h4 className="text-md font-semibold text-gray-800">{title}</h4>
+            <div className="space-y-2">
+                {items.map((item: any, index: number) => (
+                    <div key={item.id} className="p-3 border rounded-md bg-white shadow-sm" draggable onDragStart={() => dragItem.current = index} onDragEnter={() => dragOverItem.current = index} onDragEnd={handleSort} onDragOver={(e) => e.preventDefault()}>
+                        <div className="flex items-start gap-2">
+                            <GripVertical className="h-5 w-5 text-gray-400 mt-1 cursor-grab flex-shrink-0" />
+                            <div className="flex-grow">{renderItem(item, (updatedContent: any) => handleUpdateItem(item.id, updatedContent))}</div>
+                            <button onClick={() => handleDeleteItem(item.id)} className="p-1 text-gray-400 hover:text-red-500"><Trash2 className="h-4 w-4"/></button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <button onClick={handleAddItem} className="w-full flex items-center justify-center gap-2 p-2 border-2 border-dashed rounded-md text-sm text-gray-600 hover:bg-gray-100 hover:border-gray-400">
+                <Plus className="h-4 w-4" /> Añadir {noun}
+            </button>
+        </div>
+    );
+}
+
+// Visual editors for each section of "About Us" page
+const sectionEditors: { [key in AboutUsSectionType]?: React.FC<{ section: PageSection, onChange: (newSection: PageSection) => void }> } = {
+    history: ({ section, onChange }) => (
+        <div className="space-y-2">
+            <input type="text" value={section.content.title} onChange={e => onChange({ ...section, content: { ...section.content, title: e.target.value }})} className={inputClass} />
+            <textarea value={section.content.text} onChange={e => onChange({ ...section, content: { ...section.content, text: e.target.value }})} className={textareaClass} />
+            {/* Image gallery editor for history would go here */}
+        </div>
+    ),
+    timeline: ({ section, onChange }) => (
+         <ListEditor 
+            title="Eventos de la Línea de Tiempo" noun="Evento"
+            items={section.content.events}
+            onUpdate={(newEvents: TimelineEvent[]) => onChange({ ...section, content: { ...section.content, events: newEvents }})}
+            newItem={{ year: new Date().getFullYear(), description: ''}}
+            renderItem={(item: TimelineEvent, update: any) => (
+                <div className="grid grid-cols-4 gap-2">
+                    <input type="number" value={item.year} onChange={e => update({ year: parseInt(e.target.value) || 0 })} className={`col-span-1 ${inputClass}`} />
+                    <input type="text" value={item.description} onChange={e => update({ description: e.target.value })} className={`col-span-3 ${inputClass}`} />
+                </div>
+            )}
+        />
+    ),
+    missionVision: ({ section, onChange }) => (
+        <div className="grid grid-cols-2 gap-4">
+            <div>
+                <h5 className="font-semibold text-sm mb-1">Misión</h5>
+                <input type="text" value={section.content.mission.title} onChange={e => onChange({ ...section, content: { ...section.content, mission: { ...section.content.mission, title: e.target.value }}})} className={inputClass} />
+                <textarea value={section.content.mission.text} onChange={e => onChange({ ...section, content: { ...section.content, mission: { ...section.content.mission, text: e.target.value }}})} className={`mt-2 ${textareaClass}`} />
+            </div>
+             <div>
+                <h5 className="font-semibold text-sm mb-1">Visión</h5>
+                <input type="text" value={section.content.vision.title} onChange={e => onChange({ ...section, content: { ...section.content, vision: { ...section.content.vision, title: e.target.value }}})} className={inputClass} />
+                <textarea value={section.content.vision.text} onChange={e => onChange({ ...section, content: { ...section.content, vision: { ...section.content.vision, text: e.target.value }}})} className={`mt-2 ${textareaClass}`} />
+            </div>
+        </div>
+    ),
+     values: ({ section, onChange }) => (
+        <ListEditor
+            title="Valores de la Empresa" noun="Valor"
+            items={section.content.values}
+            onUpdate={(newValues: CompanyValue[]) => onChange({ ...section, content: { ...section.content, values: newValues } })}
+            newItem={{ title: '', description: '', icon: 'Check' }}
+            renderItem={(item: CompanyValue, update: any) => (
+                <div className="space-y-2">
+                    <input type="text" value={item.title} onChange={e => update({ title: e.target.value })} className={inputClass} placeholder="Título"/>
+                    <textarea value={item.description} onChange={e => update({ description: e.target.value })} className={textareaClass} placeholder="Descripción"/>
+                    <IconSelector selectedIcon={item.icon} onIconChange={icon => update({ icon })} />
+                </div>
+            )}
+        />
+    ),
+     team: ({ section, onChange }) => (
+        <ListEditor
+            title="Miembros del Equipo" noun="Miembro"
+            items={section.content.members}
+            onUpdate={(newMembers: TeamMember[]) => onChange({ ...section, content: { ...section.content, members: newMembers } })}
+            newItem={{ name: '', role: '', imageUrl: 'https://i.pravatar.cc/150' }}
+            renderItem={(item: TeamMember, update: any) => (
+                <div className="space-y-2">
+                    <input type="text" value={item.name} onChange={e => update({ name: e.target.value })} className={inputClass} placeholder="Nombre"/>
+                    <input type="text" value={item.role} onChange={e => update({ role: e.target.value })} className={inputClass} placeholder="Rol"/>
+                    <ImageUploader imageUrl={item.imageUrl} onImageChange={url => update({ imageUrl: url })} isCompact />
+                </div>
+            )}
+        />
+    ),
+    hiring: ({ section, onChange }) => (
+        <div className="space-y-4">
+             <input type="text" placeholder="Título Principal" value={section.content.title} onChange={e => onChange({ ...section, content: { ...section.content, title: e.target.value }})} className={inputClass} />
+             <textarea placeholder="Texto introductorio" value={section.content.text} onChange={e => onChange({ ...section, content: { ...section.content, text: e.target.value }})} className={textareaClass} />
+             <ListEditor
+                title="Vacantes de Empleo" noun="Vacante"
+                items={section.content.vacancies}
+                onUpdate={(newVacancies: JobVacancy[]) => onChange({ ...section, content: { ...section.content, vacancies: newVacancies } })}
+                newItem={{ title: '' }}
+                renderItem={(item: JobVacancy, update: any) => (
+                    <input type="text" value={item.title} onChange={e => update({ title: e.target.value })} className={inputClass} placeholder="Título de la vacante"/>
+                )}
+            />
+             <textarea placeholder="Texto de cierre" value={section.content.closingText} onChange={e => onChange({ ...section, content: { ...section.content, closingText: e.target.value }})} className={textareaClass} />
+        </div>
+    )
+};
+
+// ... More section editors can be added here ...
 
 const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData, onNavigationChange }) => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('about');
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
   const handleAboutChange = (newContent: AboutUsPageContent) => {
     onNavigationChange({ ...navigationData, aboutUsPage: newContent });
@@ -81,6 +166,24 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
   const handleLegalChange = (newPages: LegalPage[]) => {
       onNavigationChange({ ...navigationData, legalContent: { pages: newPages } });
   };
+
+  // --- About Us Section Builder ---
+  const handleSectionUpdate = (sectionId: string, updatedSection: PageSection) => {
+    const newSections = navigationData.aboutUsPage.sections.map(s => s.id === sectionId ? updatedSection : s);
+    handleAboutChange({ sections: newSections });
+  };
+  const handleSectionDelete = (sectionId: string) => {
+     if (window.confirm("¿Seguro que quieres eliminar esta sección?")) {
+        const newSections = navigationData.aboutUsPage.sections.filter(s => s.id !== sectionId);
+        handleAboutChange({ sections: newSections });
+     }
+  };
+   const handleSectionSort = (dragIndex: number, hoverIndex: number) => {
+        const newSections = [...navigationData.aboutUsPage.sections];
+        const draggedItem = newSections.splice(dragIndex, 1)[0];
+        newSections.splice(hoverIndex, 0, draggedItem);
+        handleAboutChange({ sections: newSections });
+   };
 
   const TabButton = ({ id, label, icon: Icon }: { id: ActiveTab, label: string, icon: React.ElementType }) => (
     <button onClick={() => setActiveTab(id)} className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-t-lg border-b-2 ${activeTab === id ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>
@@ -97,9 +200,53 @@ const ContentPagesEditor: React.FC<ContentPagesEditorProps> = ({ navigationData,
         <TabButton id="legal" label="Legal" icon={FileText} />
       </div>
        <div className="p-4 bg-gray-50 rounded-b-lg border border-t-0">
-         {activeTab === 'about' && <AboutUsEditor content={navigationData.aboutUsPage} onChange={handleAboutChange} />}
-         {activeTab === 'faq' && <FAQEditor faqs={navigationData.faqContent.faqs} onChange={handleFaqChange} />}
-         {activeTab === 'legal' && <LegalEditor pages={navigationData.legalContent.pages} onChange={handleLegalChange} />}
+         {activeTab === 'about' && (
+            <div className="space-y-4">
+                {navigationData.aboutUsPage.sections.map((section, index) => {
+                    const EditorComponent = sectionEditors[section.type];
+                    return (
+                        <div key={section.id} className="p-3 border rounded-md bg-white shadow-sm">
+                            <div className="flex justify-between items-center mb-2">
+                                <h4 className="font-semibold text-gray-700 capitalize flex items-center gap-2"><GripVertical className="h-5 w-5 text-gray-400 cursor-grab" /> {section.type}</h4>
+                                <div className="flex items-center gap-2">
+                                     <button onClick={() => setEditingSectionId(editingSectionId === section.id ? null : section.id)} className="p-1 text-gray-500 hover:text-blue-600"><Edit className="h-4 w-4"/></button>
+                                     <button onClick={() => handleSectionDelete(section.id)} className="p-1 text-gray-400 hover:text-red-500"><Trash2 className="h-4 w-4"/></button>
+                                </div>
+                            </div>
+                            {editingSectionId === section.id && EditorComponent && (
+                                <div className="border-t pt-4 mt-2">
+                                    <EditorComponent section={section} onChange={(newSection) => handleSectionUpdate(section.id, newSection)} />
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+         )}
+         {activeTab === 'faq' && <ListEditor 
+            title="Preguntas Frecuentes" noun="Pregunta"
+            items={navigationData.faqContent.faqs}
+            onUpdate={handleFaqChange}
+            newItem={{ question: 'Nueva Pregunta', answer: 'Nueva Respuesta' }}
+            renderItem={(item: FAQItem, update: any) => (
+                <div className="space-y-2">
+                    <input type="text" value={item.question} onChange={e => update({ question: e.target.value })} className={inputClass} placeholder="Pregunta"/>
+                    <textarea value={item.answer} onChange={e => update({ answer: e.target.value })} className={textareaClass} placeholder="Respuesta"/>
+                </div>
+            )}
+        />}
+        {activeTab === 'legal' && <ListEditor 
+            title="Páginas Legales" noun="Página"
+            items={navigationData.legalContent.pages}
+            onUpdate={handleLegalChange}
+            newItem={{ title: 'Nueva Página', content: 'Contenido...' }}
+            renderItem={(item: LegalPage, update: any) => (
+                <div className="space-y-2">
+                    <input type="text" value={item.title} onChange={e => update({ title: e.target.value })} className={inputClass} placeholder="Título de la Página"/>
+                    <textarea value={item.content} onChange={e => update({ content: e.target.value })} className={textareaClass} placeholder="Contenido de la página"/>
+                </div>
+            )}
+        />}
        </div>
     </div>
   );

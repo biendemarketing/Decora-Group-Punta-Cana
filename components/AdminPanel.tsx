@@ -91,7 +91,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       case 'pages':
         return <ContentPagesEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       case 'footer':
-        return <FooterEditor footerContent={draftNavData.footerContent} onFooterChange={(newFooter) => setDraftNavData(prev => ({...prev, footerContent: newFooter}))} />;
+        return <FooterEditor footerContent={draftNavData.footerContent} onFooterChange={(newFooter) => setDraftNavData(prev => ({...prev, footerContent: newFooter}))} projectCategories={projectCategories} />;
       case 'integrations':
         return <IntegrationsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       default:

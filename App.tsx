@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
@@ -659,7 +658,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                       onContinueShopping={() => handleSelectCategory("Todos los productos")}
                   />;
               case 'about': return <AboutUsPage content={navigationData.aboutUsPage} />;
-              // FIX: Pass the 'content' prop to ContactPage to fix the error.
               case 'contact': return <ContactPage content={navigationData.contactPage} />;
               case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} quoteConfig={navigationData.quoteConfig} />;
               case 'quote': return <CustomQuotePage projectTypes={navigationData.quoteConfig.projectTypes} onSelectQuoteType={handleSelectQuoteType} />;
@@ -772,9 +770,9 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       })()}
       <Footer 
         content={navigationData.footerContent}
-        // FIX: Pass the footerLogoUrl from navigationData to the Footer component.
         footerLogoUrl={navigationData.footerLogoUrl}
         onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')} 
+        onSelectProjectCategory={handleSelectProjectCategory}
       />
     </div>
   );

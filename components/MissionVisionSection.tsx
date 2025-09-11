@@ -1,9 +1,12 @@
 import React from 'react';
 import { Eye, Target } from 'lucide-react';
-import { AboutUsPageContent } from '../types';
 
+// FIX: Corrected the prop type. The content is an object with mission and vision properties, not a property on AboutUsPageContent.
 interface MissionVisionSectionProps {
-  content: AboutUsPageContent['missionVision'];
+  content: {
+    mission: { title: string; text: string; };
+    vision: { title: string; text: string; };
+  };
 }
 
 const MissionVisionSection: React.FC<MissionVisionSectionProps> = ({ content }) => {

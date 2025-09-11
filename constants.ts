@@ -357,21 +357,21 @@ const INITIAL_FOOTER_CONTENT: FooterContent = {
   linkColumns: [
     {
       id: 'col1', title: "Servicios", links: [
-        { id: 'l1', text: "Cocinas Personalizadas", url: "#" },
-        { id: 'l2', text: "Closets y Walk-in", url: "#" },
-        { id: 'l3', text: "Baños Modernos", url: "#" },
-        { id: 'l4', text: "Muebles a Medida", url: "#" },
-        { id: 'l5', text: "Mobiliario de Oficina", url: "#" },
-        { id: 'l6', text: "Proyectos Comerciales", url: "#" }
+        { id: 'l1', text: "Cocinas Personalizadas", url: "Cocinas Personalizadas", linkType: 'project-category' },
+        { id: 'l2', text: "Closets y Walk-in", url: "#", linkType: 'url' }, // Example, assuming no direct project category for this
+        { id: 'l3', text: "Baños Modernos", url: "Baños Modernos", linkType: 'project-category' },
+        { id: 'l4', text: "Muebles a Medida", url: "Muebles a Medida", linkType: 'project-category' },
+        { id: 'l5', text: "Mobiliario de Oficina", url: "Mobiliario de Oficina", linkType: 'project-category' },
+        { id: 'l6', text: "Proyectos Comerciales", url: "Proyectos Comerciales", linkType: 'project-category' }
       ]
     },
     {
       id: 'col2', title: "Enlaces Rápidos", links: [
-        { id: 'l7', text: "Inicio", url: "#" },
-        { id: 'l8', text: "Quiénes Somos", url: "#" },
-        { id: 'l9', text: "Galería", url: "#" },
-        { id: 'l10', text: "Blog", url: "#" },
-        { id: 'l11', text: "Contacto", url: "#" }
+        { id: 'l7', text: "Inicio", url: "#", linkType: 'url' },
+        { id: 'l8', text: "Quiénes Somos", url: "#", linkType: 'url' },
+        { id: 'l9', text: "Galería", url: "#", linkType: 'url' },
+        { id: 'l10', text: "Blog", url: "#", linkType: 'url' },
+        { id: 'l11', text: "Contacto", url: "#", linkType: 'url' }
       ]
     }
   ],
@@ -382,15 +382,19 @@ const INITIAL_FOOTER_CONTENT: FooterContent = {
   },
   copyrightText: `© ${new Date().getFullYear()} Decora Group. Todos los derechos reservados.`,
   legalLinks: [
-    { id: 'legal1', text: "Política de Privacidad", url: "#" },
-    { id: 'legal2', text: "Términos y Condiciones", url: "#" },
-    { id: 'legal3', text: "Aviso Legal", url: "#" },
-    { id: 'legal4', text: "Política de Cookies", url: "#" }
+    { id: 'legal1', text: "Política de Privacidad", url: "#", linkType: 'url' },
+    { id: 'legal2', text: "Términos y Condiciones", url: "#", linkType: 'url' },
+    { id: 'legal3', text: "Aviso Legal", url: "#", linkType: 'url' },
+    { id: 'legal4', text: "Política de Cookies", url: "#", linkType: 'url' }
   ]
 };
 
 const INITIAL_ABOUT_US_CONTENT: AboutUsPageContent = {
-    historySection: {
+  sections: [
+    {
+      id: crypto.randomUUID(),
+      type: 'history',
+      content: {
         title: 'Nuestra Historia',
         text: 'Desde nuestros humildes comienzos hasta convertirnos en un referente del diseño y la fabricación de muebles en Punta Cana, nuestra pasión por la artesanía y la calidad ha sido el motor de nuestro crecimiento. Creemos en la creación de espacios que no solo son hermosos, sino también funcionales y duraderos.',
         images: [
@@ -399,30 +403,61 @@ const INITIAL_ABOUT_US_CONTENT: AboutUsPageContent = {
           { id: 'img3', url: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=600', alt: 'Sala de estar elegante con un proyecto de muebles finalizado' },
           { id: 'img4', url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=600', alt: 'El equipo de Decora Group colaborando en un proyecto' },
         ],
+      }
     },
-    timeline: [
-        { id: 't1', year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },
-        { id: 't2', year: 2019, description: "Inauguramos nuestro primer taller de fabricación, combinando tecnología y artesanía." },
-        { id: 't3', year: 2021, description: "Expandimos nuestros servicios para incluir proyectos comerciales y de hotelería." },
-        { id: 't4', year: 2023, description: "Lanzamos nuestra plataforma digital para ofrecer una experiencia de cotización innovadora." },
-    ],
-    missionVision: {
+    {
+      id: crypto.randomUUID(),
+      type: 'timeline',
+      content: {
+        title: 'Nuestra Trayectoria',
+        events: [
+          { id: 't1', year: 2018, description: "Nace Decora Group con la visión de transformar espacios en Punta Cana." },
+          { id: 't2', year: 2019, description: "Inauguramos nuestro primer taller de fabricación, combinando tecnología y artesanía." },
+          { id: 't3', year: 2021, description: "Expandimos nuestros servicios para incluir proyectos comerciales y de hotelería." },
+          { id: 't4', year: 2023, description: "Lanzamos nuestra plataforma digital para ofrecer una experiencia de cotización innovadora." },
+        ]
+      }
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'missionVision',
+      content: {
         mission: { title: 'Misión', text: 'Crear muebles y espacios que inspiren la vida cotidiana, combinando diseño innovador, funcionalidad excepcional y artesanía de la más alta calidad para superar las expectativas de nuestros clientes.' },
         vision: { title: 'Visión', text: 'Ser la empresa líder en diseño y fabricación de mobiliario a medida en el Caribe, reconocida por nuestra excelencia, sostenibilidad y por transformar las ideas de nuestros clientes en realidades tangibles y duraderas.' }
+      }
     },
-    values: [
-        { id: 'v1', icon: "Check", title: "Calidad y Excelencia", description: "Nos comprometemos a utilizar los mejores materiales y la artesanía más fina para entregar productos que superan los más altos estándares." },
-        { id: 'v2', icon: "Heart", title: "Pasión por el Diseño", description: "El diseño está en el corazón de todo lo que hacemos. Creamos piezas que son funcionales, hermosas y que inspiran la vida cotidiana." },
-        { id: 'v3', icon: "Scale", title: "Integridad y Transparencia", description: "Operamos con honestidad y claridad en cada interacción, construyendo relaciones de confianza con nuestros clientes, socios y equipo." },
-        { id: 'v4', icon: "Leaf", title: "Sostenibilidad", description: "Estamos dedicados a prácticas responsables, utilizando materiales sostenibles y procesos que minimizan nuestro impacto en el medio ambiente." },
-    ],
-    team: [
-        { id: 'tm1', name: "Juan Pérez", role: "CEO y Fundador", imageUrl: "https://i.pravatar.cc/150?img=1" },
-        { id: 'tm2', name: "María González", role: "Directora de Diseño", imageUrl: "https://i.pravatar.cc/150?img=2" },
-        { id: 'tm3', name: "Carlos Rodríguez", role: "Jefe de Producción", imageUrl: "https://i.pravatar.cc/150?img=3" },
-        { id: 'tm4', name: "Ana Martínez", role: "Gerente de Proyectos", imageUrl: "https://i.pravatar.cc/150?img=4" },
-    ],
-    hiring: {
+    {
+      id: crypto.randomUUID(),
+      type: 'values',
+      content: {
+        title: 'Nuestros Valores',
+        subtitle: 'Los principios que guían cada uno de nuestros proyectos y decisiones.',
+        values: [
+          { id: 'v1', icon: "Check", title: "Calidad y Excelencia", description: "Nos comprometemos a utilizar los mejores materiales y la artesanía más fina para entregar productos que superan los más altos estándares." },
+          { id: 'v2', icon: "Heart", title: "Pasión por el Diseño", description: "El diseño está en el corazón de todo lo que hacemos. Creamos piezas que son funcionales, hermosas y que inspiran la vida cotidiana." },
+          { id: 'v3', icon: "Scale", title: "Integridad y Transparencia", description: "Operamos con honestidad y claridad en cada interacción, construyendo relaciones de confianza con nuestros clientes, socios y equipo." },
+          { id: 'v4', icon: "Leaf", title: "Sostenibilidad", description: "Estamos dedicados a prácticas responsables, utilizando materiales sostenibles y procesos que minimizan nuestro impacto en el medio ambiente." },
+        ]
+      }
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'team',
+      content: {
+        title: 'Conoce a Nuestro Equipo',
+        subtitle: 'El talento y la dedicación detrás de cada proyecto exitoso.',
+        members: [
+          { id: 'tm1', name: "Juan Pérez", role: "CEO y Fundador", imageUrl: "https://i.pravatar.cc/150?img=1" },
+          { id: 'tm2', name: "María González", role: "Directora de Diseño", imageUrl: "https://i.pravatar.cc/150?img=2" },
+          { id: 'tm3', name: "Carlos Rodríguez", role: "Jefe de Producción", imageUrl: "https://i.pravatar.cc/150?img=3" },
+          { id: 'tm4', name: "Ana Martínez", role: "Gerente de Proyectos", imageUrl: "https://i.pravatar.cc/150?img=4" },
+        ]
+      }
+    },
+    {
+      id: crypto.randomUUID(),
+      type: 'hiring',
+      content: {
         title: '¿Necesitas Empleo? ¡Estamos Contratando!',
         text: 'Únete a nuestro equipo de apasionados por el diseño y la artesanía. Buscamos talento para seguir creciendo juntos.',
         vacancies: [
@@ -432,7 +467,9 @@ const INITIAL_ABOUT_US_CONTENT: AboutUsPageContent = {
             { id: 'job4', title: "Asistente Administrativo" },
         ],
         closingText: '¿No ves una posición para ti? Siempre estamos buscando personas con talento. \n Envíanos tu currículum a nuestro correo electrónico.'
+      }
     }
+  ]
 };
 
 const INITIAL_FAQ_CONTENT: { title: string; subtitle: string; faqs: FAQItem[] } = {

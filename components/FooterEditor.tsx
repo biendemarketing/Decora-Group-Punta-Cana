@@ -1,12 +1,14 @@
 import React from 'react';
-import { FooterContent, FooterLinkColumn, SocialLink } from '../types';
+import { FooterContent, FooterLinkColumn, SocialLink, SubCategory } from '../types';
+import { Plus, Trash2 } from 'lucide-react';
 
 interface FooterEditorProps {
   footerContent: FooterContent;
   onFooterChange: (newContent: FooterContent) => void;
+  projectCategories: SubCategory[];
 }
 
-const FooterEditor: React.FC<FooterEditorProps> = ({ footerContent, onFooterChange }) => {
+const FooterEditor: React.FC<FooterEditorProps> = ({ footerContent, onFooterChange, projectCategories }) => {
 
     const handleFieldChange = (field: keyof FooterContent, value: any) => {
         onFooterChange({ ...footerContent, [field]: value });
@@ -31,7 +33,7 @@ const FooterEditor: React.FC<FooterEditorProps> = ({ footerContent, onFooterChan
         handleFieldChange('linkColumns', newColumns);
     };
 
-    const handleLinkChange = (colId: string, linkId: string, field: 'text' | 'url', value: string) => {
+    const handleLinkChange = (colId: string, linkId: string, field: 'text' | 'url' | 'linkType', value: string) => {
         const newColumns = footerContent.linkColumns.map(col => {
             if (col.id === colId) {
                 const newLinks = col.links.map(link => 
@@ -43,6 +45,27 @@ const FooterEditor: React.FC<FooterEditorProps> = ({ footerContent, onFooterChan
         });
         handleFieldChange('linkColumns', newColumns);
     };
+    
+    const handleAddLink = (colId: string) => {
+        const newColumns = footerContent.linkColumns.map(col => {
+            if (col.id === colId) {
+                const newLink = { id: crypto.randomUUID(), text: 'Nuevo Enlace', url: '#', linkType: 'url' as const };
+                return { ...col, links: [...col.links, newLink] };
+            }
+            return col;
+        });
+        handleFieldChange('linkColumns', newColumns);
+    };
+
+    const handleDeleteLink = (colId: string, linkId: string) => {
+         const newColumns = footerContent.linkColumns.map(col => {
+            if (col.id === colId) {
+                return { ...col, links: col.links.filter(link => link.id !== linkId) };
+            }
+            return col;
+        });
+        handleFieldChange('linkColumns', newColumns);
+    }
 
     const inputClass = "w-full text-sm p-2 border border-gray-300 rounded bg-white text-gray-900 shadow-sm focus:ring-blue-500 focus:border-blue-500";
 
@@ -84,11 +107,28 @@ const FooterEditor: React.FC<FooterEditorProps> = ({ footerContent, onFooterChan
                             <input type="text" value={col.title} onChange={e => handleColumnTitleChange(col.id, e.target.value)} className={`font-bold mb-2 ${inputClass}`} />
                             <div className="space-y-2 mt-2">
                                 {col.links.map(link => (
-                                    <div key={link.id} className="grid grid-cols-2 gap-2">
-                                        <input type="text" placeholder="Texto" value={link.text} onChange={e => handleLinkChange(col.id, link.id, 'text', e.target.value)} className={inputClass} />
-                                        <input type="text" placeholder="URL" value={link.url} onChange={e => handleLinkChange(col.id, link.id, 'url', e.target.value)} className={inputClass} />
+                                    <div key={link.id} className="p-2 border-t space-y-2">
+                                        <div className="flex justify-end">
+                                            <button onClick={() => handleDeleteLink(col.id, link.id)} className="p-1 text-gray-400 hover:text-red-500"><Trash2 className="h-4 w-4"/></button>
+                                        </div>
+                                        <input type="text" placeholder="Texto a mostrar" value={link.text} onChange={e => handleLinkChange(col.id, link.id, 'text', e.target.value)} className={inputClass} />
+                                        <select value={link.linkType || 'url'} onChange={e => handleLinkChange(col.id, link.id, 'linkType', e.target.value)} className={inputClass}>
+                                            <option value="url">URL Personalizada</option>
+                                            <option value="project-category">Categoría de Proyecto</option>
+                                        </select>
+                                        {(link.linkType === 'project-category') ? (
+                                            <select value={link.url} onChange={e => handleLinkChange(col.id, link.id, 'url', e.target.value)} className={inputClass}>
+                                                <option value="">Selecciona una categoría</option>
+                                                {projectCategories.map(cat => <option key={cat.id} value={cat.name}>{cat.name}</option>)}
+                                            </select>
+                                        ) : (
+                                            <input type="text" placeholder="https://..." value={link.url} onChange={e => handleLinkChange(col.id, link.id, 'url', e.target.value)} className={inputClass} />
+                                        )}
                                     </div>
                                 ))}
+                                <button onClick={() => handleAddLink(col.id)} className="w-full flex items-center justify-center gap-2 p-1 mt-2 border-2 border-dashed rounded-md text-xs text-gray-500 hover:bg-gray-100">
+                                    <Plus className="h-3 w-3" /> Añadir Enlace
+                                </button>
                             </div>
                         </div>
                     ))}
