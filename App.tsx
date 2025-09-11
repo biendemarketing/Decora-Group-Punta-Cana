@@ -884,6 +884,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         isMenuOpen={isMenuOpen}
         view={view}
         onMenuToggle={onMenuToggle}
+        contactPhoneLink={navigationData.contactPhoneLink}
       />
     </div>
   );

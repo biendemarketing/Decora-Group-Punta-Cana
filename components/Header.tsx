@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search, User, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown, Package, Gem, Lightbulb, Award, CheckCircle } from 'lucide-react';
+import { Search, Menu, X, Phone, ShieldCheck, CreditCard, Truck, Heart, ShoppingCart, Camera, ChevronDown, Package, Gem, Lightbulb, Award, CheckCircle } from 'lucide-react';
 import { NavigationData, SubCategory, TopBarLink, MenuItem, Catalogue, Page } from '../types';
 import Logo from './Logo';
 import SalaMegaMenu from './SalonMegaMenu';
@@ -236,9 +236,6 @@ const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="flex items-center space-x-2 sm:space-x-4 lg:flex-1 justify-end">
-             <button className="p-2 rounded-full text-gray-600 hover:text-[#5a1e38] transition-colors">
-              <User className="h-6 w-6" />
-            </button>
             <button onClick={onViewWishlist} className="relative p-2 rounded-full text-gray-600 hover:text-[#5a1e38] transition-colors">
               <Heart className="h-6 w-6" />
               {wishlistCount > 0 && (
@@ -360,12 +357,27 @@ const Header: React.FC<HeaderProps> = ({
                   </button>
                   {isSubMenuOpen && (
                      <div className="pl-6 pt-1 pb-2 space-y-1 border-l-2 ml-4">
-                        {item.subCategories.map((subItem) => (
-                           <a key={subItem.id} href="#" onClick={(e) => { e.preventDefault(); handleMobileSubItemClick(item, subItem); }}
-                             className="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-[#5a1e38] hover:bg-gray-100">
-                             {subItem.name || subItem.title}
-                           </a>
-                        ))}
+                        {item.key === 'catalogues' ? (
+                            navigationData.catalogues
+                                .filter(c => c.isVisible)
+                                .map(catalogue => (
+                                    <a key={catalogue.id} href="#" onClick={(e) => {
+                                        e.preventDefault();
+                                        onViewCatalogueDetail(catalogue);
+                                        onMenuToggle(false);
+                                    }}
+                                    className="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-[#5a1e38] hover:bg-gray-100">
+                                        {catalogue.title}
+                                    </a>
+                                ))
+                        ) : (
+                            item.subCategories.map((subItem) => (
+                               <a key={subItem.id} href="#" onClick={(e) => { e.preventDefault(); handleMobileSubItemClick(item, subItem); }}
+                                 className="block px-3 py-2 rounded-md text-sm text-gray-600 hover:text-[#5a1e38] hover:bg-gray-100">
+                                 {subItem.name || subItem.title}
+                               </a>
+                            ))
+                        )}
                      </div>
                   )}
                 </div>

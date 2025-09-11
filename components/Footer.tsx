@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Facebook, Instagram, Youtube, Phone, Mail, MapPin, Home, Menu, Heart, ShoppingCart } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Facebook, Instagram, Youtube, Phone, Mail, MapPin, Home, Menu, Heart, ShoppingCart, ArrowUp, Package, MessageSquare } from 'lucide-react';
 import FooterLogo from './FooterLogo';
 import { FooterContent, FooterLink } from '../types';
 import { useCart, useWishlist } from '../App';
@@ -26,6 +26,7 @@ interface FooterProps {
   isMenuOpen: boolean;
   view: string;
   onMenuToggle: (isOpen: boolean) => void;
+  contactPhoneLink: string;
 }
 
 const socialIconMap = {
@@ -45,39 +46,51 @@ const NavItem: React.FC<{
 }> = ({ label, icon: Icon, isActive, onClick, badgeCount = 0, href }) => {
     
     const content = (
-      <>
-        <div className="relative">
-          <Icon className={`h-6 w-6 transition-colors ${isActive ? 'text-[#5a1e38]' : 'text-gray-600'}`} />
-          {badgeCount > 0 && (
-            <span className="absolute -top-2 -right-3 flex items-center justify-center h-5 w-5 bg-[#5a1e38] text-white text-[10px] font-bold rounded-full border-2 border-white">
-              {badgeCount}
-            </span>
-          )}
-        </div>
-        <span className={`text-xs transition-colors ${isActive ? 'text-[#5a1e38] font-semibold' : 'text-gray-600'}`}>
-          {label}
-        </span>
-      </>
+      <div className="relative">
+        <Icon className={`h-7 w-7 transition-colors ${isActive ? 'text-[#5a1e38]' : 'text-gray-600'}`} />
+        {badgeCount > 0 && (
+          <span className="absolute -top-2 -right-3 flex items-center justify-center h-5 w-5 bg-[#5a1e38] text-white text-[10px] font-bold rounded-full border-2 border-white">
+            {badgeCount > 9 ? '9+' : badgeCount}
+          </span>
+        )}
+      </div>
     );
 
     if (href) {
         return (
-             <a href={href} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center space-y-1 flex-1 h-full">
+             <a href={href} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center flex-1 h-full" aria-label={label}>
                 {content}
             </a>
         )
     }
 
     return (
-        <button onClick={onClick} className="flex flex-col items-center justify-center space-y-1 flex-1 h-full">
+        <button onClick={onClick} className="flex flex-col items-center justify-center flex-1 h-full" aria-label={label}>
             {content}
         </button>
     );
 };
 
-const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl, onSelectProjectCategory, onNavigate, isMenuOpen, view, onMenuToggle }) => {
+const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl, onSelectProjectCategory, onNavigate, isMenuOpen, view, onMenuToggle, contactPhoneLink }) => {
   const { itemCount } = useCart();
   const { wishlistCount } = useWishlist();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const scrollTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    const checkScrollTop = () => {
+      if (window.pageYOffset > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', checkScrollTop);
+    return () => window.removeEventListener('scroll', checkScrollTop);
+  }, []);
   
   const renderLink = (link: FooterLink) => {
     switch(link.linkType) {
@@ -169,15 +182,26 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
           </div>
         </div>
       </footer>
+      
+      {/* Scroll to Top floating button */}
+      {showScrollTop && !isMenuOpen && (
+        <button
+          onClick={scrollTop}
+          className="md:hidden fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 z-50 p-3 rounded-full bg-gray-800 text-white shadow-lg hover:bg-gray-900 transition-opacity"
+          aria-label="Volver arriba"
+        >
+          <ArrowUp className="h-6 w-6" />
+        </button>
+      )}
 
       {/* --- Mobile Bottom Navigation Bar --- */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-2px_5px_rgba(0,0,0,0.05)] z-40">
-        <div className="flex justify-around h-16 pb-[env(safe-area-inset-bottom)]">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-200/50 shadow-[0_-2px_5px_rgba(0,0,0,0.05)] z-40">
+        <div className="flex justify-around h-[calc(4.5rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]">
           <NavItem label="Inicio" icon={Home} isActive={view === 'home'} onClick={() => onNavigate('home')} />
-          <NavItem label="Menú" icon={Menu} isActive={isMenuOpen} onClick={() => onMenuToggle(!isMenuOpen)} />
           <NavItem label="Deseos" icon={Heart} isActive={view === 'wishlist'} onClick={() => onNavigate('wishlist')} badgeCount={wishlistCount} />
           <NavItem label="Carrito" icon={ShoppingCart} isActive={view === 'cart'} onClick={() => onNavigate('cart')} badgeCount={itemCount} />
-          <NavItem label="Contacto" icon={WhatsAppIcon} isActive={false} href="https://wa.me/18494561963" />
+          <NavItem label="Productos" icon={Package} isActive={view === 'category'} onClick={() => onNavigate('products')} />
+          <NavItem label="Contacto" icon={MessageSquare} isActive={false} href={contactPhoneLink} />
         </div>
       </div>
     </>
