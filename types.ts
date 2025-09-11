@@ -221,25 +221,42 @@ export interface BlogPost {
   tagIds: string[];
 }
 
-export type CatalogueLayout = 'list' | 'grid';
+export type CataloguePageLayoutId = 'grid' | 'list' | 'collage';
 
 export interface CatalogueCoverConfig {
     type: 'template' | 'custom';
     templateId?: string;
-    customImageUrl?: string;
+    customImageUrls: string[]; // Support for multiple images
     title: string;
-    subtitle?: string;
+    subtitle: string;
+    showTitle: boolean;
+    showSubtitle: boolean;
     showLogo: boolean;
-    showSocials: boolean;
+    logoPosition: 'top-left' | 'top-center' | 'middle-center' | 'bottom-left' | 'bottom-center';
+    logoSize: 'small' | 'medium' | 'large';
 }
+
+export interface CatalogueBackCoverConfig {
+    showLogo: boolean;
+    showCompanyName: boolean;
+    showAddress: boolean;
+    showPhone: boolean;
+    showEmail: boolean;
+    showSocials: boolean;
+    customTitle: string;
+    customText: string;
+}
+
 
 export interface CatalogueConfig {
     cover: CatalogueCoverConfig;
-    backCover: CatalogueCoverConfig;
+    backCover: CatalogueBackCoverConfig;
+    pageTemplateId: CataloguePageLayoutId;
     includedCategoryIds: string[];
     includedSubCategoryIds: string[];
-    layout: CatalogueLayout;
+    layout: CataloguePageLayoutId; // Kept for compatibility, but pageTemplateId is now the source of truth
     hidePrices: boolean;
+    showPageNumbers: boolean;
 }
 
 
