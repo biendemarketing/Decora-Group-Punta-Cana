@@ -6,10 +6,12 @@ import ClientLogos from './ClientLogos';
 import WhyChooseUs from './WhyChooseUs';
 import TeamSection from './TeamSection';
 import HiringCTA from './HiringCTA';
-import { AboutUsPageContent, PageSection } from '../types';
+import { AboutUsPageContent, PageSection, JobVacancy } from '../types';
 
 interface AboutUsPageProps {
   content: AboutUsPageContent;
+  onViewJobDetail: (job: JobVacancy) => void;
+  onApplyForJob: (jobTitle: string) => void;
 }
 
 const HistorySection: React.FC<{ content: any }> = ({ content }) => (
@@ -34,18 +36,23 @@ const sectionComponentMap: { [key: string]: React.FC<any> } = {
   missionVision: ({ content }) => <MissionVisionSection content={content} />,
   values: ({ content }) => <ValuesSection values={content.values} />,
   team: ({ content }) => <TeamSection members={content.members} />,
-  hiring: ({ content }) => <HiringCTA content={content} />,
+  hiring: ({ content, onViewJobDetail, onApplyForJob }) => <HiringCTA content={content} onViewJobDetail={onViewJobDetail} onApplyForJob={onApplyForJob} />,
   clients: () => <ClientLogos />,
   whyChooseUs: () => <WhyChooseUs />,
 };
 
 
-const AboutUsPage: React.FC<AboutUsPageProps> = ({ content }) => {
+const AboutUsPage: React.FC<AboutUsPageProps> = ({ content, onViewJobDetail, onApplyForJob }) => {
   return (
     <main className="bg-white">
       {content.sections.map((section: PageSection) => {
         const Component = sectionComponentMap[section.type];
-        return Component ? <Component key={section.id} content={section.content} /> : null;
+        const props: any = { content: section.content };
+        if (section.type === 'hiring') {
+            props.onViewJobDetail = onViewJobDetail;
+            props.onApplyForJob = onApplyForJob;
+        }
+        return Component ? <Component key={section.id} {...props} /> : null;
       })}
     </main>
   );

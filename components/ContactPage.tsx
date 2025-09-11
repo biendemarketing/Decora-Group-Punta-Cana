@@ -4,7 +4,6 @@ import LocationMap from './LocationMap';
 import ContactForm from './ContactForm';
 import { ContactContent } from '../types';
 
-// FIX: Added props to the component to make it dynamic and fix type errors.
 interface ContactPageProps {
   content: ContactContent;
 }
@@ -23,7 +22,6 @@ const ContactPage: React.FC<ContactPageProps> = ({ content }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left Column: Info & Map */}
             <div className="p-8 sm:p-10 lg:p-12 space-y-10">
-              {/* FIX: Pass content prop to child components. */}
               <ContactInfo content={content} />
               <LocationMap title={content.mapTitle} />
             </div>

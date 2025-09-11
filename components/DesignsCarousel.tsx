@@ -1,5 +1,3 @@
-
-
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { SubCategory } from '../types';
 import { 
@@ -34,7 +32,6 @@ const iconMap: { [key: string]: React.ElementType } = {
 
 const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, onSelectProjectCategory, onViewAllProjects }) => {
   const trackRef = useRef<HTMLDivElement>(null);
-  // FIX: Changed NodeJS.Timeout to ReturnType<typeof setInterval> to be compatible with browser environments and fix TypeScript error.
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isDraggingRef = useRef(false);
   const startPosRef = useRef(0);

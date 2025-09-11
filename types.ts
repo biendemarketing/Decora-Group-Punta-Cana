@@ -293,7 +293,15 @@ export interface TeamMember {
 export interface JobVacancy {
   id: string;
   title: string;
+  icon: string;
+  summary: string;
+  location: string;
+  type: 'Jornada Completa' | 'Media Jornada' | 'Pasantía';
+  description: string[];
+  responsibilities: string[];
+  requirements: string[];
 }
+
 
 // --- New About Us Section Builder Types ---
 export type AboutUsSectionType = 'history' | 'timeline' | 'missionVision' | 'values' | 'team' | 'hiring' | 'clients' | 'whyChooseUs';

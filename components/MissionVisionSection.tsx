@@ -1,7 +1,6 @@
 import React from 'react';
 import { Eye, Target } from 'lucide-react';
 
-// FIX: Corrected the prop type. The content is an object with mission and vision properties, not a property on AboutUsPageContent.
 interface MissionVisionSectionProps {
   content: {
     mission: { title: string; text: string; };

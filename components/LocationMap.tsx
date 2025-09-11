@@ -1,6 +1,5 @@
 import React from 'react';
 
-// FIX: Added props to the component to make it dynamic and fix type errors.
 interface LocationMapProps {
     title: string;
 }

@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, AboutUsPageContent, FAQItem, LegalContent, InstagramFeed, ContactContent } from './types';
+import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, AboutUsPageContent, FAQItem, LegalContent, InstagramFeed, ContactContent, JobVacancy } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -389,6 +389,61 @@ const INITIAL_FOOTER_CONTENT: FooterContent = {
   ]
 };
 
+const INITIAL_VACANCIES: JobVacancy[] = [
+    { 
+        id: 'job1', 
+        title: "Diseñador de Interiores Senior",
+        icon: 'DraftingCompass',
+        summary: 'Liderar proyectos de diseño desde el concepto hasta la ejecución, creando espacios funcionales y estéticamente excepcionales para clientes residenciales y comerciales.',
+        location: 'Punta Cana, Remoto Parcial',
+        type: 'Jornada Completa',
+        description: [
+            'Buscamos un Diseñador de Interiores Senior apasionado y con experiencia para unirse a nuestro equipo dinámico. Serás responsable de gestionar todo el ciclo de vida del diseño, desde la conceptualización inicial y el contacto con el cliente hasta la ejecución final del proyecto.',
+            'El candidato ideal tendrá un portafolio sólido que demuestre su creatividad y habilidad técnica, así como excelentes habilidades de comunicación para transformar las visiones de los clientes en realidades tangibles.'
+        ],
+        responsibilities: [
+            'Reunirse con clientes para determinar sus necesidades, presupuesto y preferencias.',
+            'Desarrollar conceptos de diseño, bocetos, planos y modelos 3D.',
+            'Seleccionar materiales, mobiliario, acabados y paletas de colores.',
+            'Coordinar con el equipo de producción y proveedores para asegurar la calidad y los plazos.',
+            'Supervisar la instalación y el montaje final del proyecto.'
+        ],
+        requirements: [
+            'Más de 5 años de experiencia demostrable en diseño de interiores.',
+            'Portafolio sólido de proyectos completados.',
+            'Dominio de software de diseño (AutoCAD, SketchUp, V-Ray, Adobe Creative Suite).',
+            'Excelentes habilidades de comunicación y gestión de clientes.',
+            'Conocimiento de materiales, construcción y normativas locales.'
+        ]
+    },
+    { 
+        id: 'job2', 
+        title: "Ebanista / Carpintero Experto",
+        icon: 'Wrench',
+        summary: 'Fabricar muebles a medida de alta calidad, interpretando planos técnicos y utilizando tanto técnicas tradicionales como maquinaria moderna para lograr acabados impecables.',
+        location: 'Taller en Punta Cana',
+        type: 'Jornada Completa',
+        description: [
+            'Estamos en la búsqueda de un Ebanista / Carpintero con un alto nivel de habilidad y atención al detalle. Serás una pieza clave en nuestro taller, responsable de dar vida a los diseños de nuestros clientes y arquitectos.',
+            'Este rol requiere una profunda comprensión de la madera y otros materiales, así como la capacidad de trabajar de forma autónoma y en equipo para producir piezas de mobiliario excepcionales.'
+        ],
+        responsibilities: [
+            'Leer e interpretar planos de diseño y especificaciones técnicas.',
+            'Operar maquinaria de carpintería (sierras, tupís, CNC, etc.) de forma segura y eficiente.',
+            'Construir, ensamblar y acabar muebles a medida con altos estándares de calidad.',
+            'Realizar trabajos de acabado como lijado, teñido, lacado y barnizado.',
+            'Mantener un espacio de trabajo limpio, seguro y organizado.'
+        ],
+        requirements: [
+            'Más de 7 años de experiencia como ebanista o carpintero de muebles finos.',
+            'Habilidad experta en el uso de herramientas manuales y maquinaria de carpintería.',
+            'Capacidad para leer e interpretar planos complejos.',
+            'Atención meticulosa al detalle y al control de calidad.',
+            'Pasión por la artesanía y el trabajo bien hecho.'
+        ]
+    },
+];
+
 const INITIAL_ABOUT_US_CONTENT: AboutUsPageContent = {
   sections: [
     {
@@ -460,12 +515,7 @@ const INITIAL_ABOUT_US_CONTENT: AboutUsPageContent = {
       content: {
         title: '¿Necesitas Empleo? ¡Estamos Contratando!',
         text: 'Únete a nuestro equipo de apasionados por el diseño y la artesanía. Buscamos talento para seguir creciendo juntos.',
-        vacancies: [
-            { id: 'job1', title: "Diseñador de Interiores Senior" },
-            { id: 'job2', title: "Ebanista / Carpintero Experto" },
-            { id: 'job3', title: "Gerente de Proyectos de Construcción" },
-            { id: 'job4', title: "Asistente Administrativo" },
-        ],
+        vacancies: INITIAL_VACANCIES,
         closingText: '¿No ves una posición para ti? Siempre estamos buscando personas con talento. \n Envíanos tu currículum a nuestro correo electrónico.'
       }
     }
@@ -485,9 +535,80 @@ const INITIAL_FAQ_CONTENT: { title: string; subtitle: string; faqs: FAQItem[] } 
 
 const INITIAL_LEGAL_CONTENT: LegalContent = {
     pages: [
-        { id: 'legal1', title: 'Política de Privacidad', content: 'Aquí va el texto completo de la política de privacidad...' },
-        { id: 'legal2', title: 'Términos y Condiciones', content: 'Aquí va el texto completo de los términos y condiciones de uso del sitio web...' },
-        { id: 'legal3', title: 'Aviso Legal', content: 'Información legal de la empresa, RNC, etc...' }
+        { 
+            id: 'legal1', 
+            title: 'Política de Privacidad', 
+            content: `
+Fecha de última actualización: ${new Date().toLocaleDateString('es-DO')}
+
+Decora Group ("nosotros", "nuestro") se compromete a proteger su privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos, divulgamos y salvaguardamos su información cuando visita nuestro sitio web.
+
+**1. RECOPILACIÓN DE INFORMACIÓN**
+Recopilamos información personal que usted nos proporciona voluntariamente, como nombre, dirección de correo electrónico, número de teléfono y dirección, cuando completa formularios de contacto o cotización.
+
+**2. USO DE SU INFORMACIÓN**
+Usamos la información recopilada para:
+- Responder a sus solicitudes y consultas.
+- Procesar sus cotizaciones y pedidos.
+- Enviarle información sobre nuestros productos y servicios.
+- Mejorar nuestro sitio web y servicios.
+
+**3. DIVULGACIÓN DE SU INFORMACIÓN**
+No vendemos, intercambiamos ni transferimos de ningún otro modo a terceros su información de identificación personal sin su consentimiento, excepto para cumplir con la ley o proteger nuestros derechos.
+
+**4. SEGURIDAD DE LA INFORMACIÓN**
+Implementamos una variedad de medidas de seguridad para mantener la seguridad de su información personal.
+
+**5. DERECHOS DEL USUARIO**
+Usted tiene derecho a acceder, rectificar, cancelar u oponerse al tratamiento de sus datos personales. Para ejercer estos derechos, contáctenos en info@decoragroup.pc.
+
+**6. POLÍTICA DE COOKIES**
+Nuestro sitio web puede utilizar "cookies" para mejorar la experiencia del usuario. Puede optar por configurar su navegador para que rechace las cookies.
+            ` 
+        },
+        { 
+            id: 'legal2', 
+            title: 'Términos y Condiciones', 
+            content: `
+Bienvenido a Decora Group. Al acceder y utilizar este sitio web, usted acepta cumplir y estar sujeto a los siguientes términos y condiciones de uso.
+
+**1. USO DEL SITIO**
+El contenido de las páginas de este sitio web es para su información y uso general. Está sujeto a cambios sin previo aviso.
+
+**2. PROPIEDAD INTELECTUAL**
+Este sitio web contiene material que es de nuestra propiedad o está licenciado para nosotros. Este material incluye, pero no se limita a, el diseño, la disposición, el aspecto, la apariencia y los gráficos. La reproducción está prohibida salvo de conformidad con el aviso de derechos de autor.
+
+**3. EXENCIÓN DE RESPONSABILIDAD**
+La información en este sitio web se proporciona "tal cual". No ofrecemos ninguna garantía en cuanto a la exactitud, puntualidad, rendimiento, integridad o idoneidad de la información y los materiales que se encuentran u ofrecen en este sitio web para un propósito particular. El uso de cualquier información o material en este sitio web es bajo su propio riesgo.
+
+**4. ENLACES A TERCEROS**
+Este sitio web puede incluir enlaces a otros sitios web. Estos enlaces se proporcionan para su conveniencia para proporcionar más información. No significan que respaldamos el (los) sitio(s) web. No tenemos ninguna responsabilidad por el contenido del (los) sitio(s) web enlazado(s).
+
+**5. LEY APLICABLE**
+Su uso de este sitio web y cualquier disputa que surja de dicho uso del sitio web está sujeto a las leyes de la República Dominicana.
+            `
+        },
+        { 
+            id: 'legal3', 
+            title: 'Aviso Legal', 
+            content: `
+En cumplimiento con el deber de información, a continuación se reflejan los siguientes datos:
+
+**1. DATOS IDENTIFICATIVOS DE LA EMPRESA**
+- **Nombre comercial:** Decora Group
+- **Razón Social:** [Razón Social de la Empresa S.R.L.]
+- **RNC:** [Número de RNC]
+- **Domicilio:** CANATOWN Plaza & Centro de Logística, Av. Barceló, local 101, Veron, Punta Cana 23000, República Dominicana.
+- **Correo electrónico de contacto:** info@decoragroup.pc
+- **Teléfono:** (849) 456-1963
+
+**2. OBJETO DEL SITIO WEB**
+El presente sitio web tiene como objeto la promoción y comercialización de muebles, servicios de diseño de interiores y proyectos de carpintería a medida.
+
+**3. USUARIOS**
+El acceso y/o uso de este portal atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, los Términos y Condiciones de Uso aquí reflejados.
+            `
+        }
     ]
 };
 
@@ -1259,7 +1380,6 @@ export const PROVINCES = [
 export const ALL_FINISHES = ['Brillo', 'Mate', 'Corrugado', 'Texturizado', 'Supermate'];
 
 
-// FIX: Export STORES constant to fix import error in PartnerLogos.tsx.
 export const STORES = [
     "Muebles Omar", "La Curacao", "Tiendas Corripio", "Plaza Lama"
 ];

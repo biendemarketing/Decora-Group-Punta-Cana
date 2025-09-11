@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue } from './types';
+import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -34,6 +34,8 @@ import CataloguesPage from './components/CataloguesPage';
 import CatalogueDetailPage from './components/CatalogueDetailPage';
 import FAQPage from './components/FAQPage';
 import LegalPage from './components/LegalPage';
+import JobDetailPage from './components/JobDetailPage';
+import JobApplicationPage from './components/JobApplicationPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -176,7 +178,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'about' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication';
 
 interface CustomerInfo {
     name: string;
@@ -312,6 +314,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({ name: '', email: '', phone: '', address: '' });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedJobVacancy, setSelectedJobVacancy] = useState<JobVacancy | null>(null);
+  const [applicationJobTitle, setApplicationJobTitle] = useState<string | null>(null);
 
   const [filters, setFilters] = useState<Filters>({
     priceRange: { min: MIN_PRICE, max: MAX_PRICE },
@@ -524,6 +528,17 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     }
   }, [handleSelectCategory, navigationData.menuItems]);
 
+  const handleViewJobDetail = useCallback((job: JobVacancy) => {
+    setSelectedJobVacancy(job);
+    setView('jobDetail');
+  }, []);
+
+  const handleApplyForJob = useCallback((jobTitle: string) => {
+    setApplicationJobTitle(jobTitle);
+    setView('jobApplication');
+  }, []);
+
+
   const filteredProducts = useMemo(() => {
     const visibleProducts = productsData.filter(p => p.isVisible !== false);
     
@@ -641,6 +656,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       
       {(() => {
           switch(view) {
+              case 'jobApplication': return <JobApplicationPage jobTitle={applicationJobTitle!} onBack={() => setView('about')} />;
+              case 'jobDetail': return <JobDetailPage job={selectedJobVacancy!} onBack={() => setView('about')} onApply={handleApplyForJob} />;
               case 'legal': return <LegalPage legalContent={navigationData.legalContent} />;
               case 'faq': return <FAQPage faqContent={navigationData.faqContent} />;
               case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} />;
@@ -657,7 +674,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                       onGoBackToCart={() => setView('cart')}
                       onContinueShopping={() => handleSelectCategory("Todos los productos")}
                   />;
-              case 'about': return <AboutUsPage content={navigationData.aboutUsPage} />;
+              case 'about': return <AboutUsPage content={navigationData.aboutUsPage} onViewJobDetail={handleViewJobDetail} onApplyForJob={handleApplyForJob} />;
               case 'contact': return <ContactPage content={navigationData.contactPage} />;
               case 'quoteForm': return <QuoteFormPage projectType={selectedQuoteType!} onBack={() => setView('quote')} quoteConfig={navigationData.quoteConfig} />;
               case 'quote': return <CustomQuotePage projectTypes={navigationData.quoteConfig.projectTypes} onSelectQuoteType={handleSelectQuoteType} />;

@@ -2,7 +2,6 @@ import React from 'react';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { ContactContent } from '../types';
 
-// FIX: Added props to the component to make it dynamic and fix type errors.
 interface ContactInfoProps {
   content: ContactContent;
 }

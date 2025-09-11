@@ -1,6 +1,5 @@
 import React from 'react';
 
-// FIX: Added 'id' to make the interface compatible with QuoteOption from types.ts
 interface Style {
   id: string;
   name: string;
@@ -19,9 +18,9 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ styles, selectedStyle, on
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
       {styles.map((style) => (
         <label
-          key={style.name}
+          key={style.id}
           className={`relative border-2 rounded-lg cursor-pointer transition-all duration-200 ${
-            selectedStyle.name === style.name
+            selectedStyle.id === style.id
               ? 'border-[#621330] shadow-lg scale-105'
               : 'border-gray-200 hover:border-gray-400'
           }`}
@@ -29,8 +28,8 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ styles, selectedStyle, on
           <input
             type="radio"
             name="style-selector"
-            value={style.name}
-            checked={selectedStyle.name === style.name}
+            value={style.id}
+            checked={selectedStyle.id === style.id}
             onChange={() => onSelect(style)}
             className="sr-only"
           />

@@ -15,7 +15,6 @@ const OptionListEditor = ({ title, options, onUpdate, optionType }: any) => {
     const inputClass = "w-full text-sm p-2 border border-gray-300 rounded bg-white text-gray-900 shadow-sm focus:ring-blue-500 focus:border-blue-500";
 
     const handleAdd = () => {
-        // FIX: Explicitly type `newItem` as `any` to allow adding properties dynamically.
         const newItem: any = { id: crypto.randomUUID(), name: "Nuevo", price: 0, imageUrl: "https://via.placeholder.com/150" };
         if(optionType === 'closetType') newItem.value = 1;
         if(optionType === 'style' || optionType === 'countertop') newItem.multiplier = 1;

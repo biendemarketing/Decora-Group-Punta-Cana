@@ -12,7 +12,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="p-8 max-w-sm w-full bg-white rounded-lg shadow-lg border">
         <div className="flex justify-center mb-6">
-          {/* FIX: The 'src' property was missing on the Logo component. It has been added using the logoUrl from INITIAL_NAVIGATION_DATA. */}
           <Logo src={INITIAL_NAVIGATION_DATA.logoUrl} />
         </div>
         <h2 className="text-2xl font-bold text-center text-gray-800">Acceso al Panel</h2>

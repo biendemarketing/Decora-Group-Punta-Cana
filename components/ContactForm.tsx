@@ -3,7 +3,6 @@ import { User, Building, Send } from 'lucide-react';
 import { PROJECT_TYPES_CONTACT, DOMINICAN_REPUBLIC_LOCATIONS } from '../constants';
 import { ContactContent } from '../types';
 
-// FIX: Added props to the component to make it dynamic and fix type errors.
 interface ContactFormProps {
   content: ContactContent;
 }

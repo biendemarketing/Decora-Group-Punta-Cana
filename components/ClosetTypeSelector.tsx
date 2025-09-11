@@ -1,6 +1,5 @@
 import React from 'react';
 
-// FIX: Added 'id' to make the interface compatible with ClosetTypeOption from types.ts
 interface ClosetType {
   id: string;
   name: string;
@@ -19,9 +18,9 @@ const ClosetTypeSelector: React.FC<ClosetTypeSelectorProps> = ({ types, selected
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
       {types.map((type) => (
         <label
-          key={type.name}
+          key={type.id}
           className={`relative border-2 rounded-lg cursor-pointer transition-all duration-200 ${
-            selectedType.name === type.name
+            selectedType.id === type.id
               ? 'border-[#621330] shadow-lg scale-105'
               : 'border-gray-200 hover:border-gray-400'
           }`}
@@ -29,8 +28,8 @@ const ClosetTypeSelector: React.FC<ClosetTypeSelectorProps> = ({ types, selected
           <input
             type="radio"
             name="closet-type-selector"
-            value={type.name}
-            checked={selectedType.name === type.name}
+            value={type.id}
+            checked={selectedType.id === type.id}
             onChange={() => onSelect(type)}
             className="sr-only"
           />

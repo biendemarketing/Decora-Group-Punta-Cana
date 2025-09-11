@@ -2,7 +2,6 @@ import React from 'react';
 import { JobVacancy } from '../types';
 import JobListing from './JobListing';
 
-// FIX: Corrected the prop type. The content is a specific object for hiring info, not a property on AboutUsPageContent.
 interface HiringCTAProps {
   content: {
     title: string;
@@ -10,9 +9,11 @@ interface HiringCTAProps {
     vacancies: JobVacancy[];
     closingText: string;
   };
+  onViewJobDetail: (job: JobVacancy) => void;
+  onApplyForJob: (jobTitle: string) => void;
 }
 
-const HiringCTA: React.FC<HiringCTAProps> = ({ content }) => {
+const HiringCTA: React.FC<HiringCTAProps> = ({ content, onViewJobDetail, onApplyForJob }) => {
   return (
     <section className="bg-white py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto text-center">
@@ -24,7 +25,12 @@ const HiringCTA: React.FC<HiringCTAProps> = ({ content }) => {
         <div className="mt-12 space-y-4 max-w-2xl mx-auto">
           <h3 className="text-xl font-semibold text-gray-800 text-left">Vacantes Disponibles</h3>
           {content.vacancies.map((job) => (
-            <JobListing key={job.id} vacancy={job} />
+            <JobListing 
+              key={job.id} 
+              vacancy={job} 
+              onViewDetail={onViewJobDetail}
+              onApply={onApplyForJob}
+            />
           ))}
         </div>
 
