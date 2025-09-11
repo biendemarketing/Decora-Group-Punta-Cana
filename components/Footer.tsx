@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Instagram, Youtube, ArrowUp } from 'lucide-react';
+import { Facebook, Instagram, Youtube, ArrowUp, Phone, Mail, MapPin } from 'lucide-react';
 import FooterLogo from './FooterLogo';
 import { FooterContent, FooterLink } from '../types';
 
@@ -20,7 +20,7 @@ interface FooterProps {
   content: FooterContent;
   footerLogoUrl: string;
   onSelectProjectCategory: (category: string) => void;
-  onNavigate: (key: string) => void;
+  onNavigate: (key: string, detail?: string) => void;
 }
 
 const socialIconMap = {
@@ -52,6 +52,12 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
                     {link.text}
                 </button>
             );
+        case 'legal':
+            return (
+                 <button onClick={() => onNavigate('legalDetail', link.url)} className="text-xs text-gray-500 hover:text-gray-300">
+                    {link.text}
+                </button>
+            )
         case 'url':
         default:
             return <a href={link.url} className="text-sm text-gray-400 hover:text-white">{link.text}</a>;
@@ -92,10 +98,19 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
             {/* Contact Column */}
             <div>
               <h3 className="text-base font-semibold text-white tracking-wider">Contacto</h3>
-               <div className="mt-4 space-y-3 text-sm text-gray-400">
-                  <p>{content.contactInfo.address}</p>
-                  <p>{content.contactInfo.phone}</p>
-                  <p>{content.contactInfo.email}</p>
+               <div className="mt-4 space-y-4 text-sm text-gray-400">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-gray-500 mt-0.5 flex-shrink-0"/>
+                    <span>{content.contactInfo.address}</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Phone className="h-5 w-5 text-gray-500 mt-0.5 flex-shrink-0"/>
+                    <span>{content.contactInfo.phone}</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Mail className="h-5 w-5 text-gray-500 mt-0.5 flex-shrink-0"/>
+                    <span>{content.contactInfo.email}</span>
+                  </div>
                </div>
             </div>
           </div>
@@ -107,7 +122,7 @@ const Footer: React.FC<FooterProps> = ({ onViewAdminPage, content, footerLogoUrl
             </p>
             <div className="flex space-x-4 mt-4 sm:mt-0">
               {content.legalLinks.map(link => (
-                <a href={link.url} key={link.id} className="text-xs text-gray-500 hover:text-gray-300">{link.text}</a>
+                <span key={link.id}>{renderLink(link)}</span>
               ))}
             </div>
           </div>

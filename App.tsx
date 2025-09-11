@@ -1,7 +1,5 @@
-
-
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
-import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page } from './types';
+import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page, LegalPage } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -35,10 +33,14 @@ import LoginPage from './components/LoginPage';
 import CataloguesPage from './components/CataloguesPage';
 import CatalogueDetailPage from './components/CatalogueDetailPage';
 import FAQPage from './components/FAQPage';
-import LegalPage from './components/LegalPage';
+// FIX: Renamed imported component from 'LegalPage' to 'LegalPageComponent' to avoid conflict with the 'LegalPage' type.
+import LegalPageComponent from './components/LegalPage';
 import JobDetailPage from './components/JobDetailPage';
 import JobApplicationPage from './components/JobApplicationPage';
 import PrintCataloguePage from './components/PrintCataloguePage';
+import HelpPage from './components/HelpPage';
+import LegalDetailPage from './components/LegalDetailPage';
+import AdminHelpPage from './components/AdminHelpPage';
 
 
 // --- CURRENCY CONTEXT ---
@@ -181,7 +183,7 @@ const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children })
 
 const PRODUCTS_PER_PAGE = 30;
 
-type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'customPage' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication' | 'printCatalogue';
+type View = 'home' | 'category' | 'productDetail' | 'projects' | 'projectDetail' | 'quote' | 'quoteForm' | 'customPage' | 'contact' | 'cart' | 'checkout' | 'printQuote' | 'wishlist' | 'blog' | 'login' | 'admin' | 'catalogues' | 'catalogueDetail' | 'faq' | 'legal' | 'jobDetail' | 'jobApplication' | 'printCatalogue' | 'help' | 'legalDetail';
 
 interface CustomerInfo {
     name: string;
@@ -321,6 +323,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedJobVacancy, setSelectedJobVacancy] = useState<JobVacancy | null>(null);
   const [applicationJobTitle, setApplicationJobTitle] = useState<string | null>(null);
+  const [activeLegalPageId, setActiveLegalPageId] = useState<string | null>(null);
 
   const [filters, setFilters] = useState<Filters>({
     priceRange: { min: MIN_PRICE, max: MAX_PRICE },
@@ -523,7 +526,14 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     setView('home');
   };
 
-  const handleNavigate = useCallback((key: string) => {
+  const handleNavigate = useCallback((key: string, detail?: string) => {
+    // Check for special navigation types like legal pages
+    if (key === 'legalDetail' && detail) {
+        setActiveLegalPageId(detail);
+        setView('legalDetail');
+        return;
+    }
+    
     // Check for dynamic page slugs first
     const customPage = navigationData.customPages.find(p => p.slug === key);
     if (customPage) {
@@ -573,6 +583,10 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         break;
       case 'legal':
         setView('legal');
+        setActiveSlug(null);
+        break;
+      case 'help':
+        setView('help');
         setActiveSlug(null);
         break;
       default:
@@ -708,10 +722,15 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       />
       
       {(() => {
+          const activeLegalPage = navigationData.legalContent.pages.find(p => p.id === activeLegalPageId);
+
           switch(view) {
+              case 'legalDetail': return <LegalDetailPage page={activeLegalPage!} onBack={() => setView('home')} />;
+              case 'help': return <HelpPage title={navigationData.helpContent.title} subtitle={navigationData.helpContent.subtitle} topics={navigationData.helpContent.userTopics} />;
               case 'jobApplication': return <JobApplicationPage jobTitle={applicationJobTitle!} onBack={() => handleNavigate('about-us')} />;
               case 'jobDetail': return <JobDetailPage job={selectedJobVacancy!} onBack={() => handleNavigate('about-us')} onApply={handleApplyForJob} />;
-              case 'legal': return <LegalPage legalContent={navigationData.legalContent} />;
+              // FIX: Renamed component to 'LegalPageComponent' to avoid naming conflicts.
+              case 'legal': return <LegalPageComponent legalContent={navigationData.legalContent} />;
               case 'faq': return <FAQPage faqContent={navigationData.faqContent} />;
               case 'catalogueDetail': return <CatalogueDetailPage catalogue={selectedCatalogue!} onBack={handleViewCatalogues} onPrintCatalogue={handlePrintCatalogue} />;
               case 'catalogues': return <CataloguesPage catalogues={navigationData.catalogues} onCatalogueSelect={handleViewCatalogueDetail} />;
@@ -865,6 +884,9 @@ const App: React.FC = () => {
         if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && parsedData.footerContent) {
           if (!parsedData.catalogues) parsedData.catalogues = [];
           if (!parsedData.customPages) parsedData.customPages = [];
+          if (!parsedData.helpContent || !parsedData.helpContent.userTopics) { // Check for new structure
+            parsedData.helpContent = INITIAL_NAVIGATION_DATA.helpContent;
+          }
           setNavigationData(parsedData);
         } else {
           localStorage.setItem('navigationData', JSON.stringify(INITIAL_NAVIGATION_DATA));

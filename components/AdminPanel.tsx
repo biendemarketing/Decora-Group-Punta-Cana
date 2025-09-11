@@ -19,6 +19,8 @@ import Dashboard from './Dashboard';
 import Analytics from './Analytics';
 import MediaLibrary from './MediaLibrary';
 import AuditLog from './AuditLog';
+import HelpEditor from './HelpEditor';
+import AdminHelpPage from './AdminHelpPage';
 import { NavigationData, Project, Product } from '../types';
 import { LogOut, Save, XCircle } from 'lucide-react';
 
@@ -31,10 +33,10 @@ interface AdminPanelProps {
 }
 
 type EditorType =
-    'dashboard' | 'analytics' | 'media' | 'audit' |
+    'dashboard' | 'analytics' | 'media' | 'audit' | 'adminHelp' |
     'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' |
     'services' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' |
-    'integrations' | 'vacancies' | 'quote';
+    'integrations' | 'vacancies' | 'quote' | 'help';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
   initialNavigationData,
@@ -83,6 +85,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         return <MediaLibrary navigationData={draftNavData} projectsData={draftProjectsData} productsData={draftProductsData} />;
       case 'audit':
         return <AuditLog />;
+      case 'adminHelp':
+        return <AdminHelpPage adminTopics={draftNavData.helpContent.adminTopics} />;
       case 'settings':
         return <SiteSettingsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       case 'menu':
@@ -116,6 +120,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         return <VacanciesEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       case 'footer':
         return <FooterEditor footerContent={draftNavData.footerContent} onFooterChange={(newFooter) => setDraftNavData(prev => ({...prev, footerContent: newFooter}))} projectCategories={projectCategories} />;
+      case 'help':
+        return <HelpEditor helpContent={draftNavData.helpContent} onHelpContentChange={(newHelp) => setDraftNavData(prev => ({...prev, helpContent: newHelp}))} />;
       case 'integrations':
         return <IntegrationsEditor navigationData={draftNavData} onNavigationChange={setDraftNavData} />;
       default:

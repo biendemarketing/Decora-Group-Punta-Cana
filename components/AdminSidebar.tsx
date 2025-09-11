@@ -1,14 +1,14 @@
 import React from 'react';
 import {
     LayoutDashboard, Settings, Image as ImageIcon, Briefcase, Star, Package, LayoutList,
-    Calculator, BookOpen, BookCopy, FileText, Anchor, Link2, BarChart2, ShieldCheck, HardDrive
+    Calculator, BookOpen, BookCopy, FileText, Anchor, Link2, BarChart2, ShieldCheck, HardDrive, HelpCircle
 } from 'lucide-react';
 
 type EditorType =
-    'dashboard' | 'analytics' | 'media' | 'audit' |
+    'dashboard' | 'analytics' | 'media' | 'audit' | 'adminHelp' |
     'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' |
     'services' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' |
-    'integrations' | 'vacancies' | 'quote';
+    'integrations' | 'vacancies' | 'quote' | 'help';
 
 interface AdminSidebarProps {
   activeEditor: EditorType;
@@ -79,7 +79,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeEditor, onSelectEdito
                 { id: 'quote', label: 'Cotizador', icon: Calculator },
                 { id: 'workProcess', label: 'Proceso de Trabajo', icon: Briefcase },
                 { id: 'vacancies', label: 'Vacantes de Empleo', icon: Briefcase },
+                { id: 'help', label: 'Editor de Ayuda', icon: HelpCircle },
                 { id: 'integrations', label: 'Integraciones', icon: Link2 },
+            ]
+        },
+        {
+            group: 'Soporte',
+            items: [
+                { id: 'adminHelp', label: 'Centro de Ayuda', icon: HelpCircle },
             ]
         }
     ];

@@ -73,7 +73,7 @@ export interface SubCategory {
 }
 
 export interface TopBarLink {
-  id: 'about' | 'faq' | 'legal' | 'contact' | string; // Allow string for dynamic keys
+  id: 'about' | 'faq' | 'legal' | 'contact' | 'help' | string; // Allow string for dynamic keys
   text: string;
 }
 
@@ -303,7 +303,7 @@ export interface FooterLink {
   id: string;
   text: string;
   url: string;
-  linkType?: 'url' | 'project-category' | 'page';
+  linkType?: 'url' | 'project-category' | 'page' | 'legal';
 }
 
 export interface FooterLinkColumn {
@@ -406,6 +406,22 @@ export interface LegalContent {
   pages: LegalPage[];
 }
 
+export interface HelpTopic {
+    id: string;
+    title: string;
+    content: string;
+    section?: 'Principal' | 'Contenido del Sitio' | 'Configuración' | 'Soporte';
+    icon?: string;
+}
+
+export interface HelpContent {
+    title: string;
+    subtitle: string;
+    userTopics: HelpTopic[];
+    adminTopics: HelpTopic[];
+}
+
+
 export interface InstagramShowcaseImage {
     id: string;
     imageUrl: string;
@@ -461,6 +477,7 @@ export interface NavigationData {
     faqs: FAQItem[];
   };
   legalContent: LegalContent;
+  helpContent: HelpContent;
   instagramShowcase: InstagramShowcaseData;
   contactPage: ContactContent;
   customPages: Page[];

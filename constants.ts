@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, FAQItem, LegalContent, InstagramShowcaseData, ContactContent, JobVacancy, Page } from './types';
+import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue, FooterContent, FAQItem, LegalContent, InstagramShowcaseData, ContactContent, JobVacancy, Page, HelpContent } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -12,9 +12,9 @@ const generateSubCategory = (item: { name: string; imageUrl: string; title?: str
 export const GOOGLE_FONTS = ['Poppins', 'Roboto', 'Montserrat', 'Lato', 'Playfair Display'];
 
 export const CATALOGUE_COVER_TEMPLATES = [
-    { id: 'minimalist_light', name: 'Minimalista Claro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxNSIgeT0iNzUiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1IiBmaWxsPSIjY2NjIiByeD0iMiIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMiIGZpbGw9IiNkZGQiIHJ4PSIyIi8+PC9zdmc+', imageSlots: 1 },
+    { id: 'minimalist_light', name: 'Minimalista Claro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZGg0PSI0MCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxNSIgeT0iNzUiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1IiBmaWxsPSIjY2NjIiByeD0iMiIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMiIGZpbGw9IiNkZGQiIHJ4PSIyIi8+PC9zdmc+', imageSlots: 1 },
     { id: 'elegant_dark', name: 'Elegante Oscuro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiMyZDNlNGUiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0iIzQwNDA0MCIgcng9IjIiLz48cmVjdCB4PSIxNSIgeT0iNzUiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1IiBmaWxsPSIjY2NjIiByeD0iMiIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMiIGZpbGw9IiNkZGQiIHJ4PSIyIi8+PC9zdmc+', imageSlots: 1 },
-    { id: 'modern_grid', name: 'Mosaico Moderno', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MiIgeT0iMTAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iNDIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MiIgeT0iNDIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iODIiIHdpZHRoPSI2MiIgaGVpZ2h0PSI4IiBmaWxsPSIjY2NjIiByeD0iMiIvPjwvc3ZnPg==', imageSlots: 4 },
+    { id: 'modern_grid', name: 'Mosaico Moderno', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ-h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MiIgeT0iMTAiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iNDIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MiIgeT0iNDIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iODIiIHdpZHRoPSI2MiIgaGVpZ2h0PSI4IiBmaWxsPSIjY2NjIiByeD0iMiIvPjwvc3ZnPg==', imageSlots: 4 },
     { id: 'corporate_dark', name: 'Corporativo Oscuro', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiMyZDNlNGUiLz48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSIyNSIgZmlsbD0iIzQwNDA0MCIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iNDUiIHdpZHRoPSIyNSIgaGVpZ2h0PSI1MCIgZmlsbD0iIzQwNDA0MCIgcng9IjIiLz48cmVjdCB4PSI0MCIgeT0iNDUiIHdpZHRoPSIzMCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzYxNjE2MSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iMTAwIiB3aWR0aD0iNjAiIGhlaWdodD0iMiIgZmlsbD0iI2NjYyIvPjwvc3ZnPg==', imageSlots: 1 },
     { id: 'asymmetric_clean', name: 'Asimétrico Limpio', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSIyNSIgaGVpZ2h0PSI4NSIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MCIgeT0iMTAiIHdpZHRoPSIzMCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSI0MCIgeT0iNTUiIHdpZHRoPSIzMCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2RlZGVkZSIgcng9IjIiLz48cmVjdCB4PSIxMCIgeT0iMTAwIiB3aWR0aD0iNjAiIGhlaWdodD0iMiIgZmlsbD0iI2NjYyIvPjwvc3ZnPg==', imageSlots: 3 },
 ];
@@ -405,10 +405,10 @@ const INITIAL_FOOTER_CONTENT: FooterContent = {
   },
   copyrightText: `© ${new Date().getFullYear()} Decora Group. Todos los derechos reservados.`,
   legalLinks: [
-    { id: 'legal1', text: "Política de Privacidad", url: "#", linkType: 'url' },
-    { id: 'legal2', text: "Términos y Condiciones", url: "#", linkType: 'url' },
-    { id: 'legal3', text: "Aviso Legal", url: "#", linkType: 'url' },
-    { id: 'legal4', text: "Política de Cookies", url: "#", linkType: 'url' }
+    { id: 'legal1', text: "Política de Privacidad", url: "legal1", linkType: 'legal' },
+    { id: 'legal2', text: "Términos y Condiciones", url: "legal2", linkType: 'legal' },
+    { id: 'legal3', text: "Aviso Legal", url: "legal3", linkType: 'legal' },
+    { id: 'legal4', text: "Política de Cookies", url: "legal4", linkType: 'legal' }
   ]
 };
 
@@ -638,7 +638,73 @@ El presente sitio web tiene como objeto la promoción y comercialización de mue
 **3. USUARIOS**
 El acceso y/o uso de este portal atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, los Términos y Condiciones de Uso aquí reflejados.
             `
+        },
+        {
+            id: 'legal4',
+            title: 'Política de Cookies',
+            content: `
+**¿QUÉ SON LAS COOKIES?**
+Una cookie es un pequeño fichero de texto que un sitio web guarda en su ordenador o dispositivo móvil cuando usted visita el sitio. Esto permite que el sitio web recuerde sus acciones y preferencias (como inicio de sesión, idioma, tamaño de letra y otras preferencias de visualización) durante un período de tiempo, para que no tenga que volver a introducirlas cada vez que regrese al sitio o navegue de una página a otra.
+
+**¿CÓMO UTILIZAMOS LAS COOKIES?**
+Utilizamos cookies para:
+- **Cookies técnicas:** Son esenciales para el funcionamiento del sitio web, como mantener su sesión iniciada.
+- **Cookies de análisis:** Nos permiten reconocer y contar el número de visitantes y ver cómo se mueven por el sitio. Utilizamos esta información para mejorar el funcionamiento de nuestro sitio web. (Ej: Google Analytics).
+- **Cookies de personalización:** Se utilizan para reconocerle cuando vuelve a nuestro sitio web. Esto nos permite personalizar nuestro contenido para usted y recordar sus preferencias.
+
+**CÓMO CONTROLAR LAS COOKIES**
+Puede controlar y/o eliminar las cookies como desee. Para más información, consulte aboutcookies.org. Puede eliminar todas las cookies que ya están en su ordenador y puede configurar la mayoría de los navegadores para que impidan su instalación. Sin embargo, si lo hace, es posible que tenga que ajustar manualmente algunas preferencias cada vez que visite un sitio y que algunos servicios y funcionalidades no funcionen.
+            `
         }
+    ]
+};
+
+const INITIAL_HELP_CONTENT: HelpContent = {
+    title: 'Centro de Ayuda y Guía',
+    subtitle: 'Encuentra todo lo que necesitas saber para sacar el máximo provecho a nuestra plataforma y servicios.',
+    userTopics: [
+        {
+            id: 'user_quote_auto',
+            title: '¿Cómo funciona el cotizador automático?',
+            content: 'Nuestro cotizador automático te permite obtener un precio estimado para proyectos específicos como Closets, TV Walls y Cocinas. Simplemente sigue los pasos, selecciona las opciones que se adapten a tus necesidades (tamaño, estilo, materiales, accesorios) y al final obtendrás un presupuesto detallado. Recuerda que este es un precio estimado y puede variar ligeramente tras la visita técnica final.'
+        },
+        {
+            id: 'user_quote_custom',
+            title: '¿Cómo pido cotización para un mueble personalizado?',
+            content: 'Para muebles a medida, proyectos comerciales o cualquier otro diseño que tengas en mente, puedes contactarnos a través de nuestro formulario en la página de "Contacto". Asegúrate de darnos la mayor cantidad de detalles posible (medidas, fotos de inspiración, materiales deseados) y uno de nuestros diseñadores se pondrá en contacto contigo.'
+        },
+        {
+            id: 'user_wishlist',
+            title: '¿Para qué sirve la "Lista de Deseos"?',
+            content: 'La Lista de Deseos (marcada con un corazón ♥) te permite guardar los productos que más te gustan en un solo lugar. Es una forma fácil de no perder de vista tus muebles favoritos mientras exploras nuestro catálogo. Puedes acceder a tu lista en cualquier momento desde el icono de corazón en la parte superior de la página.'
+        },
+        {
+            id: 'user_cart',
+            title: '¿Qué es el "Carrito de Cotización"?',
+            content: 'El carrito (icono 🛒) no es para una compra directa, sino para agrupar todos los productos de los que deseas recibir una cotización formal. Añade todo lo que te interese, y cuando estés listo, ve al carrito para enviarnos tu solicitud con todos los productos juntos. Esto agiliza el proceso y nos ayuda a darte un presupuesto más preciso.'
+        },
+    ],
+    adminTopics: [
+        { id: 'admin_dashboard', section: 'Principal', icon: 'LayoutDashboard', title: 'Dashboard', content: 'El Dashboard es tu punto de partida. Te ofrece un resumen visual rápido de las métricas más importantes de tu sitio, como el número total de productos, proyectos y páginas. Es ideal para tener una visión general del estado de tu contenido de un solo vistazo.' },
+        { id: 'admin_analytics', section: 'Principal', icon: 'BarChart2', title: 'Analíticas', content: 'Esta sección te proporciona datos sobre el tráfico de tu web. Podrás ver (próximamente) información sobre el número de visitas, de dónde vienen tus usuarios (geografía) y qué páginas son las más populares. Es como tener un mini Google Analytics integrado.' },
+        { id: 'admin_media', section: 'Principal', icon: 'HardDrive', title: 'Archivos y Multimedia', content: 'Aquí se centralizan todas las imágenes y archivos de tu web. Puedes ver las imágenes usadas en productos, sliders, proyectos, etc. Además, puedes subir nuevos archivos directamente a esta biblioteca para usarlos más tarde en cualquier parte del sitio.' },
+        { id: 'admin_audit', section: 'Principal', icon: 'ShieldCheck', title: 'Auditoría', content: 'El registro de auditoría (próximamente) te mostrará un historial de los cambios importantes realizados en el panel de administración. Podrás ver quién hizo qué cambio y cuándo, lo que es crucial para la seguridad y el seguimiento del trabajo en equipo.' },
+        { id: 'admin_pages', section: 'Contenido del Sitio', icon: 'FileText', title: 'Páginas y Secciones', content: 'Este es el corazón del contenido de tu web. Desde aquí puedes editar páginas como "Quiénes Somos", "FAQ" o "Contacto". Utiliza un sistema de bloques para añadir, eliminar, reordenar y editar las distintas secciones que componen cada página, dándote control total sobre la estructura.' },
+        { id: 'admin_slider', section: 'Contenido del Sitio', icon: 'ImageIcon', title: 'Slider Principal', content: 'Gestiona las grandes imágenes rotativas que aparecen en la parte superior de tu página de inicio. Puedes cambiar las imágenes, los títulos, subtítulos y los botones de cada diapositiva. También puedes reordenarlas o eliminarlas.' },
+        { id: 'admin_popular', section: 'Contenido del Sitio', icon: 'Star', title: 'Categorías Populares', content: 'Controla las cuatro categorías destacadas que aparecen en la página de inicio. Puedes cambiar cuáles categorías se muestran, sus imágenes y el texto que las acompaña para dirigir la atención de los usuarios a las secciones más importantes.' },
+        { id: 'admin_services', section: 'Contenido del Sitio', icon: 'LayoutList', title: 'Servicios', content: 'Edita la sección de servicios que aparece en la página de inicio. Cada servicio tiene un título, descripción, imagen y un botón que puede enlazar a un tipo de cotización específico. Es ideal para destacar tus principales áreas de negocio.' },
+        { id: 'admin_projects', section: 'Contenido del Sitio', icon: 'Briefcase', title: 'Proyectos', content: 'Aquí puedes añadir, editar o eliminar los proyectos de tu portafolio. Cada proyecto tiene un título, descripción, categoría, imagen principal y una galería de imágenes para mostrar tu trabajo en detalle.' },
+        { id: 'admin_products', section: 'Contenido del Sitio', icon: 'Package', title: 'Productos', content: 'Gestiona todo tu inventario de productos. Puedes crear nuevos productos, editar los existentes (precio, descripción, imágenes, etc.), y controlar su visibilidad o disponibilidad en la tienda. También incluye herramientas para aplicar aumentos o descuentos de precio de forma masiva.' },
+        { id: 'admin_catalogues', section: 'Contenido del Sitio', icon: 'BookCopy', title: 'Catálogos', content: 'Administra tus catálogos. Puedes crear dos tipos: "Tipo Post" para enlazar a un PDF, una galería o un archivo de Drive, o "Basado en Productos" para usar el diseñador avanzado y generar un PDF personalizado a partir de tu inventario.' },
+        { id: 'admin_blog', section: 'Contenido del Sitio', icon: 'BookOpen', title: 'Blog', content: 'Gestiona todo el contenido de tu blog. Puedes escribir y editar publicaciones, así como administrar las categorías y etiquetas para mantener tu contenido organizado y fácil de navegar para los usuarios.' },
+        { id: 'admin_settings', section: 'Configuración', icon: 'Settings', title: 'Ajustes Generales', content: 'Aquí configuras los elementos globales de tu sitio: cambia los logos del encabezado y pie de página, edita los textos de la barra superior (como "Entrega gratis"), y ajusta la tasa de cambio de USD a RD$.' },
+        { id: 'admin_menu', section: 'Configuración', icon: 'LayoutList', title: 'Menú Principal', content: 'Controla la estructura de la navegación principal de tu web. Puedes añadir, eliminar, renombrar y reordenar las categorías principales. También puedes gestionar las subcategorías que aparecen en los mega menús desplegables.' },
+        { id: 'admin_footer', section: 'Configuración', icon: 'Anchor', title: 'Pie de Página', content: 'Edita toda la información que aparece en el pie de página: la descripción de la empresa, los enlaces a redes sociales, las columnas de enlaces rápidos y la información de contacto.' },
+        { id: 'admin_quote', section: 'Configuración', icon: 'Calculator', title: 'Cotizador', content: 'Configura las opciones y precios del cotizador automático. Puedes gestionar los estilos para TV Walls, los tipos y módulos de closets, y todas las opciones para cocinas (tamaños, topes, accesorios, etc.).' },
+        { id: 'admin_process', section: 'Configuración', icon: 'Briefcase', title: 'Proceso de Trabajo', content: 'Edita la sección "Proceso de Trabajo" de la página de inicio. Puedes cambiar el título, la imagen de fondo y gestionar los 4 pasos que describen cómo trabajas con los clientes.' },
+        { id: 'admin_vacancies', section: 'Configuración', icon: 'Briefcase', title: 'Vacantes de Empleo', content: 'Gestiona las ofertas de trabajo que aparecen en la página "Quiénes Somos". Puedes crear nuevas vacantes, editar las existentes y eliminar las que ya no están disponibles. Cada vacante tiene campos detallados para descripción, responsabilidades y requisitos.' },
+        { id: 'admin_help', section: 'Configuración', icon: 'HelpCircle', title: 'Ayuda y Guía', content: 'Desde aquí editas el contenido de la página de ayuda para usuarios y la guía para administradores (¡la que estás leyendo ahora!). Puedes añadir, editar o eliminar artículos para mantener ambas guías actualizadas.' },
+        { id: 'admin_integrations', section: 'Configuración', icon: 'Link2', title: 'Integraciones', content: 'Gestiona la apariencia de las secciones que se integran con servicios de terceros. Actualmente, puedes editar toda la información que se muestra en la sección de Instagram en la página de inicio (nombre de usuario, bio, fotos, etc.).' },
     ]
 };
 
@@ -839,7 +905,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   topBarLinks: [
     { id: 'about-us', text: 'Nosotros' },
     { id: 'faq', text: 'FAQ' },
-    { id: 'legal', text: 'Aviso Legal y Términos y Condiciones' },
+    { id: 'help', text: 'Ayuda' },
     { id: 'contact', text: 'Contacto' },
   ],
   topBarBenefits: [
@@ -854,6 +920,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   footerContent: INITIAL_FOOTER_CONTENT,
   faqContent: INITIAL_FAQ_CONTENT,
   legalContent: INITIAL_LEGAL_CONTENT,
+  helpContent: INITIAL_HELP_CONTENT,
   instagramShowcase: INITIAL_INSTAGRAM_SHOWCASE_DATA,
   contactPage: INITIAL_CONTACT_CONTENT,
   customPages: INITIAL_CUSTOM_PAGES,
