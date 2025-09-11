@@ -25,9 +25,9 @@ const CataloguesMegaMenu: React.FC<CataloguesMegaMenuProps> = ({ catalogues, onV
               href="#" 
               key={catalogue.id} 
               onClick={(e) => handleClick(e, catalogue)} 
-              className="group block"
+              className="group flex flex-col items-center text-center"
             >
-              <div className="aspect-w-3 aspect-h-4 rounded-lg overflow-hidden bg-gray-100">
+              <div className="w-24 h-32 rounded-lg overflow-hidden bg-gray-100">
                 <img 
                   src={catalogue.featuredImage} 
                   alt={catalogue.title} 
@@ -35,7 +35,7 @@ const CataloguesMegaMenu: React.FC<CataloguesMegaMenuProps> = ({ catalogues, onV
                 />
               </div>
               <p className="mt-3 text-sm font-semibold text-gray-800 group-hover:text-[#5a1e38]">{catalogue.title}</p>
-              <p className="mt-1 text-xs text-gray-500 flex items-center group-hover:text-[#5a1e38]">
+              <p className="mt-1 text-xs text-gray-500 flex items-center justify-center group-hover:text-[#5a1e38]">
                 Ver catálogo <ArrowRight className="h-3 w-3 ml-1" />
               </p>
             </a>

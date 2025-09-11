@@ -1,4 +1,4 @@
-import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost } from './types';
+import type { Product, Project, NavigationData, SubCategory, MenuItem, BlogCategory, BlogTag, BlogPost, Catalogue } from './types';
 
 const generateSubCategory = (item: { name: string; imageUrl: string; title?: string, description?: string, quoteType?: string }): SubCategory => ({
   id: crypto.randomUUID(),
@@ -275,6 +275,74 @@ const INITIAL_BLOG_POSTS: BlogPost[] = [
   },
 ];
 
+const INITIAL_CATALOGUES: Catalogue[] = [
+  {
+    id: crypto.randomUUID(),
+    title: "Colección Verano 2024",
+    description: "Descubre las últimas tendencias en mobiliario para exteriores y terrazas. Diseños frescos y resistentes para disfrutar del clima caribeño.",
+    featuredImage: "https://picsum.photos/id/1011/300/400",
+    isVisible: true,
+    type: 'pdf',
+    pdfUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Guía de Materiales y Acabados",
+    description: "Una guía completa para ayudarte a elegir los materiales y acabados perfectos para tu proyecto. Compara maderas, metales, telas y más.",
+    featuredImage: "https://picsum.photos/id/1074/300/400",
+    isVisible: true,
+    type: 'drive',
+    driveUrl: 'https://docs.google.com/document/d/1_G3-l4_4_.../edit?usp=sharing',
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Proyectos de Cocinas Destacados",
+    description: "Inspírate con una selección de nuestros mejores proyectos de cocinas a medida. Diseños funcionales y elegantes para el corazón de tu hogar.",
+    featuredImage: "https://picsum.photos/id/292/300/400",
+    isVisible: true,
+    type: 'gallery',
+    galleryImages: [
+      'https://picsum.photos/id/292/800/600',
+      'https://picsum.photos/id/43/800/600',
+      'https://picsum.photos/id/48/800/600',
+      'https://picsum.photos/id/49/800/600',
+      'https://picsum.photos/id/53/800/600',
+      'https://picsum.photos/id/1072/800/600'
+    ]
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Mobiliario de Oficina 2024",
+    description: "Soluciones ergonómicas y de diseño para espacios de trabajo productivos. Desde escritorios hasta sillería y almacenamiento.",
+    featuredImage: "https://picsum.photos/id/180/300/400",
+    isVisible: true,
+    type: 'pdf',
+    pdfUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Inspiración: Espacios Infantiles",
+    description: "Ideas creativas y muebles funcionales para las habitaciones de los más pequeños. Diseños que crecen con ellos.",
+    featuredImage: "https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-childrens-room-side-image.jpg",
+    isVisible: true,
+    type: 'gallery',
+    galleryImages: [
+      'https://picsum.photos/id/219/800/600',
+      'https://picsum.photos/id/309/800/600',
+      'https://picsum.photos/id/326/800/600',
+      'https://picsum.photos/id/1039/800/600'
+    ]
+  },
+  {
+    id: crypto.randomUUID(),
+    title: "Catálogo Técnico de Herrajes",
+    description: "Especificaciones técnicas y detalles de nuestra selección de herrajes de alta calidad para puertas, gabinetes y más.",
+    featuredImage: "https://picsum.photos/id/1080/300/400",
+    isVisible: false,
+    type: 'drive',
+    driveUrl: 'https://docs.google.com/spreadsheets/d/1_G3-l4_4_.../edit?usp=sharing',
+  }
+];
 
 export const INITIAL_NAVIGATION_DATA: NavigationData = {
   menuItems: MENU_ITEMS_DATA.map(item => ({ ...item, id: crypto.randomUUID() })),
@@ -437,7 +505,7 @@ export const INITIAL_NAVIGATION_DATA: NavigationData = {
   blogPosts: INITIAL_BLOG_POSTS,
   blogCategories: INITIAL_BLOG_CATEGORIES,
   blogTags: INITIAL_BLOG_TAGS,
-  catalogues: [],
+  catalogues: INITIAL_CATALOGUES,
   logoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a",
   footerLogoUrl: "https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159",
   topBarLinks: [
