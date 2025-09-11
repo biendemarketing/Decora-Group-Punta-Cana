@@ -1,4 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+
+
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { SubCategory } from '../types';
 import { 
   ArrowLeft, 
@@ -30,44 +32,144 @@ const iconMap: { [key: string]: React.ElementType } = {
   'Default': Sparkles
 };
 
-
 const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, onSelectProjectCategory, onViewAllProjects }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  // FIX: Changed NodeJS.Timeout to ReturnType<typeof setInterval> to be compatible with browser environments and fix TypeScript error.
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isDraggingRef = useRef(false);
+  const startPosRef = useRef(0);
+  const currentTranslateRef = useRef(0);
+  const animationFrameRef = useRef<number | null>(null);
+  
+  const [clonedCount, setClonedCount] = useState(0);
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const { current } = scrollContainerRef;
-      const scrollAmount = current.offsetWidth * 0.75;
-      current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
+  // Memoize the slides to prevent re-renders
+  const slides = useMemo(() => projectCategories, [projectCategories]);
+
+  // Function to move to a specific slide index
+  const goToSlide = useCallback((index: number, useTransition = true) => {
+    if (!trackRef.current) return;
+    const slideWidth = trackRef.current.children[0]?.clientWidth || 0;
+    currentTranslateRef.current = -index * slideWidth;
+    trackRef.current.style.transition = useTransition ? 'transform 0.5s ease-in-out' : 'none';
+    trackRef.current.style.transform = `translateX(${currentTranslateRef.current}px)`;
+  }, []);
+
+  // Setup clones for infinite loop effect
+  useEffect(() => {
+    if (!trackRef.current || slides.length === 0) return;
+
+    const track = trackRef.current;
+    // Clear previous clones
+    Array.from(track.children).forEach(child => {
+      if (child.hasAttribute('data-clone')) track.removeChild(child);
+    });
+
+    // Determine how many items to clone based on what's visible
+    const visibleItems = Math.floor(track.parentElement!.clientWidth / (track.children[0] as HTMLElement).offsetWidth);
+    const count = Math.max(visibleItems, Math.min(slides.length, 5));
+    setClonedCount(count);
+
+    const originalSlides = Array.from(track.children);
+    for (let i = 0; i < count; i++) {
+        const clone = originalSlides[i].cloneNode(true) as HTMLElement;
+        clone.setAttribute('data-clone', 'true');
+        track.appendChild(clone);
+    }
+    for (let i = originalSlides.length - 1; i >= originalSlides.length - count; i--) {
+        const clone = originalSlides[i].cloneNode(true) as HTMLElement;
+        clone.setAttribute('data-clone', 'true');
+        track.insertBefore(clone, track.firstChild);
+    }
+    
+    goToSlide(count, false); // Initial position
+  }, [slides, goToSlide]);
+
+
+  const handleNext = useCallback(() => {
+    if (!trackRef.current) return;
+    const totalSlides = slides.length + 2 * clonedCount;
+    const currentIndex = Math.round(-currentTranslateRef.current / (trackRef.current.children[0]?.clientWidth || 1));
+    
+    if (currentIndex >= slides.length + clonedCount) return; // Prevent fast-forwarding during loop reset
+    goToSlide(currentIndex + 1);
+  }, [slides.length, clonedCount, goToSlide]);
+
+  const handlePrev = () => {
+    if (!trackRef.current) return;
+    const currentIndex = Math.round(-currentTranslateRef.current / (trackRef.current.children[0]?.clientWidth || 1));
+    
+    if (currentIndex <= clonedCount -1) return; // Prevent rewinding during loop reset
+    goToSlide(currentIndex - 1);
+  };
+  
+  // Autoplay functionality
+  const startAutoPlay = useCallback(() => {
+    stopAutoPlay();
+    autoPlayRef.current = setInterval(handleNext, 4000);
+  }, [handleNext]);
+
+  const stopAutoPlay = () => {
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+  };
+  
+  useEffect(() => {
+    startAutoPlay();
+    return () => stopAutoPlay();
+  }, [startAutoPlay]);
+
+
+  // Handle the "jump" for the infinite loop effect
+  const onTransitionEnd = () => {
+    if (!trackRef.current) return;
+    const slideWidth = trackRef.current.children[0]?.clientWidth || 1;
+    const currentIndex = Math.round(-currentTranslateRef.current / slideWidth);
+
+    if (currentIndex >= slides.length + clonedCount) {
+        goToSlide(clonedCount, false);
+    }
+    if (currentIndex < clonedCount) {
+        goToSlide(slides.length + clonedCount -1, false);
     }
   };
 
-  const startAutoScroll = () => {
-    if (intervalId.current) clearInterval(intervalId.current);
-    intervalId.current = setInterval(() => {
-      if (scrollContainerRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-        if (scrollLeft + clientWidth >= scrollWidth) {
-          scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          scroll('right');
-        }
-      }
-    }, 5000);
+  // Drag functionality
+  const getPositionX = (event: MouseEvent | TouchEvent) => {
+    return event.type.includes('mouse') ? (event as MouseEvent).pageX : (event as TouchEvent).touches[0].clientX;
+  };
+  
+  const dragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    isDraggingRef.current = true;
+    startPosRef.current = getPositionX(e.nativeEvent);
+    stopAutoPlay();
+    
+    animationFrameRef.current = requestAnimationFrame(function animation() {
+        if(trackRef.current) trackRef.current.style.transform = `translateX(${currentTranslateRef.current}px)`;
+        if (isDraggingRef.current) requestAnimationFrame(animation);
+    });
+    
+    if (trackRef.current) trackRef.current.style.transition = 'none';
   };
 
-  const stopAutoScroll = () => {
-    if (intervalId.current) clearInterval(intervalId.current);
+  const dragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDraggingRef.current) return;
+    const currentPosition = getPositionX(e.nativeEvent);
+    const diff = currentPosition - startPosRef.current;
+    currentTranslateRef.current += diff * 1.5; // Multiply for a better drag feel
+    startPosRef.current = currentPosition;
   };
 
-  useEffect(() => {
-    startAutoScroll();
-    return () => stopAutoScroll();
-  }, []);
+  const dragEnd = () => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    if(animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    
+    const slideWidth = trackRef.current?.children[0]?.clientWidth || 1;
+    const targetIndex = Math.round(-currentTranslateRef.current / slideWidth);
+
+    goToSlide(targetIndex);
+    startAutoPlay();
+  };
 
   return (
     <div className="bg-gray-50 py-16">
@@ -80,53 +182,68 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
         </div>
         
         <div 
-          className="relative flex items-center"
-          onMouseEnter={stopAutoScroll}
-          onMouseLeave={startAutoScroll}
+          className="relative"
+          onMouseEnter={stopAutoPlay}
+          onMouseLeave={startAutoPlay}
         >
           <button 
-            onClick={() => scroll('left')}
-            className="absolute -left-4 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors hidden md:block"
-            aria-label="Scroll left"
+            onClick={handlePrev}
+            className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors hidden md:flex items-center justify-center"
+            aria-label="Anterior"
           >
             <ArrowLeft className="h-6 w-6 text-gray-700" />
           </button>
-
+          
           <div 
-            ref={scrollContainerRef}
-            className="flex items-start space-x-8 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
+            className="overflow-hidden cursor-grab active:cursor-grabbing"
+            onMouseDown={dragStart}
+            onMouseMove={dragMove}
+            onMouseUp={dragEnd}
+            onMouseLeave={dragEnd}
+            onTouchStart={dragStart}
+            onTouchMove={dragMove}
+            onTouchEnd={dragEnd}
           >
-            {projectCategories.map((category) => {
-              const Icon = iconMap[category.name] || iconMap['Default'];
-              return (
-              <a 
-                href="#" 
-                key={category.id} 
-                onClick={(e) => { e.preventDefault(); onSelectProjectCategory(category.name); }}
-                className="flex-shrink-0 w-40 text-center group snap-center"
-              >
-                <div className="relative w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-white transform group-hover:scale-105 transition-transform duration-300">
-                  <img
-                    src={category.imageUrl}
-                    alt={category.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-[#5a1e38]/75 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <Icon className="h-8 w-8 text-white" />
+            <div 
+              ref={trackRef}
+              className="flex"
+              onTransitionEnd={onTransitionEnd}
+            >
+              {slides.map((category) => {
+                const Icon = iconMap[category.name] || iconMap['Default'];
+                return (
+                  <div key={category.id} className="min-w-0 shrink-0 grow-0 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 p-4">
+                    <a 
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); onSelectProjectCategory(category.name); }}
+                      className="flex flex-col items-center text-center group"
+                      draggable="false"
+                    >
+                      <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-lg transform transition-all duration-300 group-hover:shadow-xl group-hover:scale-105">
+                        <img
+                          src={category.imageUrl}
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                          draggable="false"
+                        />
+                        <div className="absolute inset-0 bg-[#5a1e38]/75 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <Icon className="h-9 w-9 text-white" />
+                        </div>
+                      </div>
+                      <h3 className="mt-4 text-sm font-semibold text-gray-800 group-hover:text-[#5a1e38] transition-colors h-10 flex items-center">
+                        {category.name}
+                      </h3>
+                    </a>
                   </div>
-                </div>
-                <h3 className="mt-4 text-sm font-semibold text-gray-800 group-hover:text-[#5a1e38] transition-colors">
-                  {category.name}
-                </h3>
-              </a>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
           <button 
-            onClick={() => scroll('right')}
-            className="absolute -right-4 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors hidden md:block"
-            aria-label="Scroll right"
+            onClick={handleNext}
+            className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors hidden md:flex items-center justify-center"
+            aria-label="Siguiente"
           >
             <ArrowRight className="h-6 w-6 text-gray-700" />
           </button>
@@ -141,15 +258,6 @@ const DesignsCarousel: React.FC<DesignsCarouselProps> = ({ projectCategories, on
           </button>
         </div>
       </div>
-       <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    `}</style>
     </div>
   );
 };
