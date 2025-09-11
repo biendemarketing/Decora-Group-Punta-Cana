@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Building, Send } from 'lucide-react';
-import { PROJECT_TYPES_CONTACT, DOMINICAN_REPUBLIC_LOCATIONS } from '../constants';
+import { PROJECT_TYPES_CONTACT, DOMINICAN_REPUBLIC_LOCATIONS, COUNTRIES } from '../constants';
 import { ContactContent } from '../types';
 
 interface ContactFormProps {
@@ -9,16 +9,24 @@ interface ContactFormProps {
 
 const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
   const [personType, setPersonType] = useState<'individual' | 'company'>('individual');
+  const [selectedCountry, setSelectedCountry] = useState<string>('República Dominicana');
   const [selectedProvince, setSelectedProvince] = useState<string>('');
   const [municipalities, setMunicipalities] = useState<string[]>([]);
   
   useEffect(() => {
-    if (selectedProvince && DOMINICAN_REPUBLIC_LOCATIONS[selectedProvince as keyof typeof DOMINICAN_REPUBLIC_LOCATIONS]) {
+    if (selectedCountry !== 'República Dominicana') {
+        setSelectedProvince('');
+        setMunicipalities([]);
+    }
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    if (selectedProvince && selectedCountry === 'República Dominicana' && DOMINICAN_REPUBLIC_LOCATIONS[selectedProvince as keyof typeof DOMINICAN_REPUBLIC_LOCATIONS]) {
       setMunicipalities(DOMINICAN_REPUBLIC_LOCATIONS[selectedProvince as keyof typeof DOMINICAN_REPUBLIC_LOCATIONS]);
     } else {
       setMunicipalities([]);
     }
-  }, [selectedProvince]);
+  }, [selectedProvince, selectedCountry]);
 
   const inputClasses = "mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#5a1e38] focus:border-[#5a1e38] sm:text-sm text-gray-900";
 
@@ -72,27 +80,30 @@ const ContactForm: React.FC<ContactFormProps> = ({ content }) => {
         
         <div>
             <label htmlFor="country" className="block text-sm font-medium text-gray-700">País</label>
-            <div className={`${inputClasses} bg-gray-100 flex items-center cursor-not-allowed`}>
-                <span className="mr-2">🇩🇴</span> República Dominicana
-            </div>
+            <select id="country" name="country" value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className={inputClasses}>
+                {COUNTRIES.map(country => <option key={country} value={country}>{country}</option>)}
+            </select>
         </div>
+
+        {selectedCountry === 'República Dominicana' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label htmlFor="province" className="block text-sm font-medium text-gray-700">Provincia</label>
+                    <select id="province" name="province" value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)} className={inputClasses}>
+                        <option value="">Selecciona una provincia</option>
+                        {Object.keys(DOMINICAN_REPUBLIC_LOCATIONS).map(prov => <option key={prov} value={prov}>{prov}</option>)}
+                    </select>
+                </div>
+                <div>
+                    <label htmlFor="municipality" className="block text-sm font-medium text-gray-700">Municipio</label>
+                    <select id="municipality" name="municipality" disabled={!selectedProvince} className={`${inputClasses} disabled:bg-gray-100`}>
+                        <option value="">Selecciona un municipio</option>
+                        {municipalities.map(mun => <option key={mun} value={mun}>{mun}</option>)}
+                    </select>
+                </div>
+            </div>
+        )}
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-                <label htmlFor="province" className="block text-sm font-medium text-gray-700">Provincia</label>
-                <select id="province" name="province" value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)} className={inputClasses}>
-                    <option value="">Selecciona una provincia</option>
-                    {Object.keys(DOMINICAN_REPUBLIC_LOCATIONS).map(prov => <option key={prov} value={prov}>{prov}</option>)}
-                </select>
-            </div>
-            <div>
-                <label htmlFor="municipality" className="block text-sm font-medium text-gray-700">Municipio</label>
-                <select id="municipality" name="municipality" disabled={!selectedProvince} className={`${inputClasses} disabled:bg-gray-100`}>
-                    <option value="">Selecciona un municipio</option>
-                    {municipalities.map(mun => <option key={mun} value={mun}>{mun}</option>)}
-                </select>
-            </div>
-        </div>
 
         <div>
           <label htmlFor="address" className="block text-sm font-medium text-gray-700">Dirección (Opcional)</label>

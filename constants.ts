@@ -23,7 +23,7 @@ export const CATALOGUE_PAGE_TEMPLATES = [
     { id: 'grid', name: 'Cuadrícula', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iOSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjUiIGZpbGw9IiNlMGUwZTAiIHJ4PSIyIi8+PHJlY3QgeD0iMTAiIHk9IjI0IiB3aWR0aD0iMjgiIGhlaWdodD0iMzIiIGZpbGw9IiNkZWRlZGUiIHJ4PSIyIi8+PHJlYWN0IHg9IjQyIiB5PSIyNCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjMyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjEwIiB5PSI2MSIgd2lkdGg9IjI4IiBoZWlnaHQ9IjMyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjQyIiB5PSI2MSIgd2lkdGg9IjI4IiBoZWlnaHQ9IjMyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjwvc3ZnPg==', productsPerPageOptions: [2, 4, 6] },
     { id: 'list', name: 'Lista', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iOSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjUiIGZpbGw9IiNlMGUwZTAiIHJ4PSIyIi8+PHJlYWN0IHg9IjEwIiB5PSIyNCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjEwIiB5PSI1MSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjEwIiB5PSI3OCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjwvc3ZnPg==', productsPerPageOptions: [2, 3, 4] },
     { id: 'collage', name: 'Collage', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iOSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjUiIGZpbGw9IiNlMGUwZTAiIHJ4PSIyIi8+PHJlYWN0IHg9IjEwIiB5PSIyNCIgd2lkdGg9IjM1IiBoZWlnaHQ9IjY4IiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjUwIiB5PSIyNCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjMyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjUwIiB5PSI2MCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjMyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjwvc3ZnPg==', productsPerPageOptions: [3] },
-    { id: 'list-2-col', name: 'Lista 2 Columnas', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iOSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjUiIGZpbGw9IiNlMGUwZTAiIHJ4PSIyIi8+PHJlY3QgeD0iMTAiIHk9IjI0IiB3aWR0aD0iMjgiIGhlaWdodD0iMjIiIGZpbGw9IiNkZWRlZGUiIHJ4PSIyIi8+PHJlYWN0IHg9IjQyIiB5PSIyNCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjEwIiB5PSI1MSIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjQyIiB5PSI1MSIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjEwIiB5PSI3OCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjQyIiB5PSI3OCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjwvc3ZnPg==', productsPerPageOptions: [4, 6, 8] },
+    { id: 'list-2-col', name: 'Lista 2 Columnas', preview: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAxMDUiPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNmOWZhZmIiLz48cmVjdCB4PSIxMCIgeT0iOSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjUiIGZpbGw9IiNlMGUwZTAiIHJ4PSIyIi8+PHJlYWN0IHg9IjEwIiB5PSIyNCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjQyIiB5PSIyNCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjEwIiB5PSI1MSIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjQyIiB5PSI1MSIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjEwIiB5PSI3OCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjxyZWN0IHg9IjQyIiB5PSI3OCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjIyIiBmaWxsPSIjZGVkZWRlIiByeD0iMiIvPjwvc3ZnPg==', productsPerPageOptions: [4, 6, 8] },
 ];
 
 export const CATALOGUE_BACK_COVER_TEMPLATES = [
@@ -1411,9 +1411,55 @@ export const COLOR_MAP: { [key: string]: string } = {
 export const MAX_PRICE = 20000;
 export const MIN_PRICE = 0;
 
-export const PROVINCES = [
-    "Santo Domingo", "Distrito Nacional", "La Altagracia", "Puerto Rico", "Azua", "Bahoruco", "Barahona", "Dajabón", "Duarte", "El Seibo", "Elías Piña", "Espaillat", "Hato Mayor", "Independencia", "La Romana", "La Vega", "María Trinidad Sánchez", "Monseñor Nouel", "Montecristi", "Monte Plata", "Pedernales", "Peravia", "Puerto Plata", "Hermanas Mirabal", "Samaná", "San Cristóbal", "San Juan", "San Pedro de Macorís", "Sánchez Ramírez", "Santiago", "Santiago Rodríguez", "Valverde"
+export const COUNTRIES = [
+  "República Dominicana", "Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda", "Arabia Saudita", "Argelia", "Argentina", "Armenia", "Australia", "Austria", "Azerbaiyán",
+  "Bahamas", "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín", "Bielorrusia", "Birmania", "Bolivia", "Bosnia y Herzegovina", "Botsuana", "Brasil", "Brunéi", "Bulgaria", "Burkina Faso", "Burundi",
+  "Bután", "Cabo Verde", "Camboya", "Camerún", "Canadá", "Catar", "Chad", "Chile", "China", "Chipre", "Ciudad del Vaticano", "Colombia", "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil",
+  "Costa Rica", "Croacia", "Cuba", "Dinamarca", "Dominica", "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos", "Eritrea", "Eslovaquia", "Eslovenia", "España", "Estados Unidos", "Estonia",
+  "Etiopía", "Filipinas", "Finlandia", "Fiyi", "Francia", "Gabón", "Gambia", "Georgia", "Ghana", "Granada", "Grecia", "Guatemala", "Guyana", "Guinea", "Guinea ecuatorial", "Guinea-Bisáu", "Haití",
+  "Honduras", "Hungría", "India", "Indonesia", "Irak", "Irán", "Irlanda", "Islandia", "Islas Marshall", "Islas Salomón", "Israel", "Italia", "Jamaica", "Japón", "Jordania", "Kazajistán", "Kenia",
+  "Kirguistán", "Kiribati", "Kuwait", "Laos", "Lesoto", "Letonia", "Líbano", "Liberia", "Libia", "Liechtenstein", "Lituania", "Luxemburgo", "Madagascar", "Malasia", "Malaui", "Maldivas", "Malí",
+  "Malta", "Marruecos", "Mauricio", "Mauritania", "México", "Micronesia", "Moldavia", "Mónaco", "Mongolia", "Montenegro", "Mozambique", "Namibia", "Nauru", "Nepal", "Nicaragua", "Níger", "Nigeria",
+  "Noruega", "Nueva Zelanda", "Omán", "Países Bajos", "Pakistán", "Palaos", "Panamá", "Papúa Nueva Guinea", "Paraguay", "Perú", "Polonia", "Portugal", "Reino Unido", "República Centroafricana",
+  "República Checa", "República de Macedonia", "República del Congo", "República Democrática del Congo", "Ruanda", "Rumanía", "Rusia", "Samoa", "San Cristóbal y Nieves", "San Marino", "San Vicente y las Granadinas",
+  "Santa Lucía", "Santo Tomé y Príncipe", "Senegal", "Serbia", "Seychelles", "Sierra Leona", "Singapur", "Siria", "Somalia", "Sri Lanka", "Suazilandia", "Sudáfrica", "Sudán", "Sudán del Sur", "Suecia",
+  "Suiza", "Surinam", "Tailandia", "Tanzania", "Tayikistán", "Timor Oriental", "Togo", "Tonga", "Trinidad y Tobago", "Túnez", "Turkmenistán", "Turquía", "Tuvalu", "Ucrania", "Uganda", "Uruguay",
+  "Uzbekistán", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Yibuti", "Zambia", "Zimbabue"
 ];
+
+export const PROVINCES = Object.keys({
+    "Santo Domingo": ["Santo Domingo Este", "Boca Chica", "Los Alcarrizos", "Pedro Brand", "San Antonio de Guerra", "Santo Domingo Norte", "Santo Domingo Oeste"],
+    "Distrito Nacional": ["Distrito Nacional"],
+    "La Altagracia": ["Salvaleón de Higüey", "San Rafael del Yuma", "Punta Cana"],
+    "Azua": ["Azua de Compostela", "Estebanía", "Guayabal", "Las Charcas", "Las Yayas de Viajama", "Padre Las Casas", "Peralta", "Pueblo Viejo", "Sabana Yegua", "Tábara Arriba"],
+    "Bahoruco": ["Neiba", "Galván", "Los Ríos", "Tamayo", "Villa Jaragua"],
+    "Barahona": ["Santa Cruz de Barahona", "Cabral", "El Peñón", "Enriquillo", "Fundación", "Jaquimeyes", "La Ciénaga", "Las Salinas", "Paraíso", "Polo", "Vicente Noble"],
+    "Dajabón": ["Dajabón", "El Pino", "Loma de Cabrera", "Partido", "Restauración"],
+    "Duarte": ["San Francisco de Macorís", "Arenoso", "Castillo", "Eugenio María de Hostos", "Las Guáranas", "Pimentel", "Villa Riva"],
+    "El Seibo": ["Santa Cruz de El Seibo", "Miches"],
+    "Elías Piña": ["Comendador", "Bánica", "El Llano", "Hondo Valle", "Juan Santiago", "Pedro Santana"],
+    "Espaillat": ["Moca", "Cayetano Germosén", "Gaspar Hernández", "Jamao al Norte"],
+    "Hato Mayor": ["Hato Mayor del Rey", "El Valle", "Sabana de la Mar"],
+    "Independencia": ["Jimaní", "Cristóbal", "Duvergé", "La Descubierta", "Mella", "Postrer Río"],
+    "La Romana": ["La Romana", "Guaymate", "Villa Hermosa"],
+    "La Vega": ["Concepción de La Vega", "Constanza", "Jarabacoa", "Jima Abajo"],
+    "María Trinidad Sánchez": ["Nagua", "Cabrera", "El Factor", "Río San Juan"],
+    "Monseñor Nouel": ["Bonao", "Maimón", "Piedra Blanca"],
+    "Montecristi": ["San Fernando de Monte Cristi", "Castañuelas", "Guayubín", "Las Matas de Santa Cruz", "Pepillo Salcedo", "Villa Vásquez"],
+    "Monte Plata": ["Monte Plata", "Bayaguana", "Peralvillo", "Sabana Grande de Boyá", "Yamasá"],
+    "Pedernales": ["Pedernales", "Oviedo"],
+    "Peravia": ["Baní", "Matanzas", "Nizao"],
+    "Puerto Plata": ["San Felipe de Puerto Plata", "Altamira", "Guananico", "Imbert", "Los Hidalgos", "Luperón", "Sosúa", "Villa Isabela", "Villa Montellano"],
+    "Hermanas Mirabal": ["Salcedo", "Tenares", "Villa Tapia"],
+    "Samaná": ["Santa Bárbara de Samaná", "Las Terrenas", "Sánchez"],
+    "San Cristóbal": ["San Cristóbal", "Bajos de Haina", "Cambita Garabitos", "Los Cacaos", "Sabana Grande de Palenque", "San Gregorio de Nigua", "Villa Altagracia", "Yaguate"],
+    "San Juan": ["San Juan de la Maguana", "Bohechío", "El Cercado", "Juan de Herrera", "Las Matas de Farfán", "Vallejuelo"],
+    "San Pedro de Macorís": ["San Pedro de Macorís", "Consuelo", "Guayacanes", "Quisqueya", "Ramón Santana", "San José de los Llanos"],
+    "Sánchez Ramírez": ["Cotuí", "Cevicos", "Fantino", "La Mata"],
+    "Santiago": ["Santiago de los Caballeros", "Bisonó", "Jánico", "Licey al Medio", "Puñal", "Sabana Iglesia", "San José de las Matas", "Tamboril", "Villa González"],
+    "Santiago Rodríguez": ["San Ignacio de Sabaneta", "Los Almácigos", "Monción"],
+    "Valverde": ["Mao", "Esperanza", "Laguna Salada"]
+});
 
 export const ALL_FINISHES = ['Brillo', 'Mate', 'Corrugado', 'Texturizado', 'Supermate'];
 
