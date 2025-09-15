@@ -1,0 +1,15 @@
+-- INSERTS FOR menu_items TABLE
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-1', 'sala', 'Sala', true, 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-2', 'dormitorio', 'Dormitorio', true, 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-bedroom-side-image.jpg');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-3', 'cocina', 'Cocina', true, 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-kitchen-side-image.jpg');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-4', 'recibidor', 'Recibidor', true, 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-hallway-side-image.jpg');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-5', 'oficina', 'Oficina', true, 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-6', 'bano', 'Baño', true, 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-bathroom-side-image.jpg');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-7', 'infantiles', 'Muebles infantiles', true, 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-childrens-room-side-image.jpg');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-8', 'puertas', 'Puertas', true, 'https://picsum.photos/id/1013/600/800');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-9', 'herrajes', 'Herrajes y Accesorios', true, 'https://picsum.photos/id/1080/600/800');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-10', 'electrodomesticos', 'Electrodomésticos', true, 'https://picsum.photos/id/225/600/800');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-11', 'catalogues', 'Catálogos', true, 'https://picsum.photos/id/367/600/800');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-12', 'blog', 'Blog', true, '');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-13', 'proyectos', 'Proyectos', true, 'https://picsum.photos/id/1076/600/800');
+INSERT INTO menu_items (id, item_key, title, is_visible, featured_image_url) VALUES ('uuid-mi-14', 'cotizar', 'Cotizar a medida', true, 'https://picsum.photos/id/1076/600/800');

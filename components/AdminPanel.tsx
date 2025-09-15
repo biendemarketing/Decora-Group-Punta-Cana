@@ -23,7 +23,7 @@ import HelpEditor from './HelpEditor';
 import AdminHelpPage from './AdminHelpPage';
 import DocumentationPage from './DocumentationPage';
 import { NavigationData, Project, Product } from '../types';
-import { LogOut, Save, XCircle } from 'lucide-react';
+import { LogOut, Save, XCircle, Eye } from 'lucide-react';
 
 interface AdminPanelProps {
   initialNavigationData: NavigationData;
@@ -31,6 +31,7 @@ interface AdminPanelProps {
   initialProductsData: Product[];
   onSaveChanges: (data: { navigation: NavigationData, projects: Project[], products: Product[] }) => void;
   onLogout: () => void;
+  onViewSite: () => void;
 }
 
 type EditorType =
@@ -44,7 +45,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   initialProjectsData,
   initialProductsData,
   onSaveChanges,
-  onLogout
+  onLogout,
+  onViewSite
 }) => {
   const [activeEditor, setActiveEditor] = useState<EditorType>('dashboard');
 
@@ -137,6 +139,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       <header className="p-4 bg-white shadow-md flex justify-between items-center z-10 sticky top-0">
         <h1 className="text-xl font-bold text-gray-800">Panel de Administración</h1>
         <div className="flex items-center gap-4">
+           <button
+            onClick={onViewSite}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+          >
+            <Eye className="h-4 w-4" />
+            Ver Sitio
+          </button>
            {hasChanges && (
             <>
                <button onClick={handleDiscardChanges} className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors">

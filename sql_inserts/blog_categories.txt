@@ -1,0 +1,4 @@
+-- INSERTS FOR blog_categories TABLE
+INSERT INTO blog_categories (id, name) VALUES ('cat1', 'Inspiración');
+INSERT INTO blog_categories (id, name) VALUES ('cat2', 'Tendencias');
+INSERT INTO blog_categories (id, name) VALUES ('cat3', 'Guías');

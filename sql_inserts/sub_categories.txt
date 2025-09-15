@@ -1,0 +1,13 @@
+-- INSERTS FOR sub_categories TABLE
+-- Sala
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, sort_order) VALUES ('uuid-sc-sala-1', 'uuid-mi-1', 'Juegos de muebles de sala', 'https://img.furniture1.eu/v7/_f1_/images/category_icons/wall_units.png', 1);
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, sort_order) VALUES ('uuid-sc-sala-2', 'uuid-mi-1', 'Gaveteros', 'https://img.furniture1.eu/v7/_f1_/images/category_icons/chest_of_drawers.png', 2);
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, sort_order) VALUES ('uuid-sc-sala-3', 'uuid-mi-1', 'Mesas de centro', 'https://img.furniture1.eu/v7/_f1_/images/category_icons/coffee_tables.png', 3);
+-- ... (many more subcategories for each menu item) ...
+-- Proyectos
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, sort_order) VALUES ('uuid-sc-proy-1', 'uuid-mi-13', 'Cocinas Personalizadas', 'https://img.furniture1.eu/v7/_f1_/images/category_icons/kitchen_sets.png', 1);
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, sort_order) VALUES ('uuid-sc-proy-2', 'uuid-mi-13', 'Baños Modernos', 'https://img.furniture1.eu/v7/_f1_/images/category_icons/bathroom_sets.png', 2);
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, sort_order) VALUES ('uuid-sc-proy-3', 'uuid-mi-13', 'Muebles a Medida', 'https://img.furniture1.eu/v7/_f1_/images/category_icons/modular_furniture.png', 3);
+-- Cotizar a medida
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, title, description, quote_type, sort_order) VALUES ('uuid-sc-cot-1', 'uuid-mi-14', 'TV Wall', 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg', 'TV Wall', 'Espacios de muebles de TV y similares.', 'TV Wall', 1);
+INSERT INTO sub_categories (id, menu_item_id, name, image_url, title, description, quote_type, sort_order) VALUES ('uuid-sc-cot-2', 'uuid-mi-14', 'Closets', 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg', 'Closets', 'Reach in, walk in y personalizados.', 'Closets', 2);

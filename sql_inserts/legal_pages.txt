@@ -1,0 +1,68 @@
+-- INSERTS FOR legal_pages TABLE
+INSERT INTO legal_pages (id, title, content) VALUES ('legal1', 'Política de Privacidad', 'Fecha de última actualización: 2024-08-01
+
+Decora Group ("nosotros", "nuestro") se compromete a proteger su privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos, divulgamos y salvaguardamos su información cuando visita nuestro sitio web.
+
+**1. RECOPILACIÓN DE INFORMACIÓN**
+Recopilamos información personal que usted nos proporciona voluntariamente, como nombre, dirección de correo electrónico, número de teléfono y dirección, cuando completa formularios de contacto o cotización.
+
+**2. USO DE SU INFORMACIÓN**
+Usamos la información recopilada para:
+- Responder a sus solicitudes y consultas.
+- Procesar sus cotizaciones y pedidos.
+- Enviarle información sobre nuestros productos y servicios.
+- Mejorar nuestro sitio web y servicios.
+
+**3. DIVULGACIÓN DE SU INFORMACIÓN**
+No vendemos, intercambiamos ni transferimos de ningún otro modo a terceros su información de identificación personal sin su consentimiento, excepto para cumplir con la ley o proteger nuestros derechos.
+
+**4. SEGURIDAD DE LA INFORMACIÓN**
+Implementamos una variedad de medidas de seguridad para mantener la seguridad de su información personal.
+
+**5. DERECHOS DEL USUARIO**
+Usted tiene derecho a acceder, rectificar, cancelar u oponerse al tratamiento de sus datos personales. Para ejercer estos derechos, contáctenos en info@decoragroup.pc.
+
+**6. POLÍTICA DE COOKIES**
+Nuestro sitio web puede utilizar "cookies" para mejorar la experiencia del usuario. Puede optar por configurar su navegador para que rechace las cookies.');
+INSERT INTO legal_pages (id, title, content) VALUES ('legal2', 'Términos y Condiciones', 'Bienvenido a Decora Group. Al acceder y utilizar este sitio web, usted acepta cumplir y estar sujeto a los siguientes términos y condiciones de uso.
+
+**1. USO DEL SITIO**
+El contenido de las páginas de este sitio web es para su información y uso general. Está sujeto a cambios sin previo aviso.
+
+**2. PROPIEDAD INTELECTUAL**
+Este sitio web contiene material que es de nuestra propiedad o está licenciado para nosotros. Este material incluye, pero no se limita a, el diseño, la disposición, el aspecto, la apariencia y los gráficos. La reproducción está prohibida salvo de conformidad con el aviso de derechos de autor.
+
+**3. EXENCIÓN DE RESPONSABILIDAD**
+La información en este sitio web se proporciona "tal cual". No ofrecemos ninguna garantía en cuanto a la exactitud, puntualidad, rendimiento, integridad o idoneidad de la información y los materiales que se encuentran u ofrecen en este sitio web para un propósito particular. El uso de cualquier información o material en este sitio web es bajo su propio riesgo.
+
+**4. ENLACES A TERCEROS**
+Este sitio web puede incluir enlaces a otros sitios web. Estos enlaces se proporcionan para su conveniencia para proporcionar más información. No significan que respaldamos el (los) sitio(s) web. No tenemos ninguna responsabilidad por el contenido del (los) sitio(s) web enlazado(s).
+
+**5. LEY APLICABLE**
+Su uso de este sitio web y cualquier disputa que surja de dicho uso del sitio web está sujeto a las leyes de la República Dominicana.');
+INSERT INTO legal_pages (id, title, content) VALUES ('legal3', 'Aviso Legal', 'En cumplimiento con el deber de información, a continuación se reflejan los siguientes datos:
+
+**1. DATOS IDENTIFICATIVOS DE LA EMPRESA**
+- **Nombre comercial:** Decora Group
+- **Razón Social:** [Razón Social de la Empresa S.R.L.]
+- **RNC:** [Número de RNC]
+- **Domicilio:** CANATOWN Plaza & Centro de Logística, Av. Barceló, local 101, Veron, Punta Cana 23000, República Dominicana.
+- **Correo electrónico de contacto:** info@decoragroup.pc
+- **Teléfono:** (849) 456-1963
+
+**2. OBJETO DEL SITIO WEB**
+El presente sitio web tiene como objeto la promoción y comercialización de muebles, servicios de diseño de interiores y proyectos de carpintería a medida.
+
+**3. USUARIOS**
+El acceso y/o uso de este portal atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, los Términos y Condiciones de Uso aquí reflejados.');
+INSERT INTO legal_pages (id, title, content) VALUES ('legal4', 'Política de Cookies', '**¿QUÉ SON LAS COOKIES?**
+Una cookie es un pequeño fichero de texto que un sitio web guarda en su ordenador o dispositivo móvil cuando usted visita el sitio. Esto permite que el sitio web recuerde sus acciones y preferencias (como inicio de sesión, idioma, tamaño de letra y otras preferencias de visualización) durante un período de tiempo, para que no tenga que volver a introducirlas cada vez que regrese al sitio o navegue de una página a otra.
+
+**¿CÓMO UTILIZAMOS LAS COOKIES?**
+Utilizamos cookies para:
+- **Cookies técnicas:** Son esenciales para el funcionamiento del sitio web, como mantener su sesión iniciada.
+- **Cookies de análisis:** Nos permiten reconocer y contar el número de visitantes y ver cómo se mueven por el sitio. Utilizamos esta información para mejorar el funcionamiento de nuestro sitio web. (Ej: Google Analytics).
+- **Cookies de personalización:** Se utilizan para reconocerle cuando vuelve a nuestro sitio web. Esto nos permite personalizar nuestro contenido para usted y recordar sus preferencias.
+
+**CÓMO CONTROLAR LAS COOKIES**
+Puede controlar y/o eliminar las cookies como desee. Para más información, consulte aboutcookies.org. Puede eliminar todas las cookies que ya están en su ordenador y puede configurar la mayoría de los navegadores para que impidan su instalación. Sin embargo, si lo hace, es posible que tenga que ajustar manualmente algunas preferencias cada vez que visite un sitio y que algunos servicios y funcionalidades no funcionen.');

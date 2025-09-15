@@ -1,0 +1,30 @@
+-- INSERTS FOR quote_project_types TABLE
+INSERT INTO quote_project_types (id, title, description, image_url, quote_type) VALUES ('uuid-qpt-1', 'TV Wall', 'Espacios de muebles de TV y similares.', 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg', 'TV Wall');
+INSERT INTO quote_project_types (id, title, description, image_url, quote_type) VALUES ('uuid-qpt-2', 'Closets', 'Reach in, walk in y personalizados.', 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg', 'Closets');
+INSERT INTO quote_project_types (id, title, description, image_url, quote_type) VALUES ('uuid-qpt-3', 'Cocinas', 'Modulares personalizados.', 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop', 'Cocinas');
+INSERT INTO quote_project_types (id, title, description, image_url, quote_type) VALUES ('uuid-qpt-4', 'Muebles Personalizados', 'Diseño o solicitud de mobiliario con funciones especiales.', 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop', 'Muebles Personalizados');
+INSERT INTO quote_project_types (id, title, description, image_url, quote_type) VALUES ('uuid-qpt-5', 'Mobiliario Comercial', 'Construcción de tiendas, anaqueles, tramería, estantes, counters, etc...', 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop', 'Mobiliario Comercial');
+INSERT INTO quote_project_types (id, title, description, image_url, quote_type) VALUES ('uuid-qpt-6', 'Construcciones Especializadas', 'Desde el revestimiento de una pared hasta la construcción de una tiny house.', 'https://images.unsplash.com/photo-1512211756210-85090ea05c0b?q=80&w=800&auto=format&fit=crop', 'Construcciones Especializadas');
+
+-- INSERTS FOR quote_tv_wall_styles TABLE
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-1', 'Clásico', 200.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-7.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-2', 'Clásico Vitrina', 255.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-2.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-3', 'Trilogy', 294.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-6.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-4', 'Trilogy Shell', 348.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-4.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-5', 'Bay Vitrina', 397.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-5.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-6', 'Bay Dual', 414.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-1.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-7', 'Librelux', 436.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-3.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-8', 'Librelux Shell', 448.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-8.jpg');
+INSERT INTO quote_tv_wall_styles (id, name, price, image_url) VALUES ('uuid-qtvs-9', 'MegaLux', 461.00, 'https://hom.com.do/wp-content/uploads/2024/08/tv-wall-hom-9.jpg');
+
+-- INSERTS FOR quote_closet_types TABLE
+INSERT INTO quote_closet_types (id, name, module_capacity, image_url) VALUES ('uuid-qct-1', 'Closet Tipo U', 9, 'https://hom.com.do/wp-content/uploads/2025/02/closet-u.jpg');
+INSERT INTO quote_closet_types (id, name, module_capacity, image_url) VALUES ('uuid-qct-2', 'Closet Doble', 7, 'https://hom.com.do/wp-content/uploads/2025/02/Closet-doble.jpg');
+INSERT INTO quote_closet_types (id, name, module_capacity, image_url) VALUES ('uuid-qct-3', 'Closet L', 6, 'https://hom.com.do/wp-content/uploads/2025/02/Closet-L.jpg');
+INSERT INTO quote_closet_types (id, name, module_capacity, image_url) VALUES ('uuid-qct-4', 'Closet Simple', 5, 'https://hom.com.do/wp-content/uploads/2025/02/closet-sencillo.jpg');
+INSERT INTO quote_closet_types (id, name, module_capacity, image_url) VALUES ('uuid-qct-5', 'Armario', 4, 'https://hom.com.do/wp-content/uploads/2025/02/armario.jpg');
+
+-- INSERTS FOR quote_closet_modules TABLE
+INSERT INTO quote_closet_modules (id, name, price, image_url) VALUES ('uuid-qcm-1', 'Perchero Simple', 350.00, 'https://hom.com.do/wp-content/uploads/2025/06/m1-perchero-simple-768x1432.jpg');
+INSERT INTO quote_closet_modules (id, name, price, image_url) VALUES ('uuid-qcm-2', 'Perchero Doble', 350.00, 'https://hom.com.do/wp-content/uploads/2025/06/m2-perchero-doble-768x1432.jpg');
+-- ... (and so on for all quote configuration tables)

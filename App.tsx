@@ -1,5 +1,7 @@
 
 
+
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page, LegalPage, BlogPost } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
@@ -44,6 +46,8 @@ import LegalDetailPage from './components/LegalDetailPage';
 import AdminHelpPage from './components/AdminHelpPage';
 import DocumentationPage from './components/DocumentationPage';
 import BlogPostDetailPage from './components/BlogPostDetailPage';
+import { supabase } from './supabaseClient';
+import type { Session } from '@supabase/supabase-js';
 
 
 // --- CURRENCY CONTEXT ---
@@ -232,6 +236,9 @@ interface AppContentProps {
   onSaveChanges: (data: { navigation: NavigationData, projects: Project[], products: Product[] }) => void;
   isMenuOpen: boolean;
   onMenuToggle: (isOpen: boolean) => void;
+  session: Session | null;
+  setView: (view: View) => void;
+  view: View;
 }
 
 export const processProducts = (products: any[]): Product[] => {
@@ -310,11 +317,10 @@ export const processProducts = (products: any[]): Product[] => {
   });
 };
 
-const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, productsData, onSaveChanges, isMenuOpen, onMenuToggle }) => {
+const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, productsData, onSaveChanges, isMenuOpen, onMenuToggle, session, setView, view }) => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
   
-  const [view, setView] = useState<View>('home');
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -324,7 +330,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const [selectedCatalogue, setSelectedCatalogue] = useState<Catalogue | null>(null);
   const [catalogueToPrint, setCatalogueToPrint] = useState<Catalogue | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({ name: '', email: '', phone: '', address: '' });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedJobVacancy, setSelectedJobVacancy] = useState<JobVacancy | null>(null);
   const [applicationJobTitle, setApplicationJobTitle] = useState<string | null>(null);
@@ -522,14 +527,13 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    setView('admin');
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    // The onAuthStateChange listener in App will handle view change
   };
-  
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setView('home');
+
+  const handleViewSite = () => {
+    window.open('/', '_blank', 'noopener,noreferrer');
   };
 
   const handleNavigate = useCallback((key: string, detail?: string) => {
@@ -663,19 +667,20 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
   const setTypesForFilter = useMemo(() => [...new Set(productsData.map(p => p.setType).filter(Boolean))] as ('Sólido' | 'Partes separadas')[], [productsData]);
 
 
-  if (view === 'login') return <LoginPage onLogin={handleLogin} />;
+  if (view === 'login') return <LoginPage onGoBack={resetToHome} />;
 
   if (view === 'admin') {
-    if (!isAuthenticated) {
+    if (!session) {
       setView('login');
-      return <LoginPage onLogin={handleLogin} />;
+      return <LoginPage onGoBack={resetToHome} />;
     }
     return <AdminPanel 
              initialNavigationData={navigationData} 
              initialProjectsData={projectsData} 
              initialProductsData={productsData}
              onSaveChanges={onSaveChanges} 
-             onLogout={handleLogout} 
+             onLogout={handleLogout}
+             onViewSite={handleViewSite} 
            />;
   }
     
@@ -848,7 +853,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
       <Footer 
         content={navigationData.footerContent}
         footerLogoUrl={navigationData.footerLogoUrl}
-        onViewAdminPage={() => setView(isAuthenticated ? 'admin' : 'login')} 
+        onViewAdminPage={() => setView(session ? 'admin' : 'login')} 
         onSelectProjectCategory={handleSelectProjectCategory}
         onNavigate={handleNavigate}
         isMenuOpen={isMenuOpen}
@@ -866,6 +871,26 @@ const App: React.FC = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [currency, setCurrency] = useState<Currency>('USD');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const [view, setView] = useState<View>('home');
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (_event === 'SIGNED_IN') {
+        setView('admin');
+      }
+      if (_event === 'SIGNED_OUT') {
+        setView('home');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
   
   useEffect(() => {
     if (isMenuOpen) {
@@ -971,6 +996,9 @@ const App: React.FC = () => {
             onSaveChanges={handleSaveChanges}
             isMenuOpen={isMenuOpen}
             onMenuToggle={setIsMenuOpen} 
+            session={session}
+            view={view}
+            setView={setView}
           />
         </WishlistProvider>
       </CartProvider>

@@ -1,0 +1,5 @@
+-- INSERTS FOR work_process_steps TABLE
+INSERT INTO work_process_steps (id, title, description, icon, sort_order) VALUES ('uuid-wps-1', 'Cotiza', 'A través de nuestra plataforma digital o enviando los planos y solicitando visita de reconocimiento.', 'FileText', 1);
+INSERT INTO work_process_steps (id, title, description, icon, sort_order) VALUES ('uuid-wps-2', 'Asesoría', 'Se optimiza el proceso con la asesoría del equipo de diseño y producción.', 'Edit3', 2);
+INSERT INTO work_process_steps (id, title, description, icon, sort_order) VALUES ('uuid-wps-3', 'Presupuesto', 'Recibes un presupuesto detallado y con el alcance del proyecto.', 'ShieldCheck', 3);
+INSERT INTO work_process_steps (id, title, description, icon, sort_order) VALUES ('uuid-wps-4', 'Ejecución', 'Ejecución y control de calidad de tu proyecto.', 'BookOpen', 4);

@@ -1,0 +1,6 @@
+-- INSERTS FOR hero_buttons TABLE
+INSERT INTO hero_buttons (id, slide_id, text, link_key, style, icon, sort_order) VALUES ('uuid-hb-1', 'uuid-hs-1', 'Cotización automática', 'quote', 'primary', 'Calculator', 1);
+INSERT INTO hero_buttons (id, slide_id, text, link_key, style, icon, sort_order) VALUES ('uuid-hb-2', 'uuid-hs-1', 'Ver productos', 'products', 'secondary', 'Eye', 2);
+INSERT INTO hero_buttons (id, slide_id, text, link_key, style, icon, sort_order) VALUES ('uuid-hb-3', 'uuid-hs-2', 'Nuestros Proyectos', 'projects', 'primary', 'Wrench', 1);
+INSERT INTO hero_buttons (id, slide_id, text, link_key, style, icon, sort_order) VALUES ('uuid-hb-4', 'uuid-hs-3', 'Sobre Nosotros', 'about-us', 'secondary', 'Users', 1);
+INSERT INTO hero_buttons (id, slide_id, text, link_key, style, icon, sort_order) VALUES ('uuid-hb-5', 'uuid-hs-3', 'Contáctanos', 'contact', 'primary', 'Phone', 2);

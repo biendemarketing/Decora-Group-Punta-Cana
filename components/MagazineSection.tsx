@@ -60,9 +60,9 @@ const MagazineSection: React.FC<MagazineSectionProps> = ({ magazineSection, blog
               <div className="flex-1 bg-white p-6 flex flex-col justify-between">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-[#5a1e38]">{getCategoryName(post.categoryId)}</p>
-                  {/* FIX: Changed <a> to <button> and added onClick handler for onViewPost prop. */}
                   <button onClick={() => onViewPost(post)} className="block mt-2 text-left focus:outline-none">
                     <p className="text-xl font-semibold text-gray-900 group-hover:text-[#4d182e] transition-colors">{post.title}</p>
+                    <p className="mt-3 text-sm text-gray-500 line-clamp-2">{post.description}</p>
                   </button>
                 </div>
               </div>

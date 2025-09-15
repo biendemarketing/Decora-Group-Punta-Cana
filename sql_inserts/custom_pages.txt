@@ -1,0 +1,11 @@
+-- INSERTS FOR custom_pages TABLE
+INSERT INTO custom_pages (id, title, slug, is_visible_in_header, is_visible_in_footer) VALUES ('about-us-page', 'Quiénes Somos', 'about-us', false, true);
+
+-- INSERTS FOR page_sections TABLE
+-- Note: 'content' column should be of type JSON or TEXT. The content is heavily truncated for brevity.
+INSERT INTO page_sections (id, page_id, type, sort_order, content) VALUES ('uuid-ps-1', 'about-us-page', 'history', 1, '{"title":"Nuestra Historia","text":"Desde nuestros humildes comienzos...","images":[{"id":"img1","url":"https://...","alt":"..."},...]}');
+INSERT INTO page_sections (id, page_id, type, sort_order, content) VALUES ('uuid-ps-2', 'about-us-page', 'timeline', 2, '{"title":"Nuestra Trayectoria","events":[{"id":"t1","year":2018,"description":"..."},...]}');
+INSERT INTO page_sections (id, page_id, type, sort_order, content) VALUES ('uuid-ps-3', 'about-us-page', 'missionVision', 3, '{"mission":{"title":"Misión","text":"..."},"vision":{"title":"Visión","text":"..."}}');
+INSERT INTO page_sections (id, page_id, type, sort_order, content) VALUES ('uuid-ps-4', 'about-us-page', 'values', 4, '{"title":"Nuestros Valores","subtitle":"...","values":[{"id":"v1","icon":"Check","title":"Calidad y Excelencia","description":"..."},...]}');
+INSERT INTO page_sections (id, page_id, type, sort_order, content) VALUES ('uuid-ps-5', 'about-us-page', 'team', 5, '{"title":"Conoce a Nuestro Equipo","subtitle":"...","members":[{"id":"tm1","name":"Juan Pérez","role":"CEO y Fundador","imageUrl":"..."},...]}');
+INSERT INTO page_sections (id, page_id, type, sort_order, content) VALUES ('uuid-ps-6', 'about-us-page', 'hiring', 6, '{"title":"¿Necesitas Empleo? ¡Estamos Contratando!","text":"...","vacancies":[],"closingText":"..."}');

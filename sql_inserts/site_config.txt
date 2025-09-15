@@ -1,0 +1,10 @@
+-- INSERTS FOR site_config TABLE (key-value store)
+INSERT INTO site_config (config_key, config_value) VALUES ('logo_url', 'https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a');
+INSERT INTO site_config (config_key, config_value) VALUES ('footer_logo_url', 'https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-02.png?alt=media&token=26271fa9-9ba9-42c7-8804-fc47a85b5159');
+INSERT INTO site_config (config_key, config_value) VALUES ('contact_phone_number_text', '(849) 456-1963');
+INSERT INTO site_config (config_key, config_value) VALUES ('contact_phone_link', 'https://wa.me/18494561963?text=vi%20tu%20pagina%20web%20y%20necesito%20mas%20informacionde%20tus%20productos%20y%20servicios');
+INSERT INTO site_config (config_key, config_value) VALUES ('exchange_rate_usd_to_dop', '58.50');
+INSERT INTO site_config (config_key, config_value) VALUES ('magazine_section_title', 'Magazine "Estilo Tropical"');
+INSERT INTO site_config (config_key, config_value) VALUES ('magazine_section_subtitle', 'Ideas, tendencias y guías para hacer de tu hogar un paraíso.');
+INSERT INTO site_config (config_key, config_value) VALUES ('work_process_title', 'Proceso de Trabajo con Decora Group');
+INSERT INTO site_config (config_key, config_value) VALUES ('work_process_bg_image', 'https://picsum.photos/id/1071/1920/1080');

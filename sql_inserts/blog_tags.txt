@@ -1,0 +1,5 @@
+-- INSERTS FOR blog_tags TABLE
+INSERT INTO blog_tags (id, name) VALUES ('tag1', 'Terrazas');
+INSERT INTO blog_tags (id, name) VALUES ('tag2', 'Caribe');
+INSERT INTO blog_tags (id, name) VALUES ('tag3', 'Colores');
+INSERT INTO blog_tags (id, name) VALUES ('tag4', 'Sofás');

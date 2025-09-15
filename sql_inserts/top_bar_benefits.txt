@@ -1,0 +1,4 @@
+-- INSERTS FOR top_bar_benefits TABLE
+INSERT INTO top_bar_benefits (id, icon, text, sort_order) VALUES ('uuid-tbb-1', 'Truck', 'Entrega gratis en Punta Cana', 1);
+INSERT INTO top_bar_benefits (id, icon, text, sort_order) VALUES ('uuid-tbb-2', 'CreditCard', 'Pago a la entrega', 2);
+INSERT INTO top_bar_benefits (id, icon, text, sort_order) VALUES ('uuid-tbb-3', 'ShieldCheck', '365 días - garantía', 3);

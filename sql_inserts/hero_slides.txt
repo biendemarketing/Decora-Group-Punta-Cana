@@ -1,0 +1,4 @@
+-- INSERTS FOR hero_slides TABLE
+INSERT INTO hero_slides (id, image_url, title, subtitle, sort_order) VALUES ('uuid-hs-1', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1920&auto=format&fit=crop', 'Diseño y Calidad Insuperables', 'Muebles que transforman tu espacio', 1);
+INSERT INTO hero_slides (id, image_url, title, subtitle, sort_order) VALUES ('uuid-hs-2', 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1920&auto=format&fit=crop', 'Entrega Garantizada y Segura', 'Recibe tus muebles justo a tiempo, sin prepago.', 2);
+INSERT INTO hero_slides (id, image_url, title, subtitle, sort_order) VALUES ('uuid-hs-3', 'https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=1920&auto=format&fit=crop', 'Estilo Que Inspira', 'Descubre colecciones que definen tu hogar.', 3);

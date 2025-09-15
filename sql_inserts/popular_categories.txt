@@ -1,0 +1,5 @@
+-- INSERTS FOR popular_categories TABLE
+INSERT INTO popular_categories (id, name, image_url, link_to_category_title, sort_order) VALUES ('uuid-pc-1', 'Salas', 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-living-room-side-image.jpg', 'Sala', 1);
+INSERT INTO popular_categories (id, name, image_url, link_to_category_title, sort_order) VALUES ('uuid-pc-2', 'Dormitorios', 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-bedroom-side-image.jpg', 'Dormitorio', 2);
+INSERT INTO popular_categories (id, name, image_url, link_to_category_title, sort_order) VALUES ('uuid-pc-3', 'Terrazas y Jardines', 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-outdoors-side-image.jpg', 'Sala', 3);
+INSERT INTO popular_categories (id, name, image_url, link_to_category_title, sort_order) VALUES ('uuid-pc-4', 'Oficinas en Casa', 'https://img.furniture1.eu/v7/_f1_/images/desktop_menu/menu-office-side-image.jpg', 'Oficina', 4);
