@@ -2,6 +2,8 @@
 
 
 
+
+
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page, LegalPage, BlogPost } from './types';
 import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
@@ -532,10 +534,6 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     // The onAuthStateChange listener in App will handle view change
   };
 
-  const handleViewSite = () => {
-    window.open('/', '_blank', 'noopener,noreferrer');
-  };
-
   const handleNavigate = useCallback((key: string, detail?: string) => {
     onMenuToggle(false);
     
@@ -680,7 +678,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
              initialProductsData={productsData}
              onSaveChanges={onSaveChanges} 
              onLogout={handleLogout}
-             onViewSite={handleViewSite} 
+             onViewSite={resetToHome} 
            />;
   }
     
