@@ -1,12 +1,6 @@
-
-
-
-
-
-
 import React, { useState, useMemo, useCallback, useEffect, createContext, useContext } from 'react';
 import type { Filters, Product, Project, CartItem, NavigationData, PopularCategory, Catalogue, JobVacancy, Page, LegalPage, BlogPost } from './types';
-import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP } from './constants';
+import { INITIAL_PROJECTS, MAX_PRICE, MIN_PRICE, INITIAL_NAVIGATION_DATA, rawProducts, COLOR_MAP, INITIAL_QUOTE_CONFIG } from './constants';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import CategoryGrid from './components/CategoryGrid';
@@ -686,7 +680,7 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
         return <PrintCataloguePage catalogue={catalogueToPrint} products={productsData} navigationData={navigationData} />;
     }
 
-  if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} />;
+  if (view === 'printQuote') return <QuoteTemplate customerInfo={customerInfo} templateConfig={navigationData.quoteConfig.template} logoUrl={navigationData.logoUrl} />;
 
   return (
     <div className="bg-gray-50 pb-16 md:pb-0">
@@ -734,6 +728,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
                       onWhatsAppQuote={handleWhatsAppQuote}
                       onGoBackToCart={() => setView('cart')}
                       onContinueShopping={() => handleSelectCategory("Todos los productos")}
+                      templateConfig={navigationData.quoteConfig.template}
+                      logoUrl={navigationData.logoUrl}
                   />;
               case 'customPage':
                   const pageData = navigationData.customPages.find(p => p.slug === activeSlug);
@@ -907,10 +903,14 @@ const App: React.FC = () => {
       try {
         const parsedData = JSON.parse(storedNavData);
         if (parsedData && Array.isArray(parsedData.menuItems) && parsedData.quoteConfig && parsedData.footerContent) {
+          // Migration for newly added features
           if (!parsedData.catalogues) parsedData.catalogues = [];
           if (!parsedData.customPages) parsedData.customPages = [];
           if (!parsedData.helpContent || !parsedData.helpContent.userTopics) {
             parsedData.helpContent = INITIAL_NAVIGATION_DATA.helpContent;
+          }
+          if (!parsedData.quoteConfig.template) { // Add template config if missing
+            parsedData.quoteConfig.template = INITIAL_QUOTE_CONFIG.template;
           }
           setNavigationData(parsedData);
         } else {

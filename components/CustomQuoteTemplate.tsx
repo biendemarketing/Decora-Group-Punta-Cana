@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCurrency } from '../App';
+import { QuoteTemplateConfig } from '../types';
 
 interface CustomQuoteTemplateProps {
   title: string;
@@ -10,9 +11,11 @@ interface CustomQuoteTemplateProps {
   };
   details: { label: string; value: string | number }[];
   subtotal: number;
+  templateConfig: QuoteTemplateConfig;
+  logoUrl: string;
 }
 
-const CustomQuoteTemplate: React.FC<CustomQuoteTemplateProps> = ({ title, userInfo, details, subtotal }) => {
+const CustomQuoteTemplate: React.FC<CustomQuoteTemplateProps> = ({ title, userInfo, details, subtotal, templateConfig, logoUrl }) => {
   const { formatPrice } = useCurrency();
   const quoteDate = new Date().toLocaleDateString('es-DO', {
     year: 'numeric', month: 'long', day: 'numeric'
@@ -20,43 +23,51 @@ const CustomQuoteTemplate: React.FC<CustomQuoteTemplateProps> = ({ title, userIn
   const quoteNumber = `DG-CUSTOM-${Date.now().toString().slice(-6)}`;
   const itbis = subtotal * 0.18;
   const total = subtotal + itbis;
+  
+  const { companyInfo, labels, visibility, style } = templateConfig;
+
 
   return (
     <div className="printable-area bg-white p-8 font-sans text-sm text-gray-800">
       <style>{`
         .quote-table th, .quote-table td { padding: 0.75rem; text-align: left; }
-        .quote-table th { background-color: #f3f4f6; }
+        .quote-table th { background-color: ${style.accentColor}1A; color: ${style.accentColor}; }
         .quote-table tbody tr:nth-child(even) { background-color: #f9fafb; }
       `}</style>
       
-      <header className="flex justify-between items-start pb-6 border-b-2 border-gray-800">
+      <header className="flex justify-between items-start pb-6" style={{ borderBottom: `2px solid ${style.accentColor}` }}>
         <div>
-          <img 
-            src="https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a"
-            alt="Decora Group Logo"
-            className="h-20"
-          />
+          {visibility.showLogo && (
+            <img 
+              src={logoUrl}
+              alt={`${companyInfo.name} Logo`}
+              className="h-20"
+            />
+          )}
         </div>
         <div className="text-right">
-          <h1 className="text-3xl font-bold text-gray-900 uppercase">COTIZACIÓN</h1>
+          <h1 className="text-3xl font-bold text-gray-900 uppercase">{labels.mainTitle}</h1>
           <h2 className="text-lg font-semibold text-gray-700">{title}</h2>
-          <p className="mt-2"><strong>No:</strong> {quoteNumber}</p>
-          <p><strong>Fecha:</strong> {quoteDate}</p>
+          {visibility.showQuoteNumber && <p className="mt-2"><strong>{labels.quoteNumberLabel}</strong> {quoteNumber}</p>}
+          {visibility.showDate && <p><strong>{labels.dateLabel}</strong> {quoteDate}</p>}
         </div>
       </header>
 
       <section className="grid grid-cols-2 gap-8 my-8">
         <div>
-          <h2 className="font-bold text-gray-900 mb-2">PARA:</h2>
+          <h2 className="font-bold text-gray-900 mb-2">{labels.toLabel}</h2>
           <p className="font-bold">{userInfo.name}</p>
           <p>{userInfo.email}</p>
           <p>{userInfo.phone}</p>
         </div>
         <div className="text-right">
-            <h2 className="font-bold text-gray-900 mb-2">DE:</h2>
-            <p className="font-bold">Decora Group Punta Cana</p>
-            <p>Email: decoragrouppc@gmail.com</p>
-            <p>Tel: (849) 456-1963</p>
+            <h2 className="font-bold text-gray-900 mb-2">{labels.fromLabel}</h2>
+            <p className="font-bold">{companyInfo.name}</p>
+            <p>{companyInfo.addressLine1}</p>
+            <p>{companyInfo.addressLine2}</p>
+            {visibility.showRnc && <p>RNC: {companyInfo.rnc}</p>}
+            <p>Email: {companyInfo.email}</p>
+            <p>Tel: {companyInfo.phone}</p>
         </div>
       </section>
 
@@ -64,7 +75,7 @@ const CustomQuoteTemplate: React.FC<CustomQuoteTemplateProps> = ({ title, userIn
         <table className="w-full border-collapse quote-table">
           <thead>
             <tr>
-              <th className="w-2/3 font-bold">Descripción</th>
+              <th className="w-2/3 font-bold">{labels.itemDescriptionHeader}</th>
               <th className="font-bold text-right">Detalle</th>
             </tr>
           </thead>
@@ -82,16 +93,18 @@ const CustomQuoteTemplate: React.FC<CustomQuoteTemplateProps> = ({ title, userIn
       <section className="flex justify-end mt-6">
         <div className="w-full max-w-xs">
           <div className="flex justify-between py-2">
-            <span>Subtotal:</span>
+            <span>{labels.subtotalLabel}</span>
             <span>{formatPrice(subtotal)}</span>
           </div>
-          <div className="flex justify-between py-2">
-            <span>ITBIS (18%):</span>
-            <span>{formatPrice(itbis)}</span>
-          </div>
-          <div className="flex justify-between py-2 text-lg font-bold text-gray-900 border-t-2 border-gray-800 mt-2">
+          {visibility.showTax && (
+            <div className="flex justify-between py-2">
+              <span>{labels.taxLabel}</span>
+              <span>{formatPrice(itbis)}</span>
+            </div>
+          )}
+          <div className="flex justify-between py-2 text-lg font-bold text-gray-900 mt-2" style={{ borderTop: `2px solid ${style.accentColor}`}}>
             <span>TOTAL ESTIMADO:</span>
-            <span>{formatPrice(total)}</span>
+            <span>{formatPrice(visibility.showTax ? total : subtotal)}</span>
           </div>
         </div>
       </section>

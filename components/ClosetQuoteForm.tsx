@@ -80,7 +80,16 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack, quoteConfig }
 
   const handleDownloadPDF = () => {
     if (!validateForm()) return;
-    setQuoteForPrint(<CustomQuoteTemplate title="Cotización de Closet" userInfo={formData.userInfo} details={getQuoteDetails()} subtotal={subtotal} />);
+    setQuoteForPrint(
+      <CustomQuoteTemplate 
+        title="Cotización de Closet" 
+        userInfo={formData.userInfo} 
+        details={getQuoteDetails()} 
+        subtotal={subtotal}
+        templateConfig={quoteConfig.template}
+        logoUrl="https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a"
+      />
+    );
     setTimeout(() => { window.print(); setQuoteForPrint(null); }, 100);
   };
   
@@ -90,7 +99,12 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack, quoteConfig }
     message += `Hola, me gustaría solicitar una cotización con los siguientes detalles:\n\n`;
     message += `*Cliente:* ${formData.userInfo.name}\n\n`;
     getQuoteDetails().forEach(detail => { message += `- ${detail.label}: ${detail.value}\n`; });
-    message += `\n*Subtotal:* ${formatPrice(subtotal)}\n*ITBIS (18%):* ${formatPrice(itbis)}\n*Total Estimado:* ${formatPrice(totalPrice)}`;
+    message += `\n*Subtotal:* ${formatPrice(subtotal)}\n`;
+    if (quoteConfig.template.visibility.showTax) {
+      message += `*ITBIS (18%):* ${formatPrice(itbis)}\n*Total Estimado:* ${formatPrice(totalPrice)}`;
+    } else {
+      message += `*Total Estimado:* ${formatPrice(subtotal)}`;
+    }
     const whatsappUrl = `https://wa.me/18494561963?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -101,7 +115,12 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack, quoteConfig }
     let body = `Se ha generado una nueva solicitud de cotización de Closet:\n\n`;
     body += `*Cliente:* ${formData.userInfo.name}\n*Email:* ${formData.userInfo.email}\n*Teléfono:* ${formData.userInfo.phone}\n\n`;
     getQuoteDetails().forEach(detail => { body += `- ${detail.label}: ${detail.value}\n`; });
-    body += `\nSubtotal: ${formatPrice(subtotal)}\nITBIS (18%): ${formatPrice(itbis)}\nTotal Estimado: ${formatPrice(totalPrice)}`;
+    body += `\nSubtotal: ${formatPrice(subtotal)}\n`;
+    if (quoteConfig.template.visibility.showTax) {
+      body += `ITBIS (18%): ${formatPrice(itbis)}\nTotal Estimado: ${formatPrice(totalPrice)}`;
+    } else {
+      body += `Total Estimado: ${formatPrice(subtotal)}`;
+    }
     const mailtoLink = `mailto:decoragrouppc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoLink;
   };
@@ -210,7 +229,7 @@ const ClosetQuoteForm: React.FC<ClosetQuoteFormProps> = ({ onBack, quoteConfig }
           </form>
         </div>
       </div>
-      <StickyTotalBar total={totalPrice} />
+      <StickyTotalBar total={quoteConfig.template.visibility.showTax ? totalPrice : subtotal} />
       <TermsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   );

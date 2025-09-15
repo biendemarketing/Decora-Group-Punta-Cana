@@ -8,6 +8,7 @@ import PopularCategoriesEditor from './PopularCategoriesEditor';
 import ProductsEditor from './ProductsEditor';
 import ServicesEditor from './ServicesEditor';
 import QuoteEditor from './QuoteEditor';
+import QuoteTemplateEditor from './QuoteTemplateEditor';
 import WorkProcessEditor from './WorkProcessEditor';
 import BlogEditor from './BlogEditor';
 import CataloguesEditor from './CataloguesEditor';
@@ -38,7 +39,7 @@ type EditorType =
     'dashboard' | 'analytics' | 'media' | 'audit' | 'adminHelp' |
     'menu' | 'slider' | 'settings' | 'projects' | 'popularCategories' | 'products' |
     'services' | 'workProcess' | 'blog' | 'catalogues' | 'pages' | 'footer' |
-    'integrations' | 'vacancies' | 'quote' | 'help' | 'documentation';
+    'integrations' | 'vacancies' | 'quote' | 'help' | 'documentation' | 'quoteTemplate';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
   initialNavigationData,
@@ -115,6 +116,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 />;
       case 'quote':
         return <QuoteEditor quoteConfig={draftNavData.quoteConfig} onQuoteConfigChange={(newConfig) => setDraftNavData(prev => ({...prev, quoteConfig: newConfig}))} />;
+      case 'quoteTemplate':
+        return <QuoteTemplateEditor templateConfig={draftNavData.quoteConfig.template} onTemplateChange={(newTemplate) => setDraftNavData(prev => ({...prev, quoteConfig: {...prev.quoteConfig, template: newTemplate}}))} />;
       case 'projects':
         return <ProjectsEditor projects={draftProjectsData} onProjectsChange={setDraftProjectsData} projectCategories={projectCategories} />;
       case 'products':

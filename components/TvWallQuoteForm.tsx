@@ -77,7 +77,16 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack, quoteConfig }
         return;
     }
     const details = getQuoteDetails();
-    setQuoteForPrint(<CustomQuoteTemplate title="Cotización de TV Wall" userInfo={formData.userInfo} details={details} subtotal={subtotal} />);
+    setQuoteForPrint(
+      <CustomQuoteTemplate 
+        title="Cotización de TV Wall" 
+        userInfo={formData.userInfo} 
+        details={details} 
+        subtotal={subtotal}
+        templateConfig={quoteConfig.template}
+        logoUrl="https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a"
+      />
+    );
     setTimeout(() => {
         window.print();
         setQuoteForPrint(null);
@@ -99,8 +108,12 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack, quoteConfig }
         message += `- ${detail.label}: ${detail.value}\n`;
     });
     message += `\n*Subtotal:* ${formatPrice(subtotal)}\n`;
-    message += `*ITBIS (18%):* ${formatPrice(itbis)}\n`;
-    message += `*Total Estimado:* ${formatPrice(totalPrice)}\n\n`;
+    if (quoteConfig.template.visibility.showTax) {
+      message += `*ITBIS (18%):* ${formatPrice(itbis)}\n`;
+      message += `*Total Estimado:* ${formatPrice(totalPrice)}\n\n`;
+    } else {
+      message += `*Total Estimado:* ${formatPrice(subtotal)}\n\n`;
+    }
     message += `_Observaciones: ${formData.userInfo.observations || 'N/A'}_`;
 
     const whatsappUrl = `https://wa.me/18494561963?text=${encodeURIComponent(message)}`;
@@ -122,8 +135,12 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack, quoteConfig }
         body += `- ${detail.label}: ${detail.value}\n`;
     });
     body += `\n*Subtotal:* ${formatPrice(subtotal)}\n`;
-    body += `*ITBIS (18%):* ${formatPrice(itbis)}\n`;
-    body += `*Total Estimado:* ${formatPrice(totalPrice)}\n\n`;
+    if (quoteConfig.template.visibility.showTax) {
+      body += `*ITBIS (18%):* ${formatPrice(itbis)}\n`;
+      body += `*Total Estimado:* ${formatPrice(totalPrice)}\n\n`;
+    } else {
+      body += `*Total Estimado:* ${formatPrice(subtotal)}\n\n`;
+    }
     body += `Observaciones: ${formData.userInfo.observations || 'N/A'}`;
 
     const mailtoLink = `mailto:decoragrouppc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -231,7 +248,7 @@ const TvWallQuoteForm: React.FC<TvWallQuoteFormProps> = ({ onBack, quoteConfig }
           </form>
         </div>
       </div>
-      <StickyTotalBar total={totalPrice} />
+      <StickyTotalBar total={quoteConfig.template.visibility.showTax ? totalPrice : subtotal} />
       <TermsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   );

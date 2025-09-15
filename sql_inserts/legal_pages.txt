@@ -45,7 +45,7 @@ INSERT INTO legal_pages (id, title, content) VALUES ('legal3', 'Aviso Legal', 'E
 **1. DATOS IDENTIFICATIVOS DE LA EMPRESA**
 - **Nombre comercial:** Decora Group
 - **Razón Social:** [Razón Social de la Empresa S.R.L.]
-- **RNC:** [Número de RNC]
+- **RNC:** 131-80470-5
 - **Domicilio:** CANATOWN Plaza & Centro de Logística, Av. Barceló, local 101, Veron, Punta Cana 23000, República Dominicana.
 - **Correo electrónico de contacto:** info@decoragroup.pc
 - **Teléfono:** (849) 456-1963

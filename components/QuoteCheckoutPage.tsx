@@ -2,6 +2,7 @@ import React from 'react';
 import { useCart, useCurrency } from '../App';
 import { Download, MessageSquare, ArrowLeft, PlusCircle } from 'lucide-react';
 import QuoteTemplate from './QuoteTemplate';
+import { QuoteTemplateConfig } from '../types';
 
 interface CustomerInfo {
     name: string;
@@ -17,6 +18,8 @@ interface QuoteCheckoutPageProps {
   onWhatsAppQuote: () => void;
   onGoBackToCart: () => void;
   onContinueShopping: () => void;
+  templateConfig: QuoteTemplateConfig;
+  logoUrl: string;
 }
 
 const QuoteCheckoutPage: React.FC<QuoteCheckoutPageProps> = ({ 
@@ -25,7 +28,9 @@ const QuoteCheckoutPage: React.FC<QuoteCheckoutPageProps> = ({
     onPrintQuote, 
     onWhatsAppQuote,
     onGoBackToCart,
-    onContinueShopping
+    onContinueShopping,
+    templateConfig,
+    logoUrl
 }) => {
   const { cartItems } = useCart();
   const { formatPrice } = useCurrency();
@@ -129,7 +134,7 @@ const QuoteCheckoutPage: React.FC<QuoteCheckoutPageProps> = ({
                 <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">Vista Previa</h2>
                 <div className="bg-white shadow-2xl rounded-lg p-2 aspect-[8.5/11] overflow-hidden">
                     <div className="h-full w-full overflow-auto border rounded-sm">
-                        <QuoteTemplate customerInfo={customerInfo} />
+                        <QuoteTemplate customerInfo={customerInfo} templateConfig={templateConfig} logoUrl={logoUrl} />
                     </div>
                 </div>
               </div>

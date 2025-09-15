@@ -32,6 +32,52 @@ export interface ClosetTypeOption {
   imageUrl: string;
 }
 
+// New types for the customizable quote template
+export interface QuoteTemplateCompanyInfo {
+  name: string;
+  addressLine1: string;
+  addressLine2: string;
+  rnc: string;
+  email: string;
+  phone: string;
+}
+
+export interface QuoteTemplateLabels {
+  mainTitle: string;
+  quoteNumberLabel: string;
+  dateLabel: string;
+  fromLabel: string;
+  toLabel: string;
+  itemDescriptionHeader: string;
+  itemQuantityHeader: string;
+  itemUnitPriceHeader: string;
+  itemTotalHeader: string;
+  subtotalLabel: string;
+  taxLabel: string;
+  totalLabel: string;
+  footerTextLine1: string;
+  footerTextLine2: string;
+}
+
+export interface QuoteTemplateVisibility {
+  showLogo: boolean;
+  showQuoteNumber: boolean;
+  showDate: boolean;
+  showRnc: boolean;
+  showTax: boolean;
+}
+
+export interface QuoteTemplateStyle {
+  accentColor: string;
+}
+
+export interface QuoteTemplateConfig {
+  companyInfo: QuoteTemplateCompanyInfo;
+  labels: QuoteTemplateLabels;
+  visibility: QuoteTemplateVisibility;
+  style: QuoteTemplateStyle;
+}
+
 export interface QuoteConfig {
   projectTypes: QuoteType[];
   tvWall: {
@@ -54,4 +100,5 @@ export interface QuoteConfig {
     installationOptions: InstallationOption[];
     paymentOptions: string[];
   };
+  template: QuoteTemplateConfig; // Added template config
 }

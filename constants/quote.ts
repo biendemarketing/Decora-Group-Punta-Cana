@@ -1,4 +1,4 @@
-import type { QuoteType, QuoteConfig } from '../types';
+import type { QuoteType, QuoteConfig, QuoteTemplateConfig } from '../types';
 
 export const QUOTE_PROJECT_TYPES_DATA: QuoteType[] = [
   {
@@ -44,6 +44,43 @@ export const QUOTE_PROJECT_TYPES_DATA: QuoteType[] = [
     quoteType: 'Construcciones Especializadas',
   },
 ];
+
+export const INITIAL_QUOTE_TEMPLATE_CONFIG: QuoteTemplateConfig = {
+  companyInfo: {
+    name: 'Decora Group Punta Cana',
+    addressLine1: 'CANATOWN Plaza & Centro de Logística',
+    addressLine2: 'Av. Barceló, local 101, Veron, Punta Cana',
+    rnc: '131-80470-5',
+    email: 'decoragrouppc@gmail.com',
+    phone: '(849) 456-1963',
+  },
+  labels: {
+    mainTitle: 'COTIZACIÓN',
+    quoteNumberLabel: 'No:',
+    dateLabel: 'Fecha:',
+    fromLabel: 'DE:',
+    toLabel: 'PARA:',
+    itemDescriptionHeader: 'Descripción',
+    itemQuantityHeader: 'Cant.',
+    itemUnitPriceHeader: 'Precio Unit.',
+    itemTotalHeader: 'Total',
+    subtotalLabel: 'Subtotal:',
+    taxLabel: 'ITBIS (18%):',
+    totalLabel: 'TOTAL:',
+    footerTextLine1: 'Gracias por su interés en Decora Group.',
+    footerTextLine2: 'Esta cotización es válida por 30 días. Los precios no incluyen instalación a menos que se especifique lo contrario.',
+  },
+  visibility: {
+    showLogo: true,
+    showQuoteNumber: true,
+    showDate: true,
+    showRnc: true,
+    showTax: true,
+  },
+  style: {
+    accentColor: '#5a1e38',
+  },
+};
 
 export const INITIAL_QUOTE_CONFIG: QuoteConfig = {
     projectTypes: QUOTE_PROJECT_TYPES_DATA,
@@ -151,5 +188,6 @@ export const INITIAL_QUOTE_CONFIG: QuoteConfig = {
         'Pago de contado al poner la orden (- 10%)',
         'Pago Mensual por 6 meses + 10%.',
       ]
-    }
+    },
+    template: INITIAL_QUOTE_TEMPLATE_CONFIG,
 };
