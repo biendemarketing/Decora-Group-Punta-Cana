@@ -408,7 +408,7 @@ export const rawProducts = [
   },
 ];
 
-const NON_PRODUCT_CATEGORIES = ['blog', 'proyectos', 'cotizar'];
+const NON_PRODUCT_CATEGORIES = ['blog', 'proyectos', 'cotizar', 'catalogues'];
 export const CATEGORIES = (MENU_ITEMS_DATA as Omit<MenuItem, 'id'>[])
   .filter(item => !NON_PRODUCT_CATEGORIES.includes(item.key))
   .map(item => item.title)
