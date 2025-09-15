@@ -381,6 +381,14 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
     }
     updateSEO(title, description, structuredData);
   }, [view, selectedProduct, filters, selectedProject, selectedProjectCategory, selectedQuoteType, activeSlug, navigationData.customPages]);
+  
+  // FIX: Route protection logic is now in a useEffect to prevent state updates during render.
+  useEffect(() => {
+    if (view === 'admin' && !session) {
+      setView('login');
+    }
+  }, [view, session, setView]);
+
 
   const resetFilters = useCallback(() => {
     setFilters({
@@ -661,11 +669,8 @@ const AppContent: React.FC<AppContentProps> = ({ navigationData, projectsData, p
 
   if (view === 'login') return <LoginPage onGoBack={resetToHome} />;
 
-  if (view === 'admin') {
-    if (!session) {
-      setView('login');
-      return <LoginPage onGoBack={resetToHome} />;
-    }
+  // Protected route logic now handled by useEffect, this part just renders the component
+  if (view === 'admin' && session) {
     return <AdminPanel 
              initialNavigationData={navigationData} 
              initialProjectsData={projectsData} 

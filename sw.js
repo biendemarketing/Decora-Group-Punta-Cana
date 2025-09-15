@@ -1,10 +1,12 @@
-const CACHE_NAME = 'decora-group-cache-v1';
+const CACHE_NAME = 'decora-group-cache-v6';
 const urlsToCache = [
   '/',
   '/index.html',
-  'https://aistudiocdn.com/react@^19.1.1',
-  'https://aistudiocdn.com/react-dom@^19.1.1/',
-  'https://aistudiocdn.com/lucide-react@^0.542.0',
+  'https://esm.sh/react@18.2.0',
+  'https://esm.sh/react-dom@18.2.0/client',
+  'https://esm.sh/react@18.2.0/jsx-runtime',
+  'https://esm.sh/lucide-react@0.363.0',
+  'https://esm.sh/@supabase/supabase-js@2',
   'https://firebasestorage.googleapis.com/v0/b/drossmediapro.appspot.com/o/decora%20group%2FLogo%20Decora%20Group-01.png?alt=media&token=790f60ef-0216-4181-ac70-bf781394543a',
   'https://decoragrouppuntacana.com/icon.png'
 ];
